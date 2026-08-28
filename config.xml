@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.dublin.lifeline" version="1.4.0" xmlns="http://www.w3.org/ns/widgets">
+    <name>Dublin Support</name>
+    <description>Dublin Essential Support and Community Guide</description>
+    <author email="dev@example.com">Dublin Support Team</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+</widget>
