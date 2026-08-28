@@ -24,18 +24,24 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Bubblewrap CLI
-        run: npm install -g @bubblewrap/cli
+      - name: Install Cordova
+        run: npm install -g cordova
 
-      - name: Initialize and Build APK
+      - name: Create Cordova App & Add Platform
         run: |
-          npx @bubblewrap/cli init --manifest=manifest.json --directory=android-app
-          cd android-app
-          npx @bubblewrap/cli build
+          cordova create build_tmp com.dublin.lifeline "Dublin Support"
+          cp index.html build_tmp/www/index.html
+          cp config.xml build_tmp/config.xml
+          cd build_tmp
+          cordova platform add android
+
+      - name: Build Android APK
+        run: |
+          cd build_tmp
+          cordova build android --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dublin-support-apk
-          path: android-app/*.apk
-          
+          name: dublin-lifeline-apk
+          path: build_tmp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
