@@ -24,16 +24,22 @@ A mobile app (iOS + Android) that helps Dublin City residents experiencing homel
 - Accessibility: offline mode, large text, low-data mode are first-class requirements.
 - Project initialized: git repo, CLAUDE.md, CONTEXT.md, docs/agents/ configured.
 
+### Research resolutions
+
+- **Data model (01)**: Flyer data extracted to `research/flyer-data.json`. All 5 Day Support Centres + 5 GP clinics documented. Gap analysis: missing phone numbers, coordinates, websites, detailed GP clinic hours, MHU schedule. [→ 01-research-flyer-data.md](01-research-flyer-data.md)
+- **Offline architecture (02)**: **SQLite + Sync Queue with Delta Sync** recommended (over Hive and Couchbase Lite). Flutter with `sqflite`/`drift`. Pull-based delta sync with ETag validation, freshness indicators (<1h green, 6-24h amber, >24h red). [→ 02-research-offline-architecture.md](02-research-offline-architecture.md)
+- **Framework (03)**: **Flutter** recommended (strongest accessibility framework `Semantics`/`TextScaler`, mature offline storage `hive_ce`/`sqflite`, Mapbox offline caching, 780ms hot reload). React Native rejected (`react-native-maps` accessibility bug), KMP rejected (immature map ecosystem, no hot reload). Mapbox instead of Google Maps for marker accessibility. [→ 03-research-framework.md](03-research-framework.md)
+- **Accessibility (04)**: Full spec at `research/accessibility-spec.md`. WCAG 2.2 / Mobile Accessibility Extension compliance. Visual: large text, high contrast, bold text. Cognitive: plain language, linear navigation, single-purpose screens. Hardware: low-end device support, haptics, voice control. UI: list-first layout, accessible map pins, voice search, crisis button, max 3 taps to any service. [→ 04-research-accessibility.md](04-research-accessibility.md)
+
 ## Not yet specified
 
-- Data model schema — how are locations, services, hours structured? Need to define before coding.
-- Scraper architecture — how does the scraper fetch and transform the flyer data?
-- Offline storage strategy — what local database/cache for mobile?
-- UI framework — what stack for iOS + Android cross-platform?
-- Map rendering — how are locations displayed on a map? What map library?
+- Data model schema — how are locations, services, hours structured? (research done, needs final definition)
+- Scraper architecture — how does the scraper fetch and transform the flyer data? (needs integration with SQLite)
+- Map rendering — Mapbox confirmed. How are locations displayed? What clustering/zoom behavior?
 - Search and filtering — how do users find services by category, proximity, or day?
 - Notification system — are hours changes pushed to users?
 - Testing strategy — how to verify data accuracy and app reliability?
+- Data gap resolution — how to fill missing fields (phone numbers, coordinates, GP clinic hours, MHU schedule)?
 
 ## Out of scope
 
