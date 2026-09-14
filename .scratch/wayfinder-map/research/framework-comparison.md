@@ -20,11 +20,11 @@ For this project — an offline-first, accessibility-critical service directory 
 
 Flutter offers three well-established offline storage options:
 
-| Solution | Type | Best For | Encryption | Maturity |
-|---|---|---|---|---|
-| `hive_ce` | NoSQL key-value | Object caching, offline lists | Built-in AES-256 | High (use community fork) |
-| `sqflite` | Relational SQL | Complex queries, structured data | Via SQLCipher | High |
-| `shared_preferences` | Key-value | Settings, flags | No | High |
+| Solution             | Type            | Best For                         | Encryption       | Maturity                  |
+| -------------------- | --------------- | -------------------------------- | ---------------- | ------------------------- |
+| `hive_ce`            | NoSQL key-value | Object caching, offline lists    | Built-in AES-256 | High (use community fork) |
+| `sqflite`            | Relational SQL  | Complex queries, structured data | Via SQLCipher    | High                      |
+| `shared_preferences` | Key-value       | Settings, flags                  | No               | High                      |
 
 For the Wayfinder app, **Hive (hive_ce)** is the best fit for caching service directory data — it is extremely fast, pure Dart (no native bridge overhead), supports custom objects via TypeAdapters, and works offline with built-in encryption for sensitive data. For relational queries (e.g., filtering services by category and district), **sqflite** is available. The 2026 maintenance warning for the original `hive` package means the project should use `hive_ce` (Community Edition), which is actively maintained.
 
@@ -34,13 +34,13 @@ For the Wayfinder app, **Hive (hive_ce)** is the best fit for caching service di
 
 React Native's offline storage ecosystem is mature but fragmented:
 
-| Solution | Type | Best For | Encryption | Maturity |
-|---|---|---|---|---|
-| `WatermelonDB` | Reactive SQL | Large offline lists, sync | SQLCipher | High (but maintenance concerns) |
-| `MMKV` | Key-value | Fast state, session | Built-in | High |
-| `AsyncStorage` | Key-value | Legacy compat | Community fork | Declining |
-| `Realm` | Object DB | Cross-device sync | Yes | Medium (MongoDB licensing concerns) |
-| `expo-sqlite` | SQL | Simple structured data | SQLCipher | High |
+| Solution       | Type         | Best For                  | Encryption     | Maturity                            |
+| -------------- | ------------ | ------------------------- | -------------- | ----------------------------------- |
+| `WatermelonDB` | Reactive SQL | Large offline lists, sync | SQLCipher      | High (but maintenance concerns)     |
+| `MMKV`         | Key-value    | Fast state, session       | Built-in       | High                                |
+| `AsyncStorage` | Key-value    | Legacy compat             | Community fork | Declining                           |
+| `Realm`        | Object DB    | Cross-device sync         | Yes            | Medium (MongoDB licensing concerns) |
+| `expo-sqlite`  | SQL          | Simple structured data    | SQLCipher      | High                                |
 
 **WatermelonDB** is the standout option for offline-first apps. It is built on SQLite, supports lazy loading, reactive queries, and has a first-class sync protocol (pull/push with conflict resolution). However, in 2026 there are significant concerns: WatermelonDB's last stable release was over a year old (0.28.0, April 2025), it requires community plugins for Expo SDK 54, has React 19 peer dependency issues, and needs native patches to work with the new architecture. **PowerSync** and **ElectricSQL** are emerging alternatives with better Expo SDK 54 support.
 
@@ -50,10 +50,10 @@ React Native's offline storage ecosystem is mature but fragmented:
 
 KMP offers two database options, both now fully multiplatform:
 
-| Solution | Type | Best For | Maturity |
-|---|---|---|---|
-| `SQLDelight` | Schema-first SQL | Greenfield multiplatform | Very High (since 2018) |
-| `Room Multiplatform` | Annotation-based | Migrating Android apps | High (stable 2025, Room 3.0 2026) |
+| Solution             | Type             | Best For                 | Maturity                          |
+| -------------------- | ---------------- | ------------------------ | --------------------------------- |
+| `SQLDelight`         | Schema-first SQL | Greenfield multiplatform | Very High (since 2018)            |
+| `Room Multiplatform` | Annotation-based | Migrating Android apps   | High (stable 2025, Room 3.0 2026) |
 
 **SQLDelight** is the most mature multiplatform database — it generates type-safe Kotlin code from `.sq` SQL files, compiles for Android, iOS, JVM, JS, and WASM, and has been production-proven since 2019. **Room Multiplatform** gained full KMP support with Room 2.7+ and Room 3.0 (March 2026), making Google's annotation-based approach available across platforms. Both use `BundledSQLiteDriver` for cross-platform consistency (~2-3 MB size increase).
 
@@ -133,32 +133,32 @@ KMP's accessibility approach is fundamentally different — and both an advantag
 
 ### App Size Comparison (2026 benchmarks)
 
-| Framework | Android APK | iOS IPA |
-|---|---|---|
+| Framework                | Android APK | iOS IPA     |
+| ------------------------ | ----------- | ----------- |
 | **Kotlin Multiplatform** | **14.2 MB** | **16.8 MB** |
-| Flutter 4 | 18.4 MB | 21.3 MB |
-| React Native 0.78 | 22.1 MB | 28.9 MB |
-| Expo Router 4 | 23.7 MB | 31.2 MB |
+| Flutter 4                | 18.4 MB     | 21.3 MB     |
+| React Native 0.78        | 22.1 MB     | 28.9 MB     |
+| Expo Router 4            | 23.7 MB     | 31.2 MB     |
 
 **KMP has the smallest binaries**, followed by Flutter. React Native/Expo produce the largest bundles — a significant concern for users on limited data plans who must download the app over cellular connections.
 
 ### Memory Usage
 
-| Framework | Idle Memory | Under Load (10K items) |
-|---|---|---|
-| **KMP** | **64 MB** | **187 MB** |
-| Flutter | 87 MB | 243 MB |
-| React Native | 142 MB | 312 MB |
+| Framework    | Idle Memory | Under Load (10K items) |
+| ------------ | ----------- | ---------------------- |
+| **KMP**      | **64 MB**   | **187 MB**             |
+| Flutter      | 87 MB       | 243 MB                 |
+| React Native | 142 MB      | 312 MB                 |
 
 **KMP has the lowest memory footprint** due to native compilation and no rendering engine overhead. Flutter's Impeller engine adds 30-50 MB of baseline memory. React Native's JavaScript heap adds significant overhead. For this project — targeting users with potentially older, lower-memory devices — KMP's memory efficiency is a meaningful advantage.
 
 ### Startup Time
 
-| Framework | Android Cold Start | iOS Cold Start |
-|---|---|---|
-| **KMP** | **276 ms** | **298 ms** |
-| Flutter | 298 ms | 310 ms |
-| React Native | ~500 ms | 487 ms |
+| Framework    | Android Cold Start | iOS Cold Start |
+| ------------ | ------------------ | -------------- |
+| **KMP**      | **276 ms**         | **298 ms**     |
+| Flutter      | 298 ms             | 310 ms         |
+| React Native | ~500 ms            | 487 ms         |
 
 All three frameworks are acceptably fast. KMP and Flutter are very close. React Native's JavaScript engine initialization adds overhead.
 
@@ -176,16 +176,16 @@ Since this app is designed to be offline-first, initial data usage for downloadi
 
 ## 5. Framework Maturity and Ecosystem
 
-| Factor | Flutter | React Native | Kotlin Multiplatform |
-|---|---|---|---|
-| **Stability** | Stable since 2018 | Stable (New Arch since 0.76) | KMP stable since Nov 2023; CMP iOS stable since May 2025 |
-| **Community size** | Large | Largest (npm ecosystem) | Growing rapidly (7% → 18% adoption in one year) |
-| **Production adopters** | Alibaba, BMW, eBay | Meta, Microsoft, Shopify | Netflix, McDonald's, Cash App, Airbnb (95% sharing) |
-| **Talent availability** | Dart is niche | JavaScript/TS is abundant | Kotlin is growing but scarce |
-| **Hot reload** | Excellent (780ms avg) | Good (Fast Refresh ~1,140ms) | Poor — full recompile required (2-4 min) |
-| **CI cost** | Low (Linux runners) | Low (Linux runners) | High (macOS runners required for iOS builds) |
-| **Google support** | Google owns Flutter | Meta (community) | Google officially recommends KMP |
-| **Web support** | Available | React Native Web | Beta (Kotlin/Wasm) |
+| Factor                  | Flutter               | React Native                 | Kotlin Multiplatform                                     |
+| ----------------------- | --------------------- | ---------------------------- | -------------------------------------------------------- |
+| **Stability**           | Stable since 2018     | Stable (New Arch since 0.76) | KMP stable since Nov 2023; CMP iOS stable since May 2025 |
+| **Community size**      | Large                 | Largest (npm ecosystem)      | Growing rapidly (7% → 18% adoption in one year)          |
+| **Production adopters** | Alibaba, BMW, eBay    | Meta, Microsoft, Shopify     | Netflix, McDonald's, Cash App, Airbnb (95% sharing)      |
+| **Talent availability** | Dart is niche         | JavaScript/TS is abundant    | Kotlin is growing but scarce                             |
+| **Hot reload**          | Excellent (780ms avg) | Good (Fast Refresh ~1,140ms) | Poor — full recompile required (2-4 min)                 |
+| **CI cost**             | Low (Linux runners)   | Low (Linux runners)          | High (macOS runners required for iOS builds)             |
+| **Google support**      | Google owns Flutter   | Meta (community)             | Google officially recommends KMP                         |
+| **Web support**         | Available             | React Native Web             | Beta (Kotlin/Wasm)                                       |
 
 ### Key Considerations for This Project
 
@@ -249,6 +249,7 @@ The `react-native-maps` accessibility bug (markers not announced by screen reade
 ### Why not Kotlin Multiplatform?
 
 KMP offers the best performance characteristics (smallest bundle, lowest memory, fastest startup) and the strongest native accessibility when using platform-specific UI. However, the risks for this specific project are significant:
+
 - The map ecosystem is not mature enough for a production accessibility-critical app
 - No hot reload severely impacts development velocity for a small team
 - macOS CI requirement adds ongoing operational cost
@@ -272,4 +273,4 @@ If Flutter is selected, the recommended architecture for the Wayfinder app:
 
 ---
 
-*This report is based on research conducted in September 2026 using publicly available documentation, GitHub issues, benchmark data, and community analysis.*
+_This report is based on research conducted in September 2026 using publicly available documentation, GitHub issues, benchmark data, and community analysis._

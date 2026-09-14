@@ -7,6 +7,7 @@
 **Question:** What cross-platform framework should be used to build both iOS and Android? Consider Flutter, React Native, and Kotlin Multiplatform. The app needs offline support, map rendering, and accessibility features.
 
 **Acceptance criteria:**
+
 - Comparison of Flutter, React Native, and Kotlin Multiplatform
 - Evaluation of offline storage capabilities in each framework
 - Assessment of map rendering support (Google Maps, Mapbox, etc.)

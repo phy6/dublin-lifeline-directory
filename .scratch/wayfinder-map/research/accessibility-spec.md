@@ -20,36 +20,36 @@ This specification defines the accessibility requirements for the Wayfinder Map 
 
 ### 2.1 Visual Accessibility
 
-| Feature | Requirement | Rationale |
-|---------|-------------|-----------|
-| Large text mode | Configurable font scaling up to 200% system default; minimum 18sp body text | Users with vision impairment, aging users, users reading under stress |
-| High contrast mode | WCAG AAA contrast ratios (7:1); black-on-white toggle option | Low vision, outdoor glare, stressed or fatigued users |
-| Bold text support | Respect system bold-text preference | Users with low vision who benefit from heavier type weights |
-| Color independence | Never encode meaning by color alone; use icons + labels + color | Color blindness, grayscale mode users |
-| Reduced motion | Respect `reduceMotion` system setting; disable animations | Users with vestibular disorders, epilepsy, or cognitive sensitivities |
-| Dark mode | System-aware dark/light theme support | Low-light environments (sleeping rough), battery saving on OLED |
+| Feature            | Requirement                                                                 | Rationale                                                             |
+| ------------------ | --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Large text mode    | Configurable font scaling up to 200% system default; minimum 18sp body text | Users with vision impairment, aging users, users reading under stress |
+| High contrast mode | WCAG AAA contrast ratios (7:1); black-on-white toggle option                | Low vision, outdoor glare, stressed or fatigued users                 |
+| Bold text support  | Respect system bold-text preference                                         | Users with low vision who benefit from heavier type weights           |
+| Color independence | Never encode meaning by color alone; use icons + labels + color             | Color blindness, grayscale mode users                                 |
+| Reduced motion     | Respect `reduceMotion` system setting; disable animations                   | Users with vestibular disorders, epilepsy, or cognitive sensitivities |
+| Dark mode          | System-aware dark/light theme support                                       | Low-light environments (sleeping rough), battery saving on OLED       |
 
 ### 2.2 Cognitive & Literacy Accessibility
 
-| Feature | Requirement | Rationale |
-|---------|-------------|-----------|
-| Plain language | Read at ≤6th-grade reading level; avoid jargon and domain-specific terms | Users with limited literacy, cognitive load in crisis situations |
-| Icon + text labeling | Every interactive element has visible text label; icons never used alone | Low-literacy users; screen reader users |
-| Linear navigation | Flat, linear information architecture; no nested hierarchies deeper than 2 levels | Users unfamiliar with hierarchical menus; research confirms linear navigation is preferred by low-literate users |
-| Consistent layout | Same navigation structure on every screen; predictable placement of key actions | Cognitive load reduction; users build mental models faster |
-| Contextual help | Help/coach marks available from every screen; audio/video tutorials over text instructions | Users who need guided onboarding; low-literacy users |
-| Single-purpose screens | Each screen delivers one primary action or question | Reduces cognitive overwhelm in urgent situations |
-| Confirmation for critical actions | Explicit confirmation dialogs before actions like calling emergency services | Prevents accidental activation in stressful moments |
+| Feature                           | Requirement                                                                                | Rationale                                                                                                        |
+| --------------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Plain language                    | Read at ≤6th-grade reading level; avoid jargon and domain-specific terms                   | Users with limited literacy, cognitive load in crisis situations                                                 |
+| Icon + text labeling              | Every interactive element has visible text label; icons never used alone                   | Low-literacy users; screen reader users                                                                          |
+| Linear navigation                 | Flat, linear information architecture; no nested hierarchies deeper than 2 levels          | Users unfamiliar with hierarchical menus; research confirms linear navigation is preferred by low-literate users |
+| Consistent layout                 | Same navigation structure on every screen; predictable placement of key actions            | Cognitive load reduction; users build mental models faster                                                       |
+| Contextual help                   | Help/coach marks available from every screen; audio/video tutorials over text instructions | Users who need guided onboarding; low-literacy users                                                             |
+| Single-purpose screens            | Each screen delivers one primary action or question                                        | Reduces cognitive overwhelm in urgent situations                                                                 |
+| Confirmation for critical actions | Explicit confirmation dialogs before actions like calling emergency services               | Prevents accidental activation in stressful moments                                                              |
 
 ### 2.3 Hardware & Device Accessibility
 
-| Feature | Requirement | Rationale |
-|---------|-------------|-----------|
-| Low-end device support | App must run on 2GB RAM devices; test on budget hardware (Android 7+, iPhone SE) | Many users rely on older, lower-spec phones |
-| Offline voice output | Text-to-speech works fully offline | Users who cannot read; hands-free use while moving |
-| Haptic feedback | Vibration confirmation on all actions | Deaf/hard-of-hearing users; confirmation without sound |
-| Large touch targets | Minimum 48dp on Android, 44pt on iOS; recommended 56dp for high-stress use | Users with motor impairments, tremor, arthritis, or gloved hands |
-| Voice control | App operable via voice commands (system-level integration) | Users with limited fine motor control |
+| Feature                | Requirement                                                                      | Rationale                                                        |
+| ---------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Low-end device support | App must run on 2GB RAM devices; test on budget hardware (Android 7+, iPhone SE) | Many users rely on older, lower-spec phones                      |
+| Offline voice output   | Text-to-speech works fully offline                                               | Users who cannot read; hands-free use while moving               |
+| Haptic feedback        | Vibration confirmation on all actions                                            | Deaf/hard-of-hearing users; confirmation without sound           |
+| Large touch targets    | Minimum 48dp on Android, 44pt on iOS; recommended 56dp for high-stress use       | Users with motor impairments, tremor, arthritis, or gloved hands |
+| Voice control          | App operable via voice commands (system-level integration)                       | Users with limited fine motor control                            |
 
 ---
 
@@ -97,13 +97,13 @@ This specification defines the accessibility requirements for the Wayfinder Map 
 
 Offline accessibility requires a **cache-first, offline-first architecture** where all essential content and UI are available without network connectivity.
 
-| Layer | Strategy | Technology |
-|-------|----------|------------|
-| App shell | Precached at install time | Service Worker (PWA) or framework-specific caching (Flutter/React Native) |
-| Service data | Full dataset cached locally on first online session | SQLite / IndexedDB / Hive (Flutter) / WatermelonDB (React Native) |
-| Map tiles | Critical area map tiles precached for Dublin City | Offline tile cache with configurable area |
-| AI/TTS | Voice models cached on-device after first download | On-device TTS (iOS AVSpeechSynthesizer, Android TextToSpeech) |
-| Images | Compressed, WebP format; low-res fallback cached | Local asset cache with size-appropriate variants |
+| Layer        | Strategy                                            | Technology                                                                |
+| ------------ | --------------------------------------------------- | ------------------------------------------------------------------------- |
+| App shell    | Precached at install time                           | Service Worker (PWA) or framework-specific caching (Flutter/React Native) |
+| Service data | Full dataset cached locally on first online session | SQLite / IndexedDB / Hive (Flutter) / WatermelonDB (React Native)         |
+| Map tiles    | Critical area map tiles precached for Dublin City   | Offline tile cache with configurable area                                 |
+| AI/TTS       | Voice models cached on-device after first download  | On-device TTS (iOS AVSpeechSynthesizer, Android TextToSpeech)             |
+| Images       | Compressed, WebP format; low-res fallback cached    | Local asset cache with size-appropriate variants                          |
 
 ### 4.2 Offline-First Data Strategy
 
@@ -135,12 +135,12 @@ Offline accessibility requires a **cache-first, offline-first architecture** whe
 
 The app must detect and respond to Android's **Data Saver** mode (API 24+) and Apple's **Low Data Mode** (iOS 13+), implementing the following adaptive behaviors:
 
-| Trigger | Action |
-|---------|--------|
-| Data Saver ON / Low Data Mode ON | Block all image loading; show text-only content with placeholders |
-| Constrained/expensive network detected | Reduce image resolution to thumbnail; disable prefetching; disable animations |
-| 2G/3G detected | Serve text-only; disable all media; use compressed WebP at 50% quality |
-| User manually enables low-data mode in app settings | Apply all above + disable background sync + reduce polling frequency |
+| Trigger                                             | Action                                                                        |
+| --------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Data Saver ON / Low Data Mode ON                    | Block all image loading; show text-only content with placeholders             |
+| Constrained/expensive network detected              | Reduce image resolution to thumbnail; disable prefetching; disable animations |
+| 2G/3G detected                                      | Serve text-only; disable all media; use compressed WebP at 50% quality        |
+| User manually enables low-data mode in app settings | Apply all above + disable background sync + reduce polling frequency          |
 
 ### 5.2 Image Optimization Strategy
 
@@ -177,14 +177,14 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 
 **Core requirements:**
 
-| Requirement | Details |
-|-------------|---------|
-| Semantic labels | Every interactive element has a meaningful label (e.g., "Shelter at 5 Main Street, open until 8pm" not "Button 1") |
-| Heading hierarchy | Content structured with proper heading levels (H1 → H2 → H3) so screen readers can jump between sections |
-| Focus order | Logical sequential focus order matching visual layout; no focus traps |
-| Live regions | Dynamic content updates (search results, status changes) announced via `aria-live` regions |
-| Grouping | Related elements (image + title + status) grouped into a single semantic unit so screen readers announce them together |
-| Skip navigation | "Skip to content" link available for bypassing repetitive navigation |
+| Requirement            | Details                                                                                                                |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Semantic labels        | Every interactive element has a meaningful label (e.g., "Shelter at 5 Main Street, open until 8pm" not "Button 1")     |
+| Heading hierarchy      | Content structured with proper heading levels (H1 → H2 → H3) so screen readers can jump between sections               |
+| Focus order            | Logical sequential focus order matching visual layout; no focus traps                                                  |
+| Live regions           | Dynamic content updates (search results, status changes) announced via `aria-live` regions                             |
+| Grouping               | Related elements (image + title + status) grouped into a single semantic unit so screen readers announce them together |
+| Skip navigation        | "Skip to content" link available for bypassing repetitive navigation                                                   |
 | No touch-only gestures | All custom gestures have tap/button alternatives. Never use a double-tap or swipe as the only way to trigger an action |
 
 **Key guidelines from WCAG 2.2 / Mobile Accessibility Extension:**
@@ -211,12 +211,12 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 
 ### 6.4 Alternative Input Methods
 
-| Method | Support | Use Case |
-|--------|---------|----------|
-| Switch control | Full support | Motor-impaired users using external switches |
-| Voice control (system) | Full support | Hands-free navigation; users with limited dexterity |
-| Keyboard navigation | Full support | External keyboards, Bluetooth keyboards |
-| Assistive touch | No interference | App must work with iOS AssistiveTouch and Android switch access |
+| Method                 | Support         | Use Case                                                        |
+| ---------------------- | --------------- | --------------------------------------------------------------- |
+| Switch control         | Full support    | Motor-impaired users using external switches                    |
+| Voice control (system) | Full support    | Hands-free navigation; users with limited dexterity             |
+| Keyboard navigation    | Full support    | External keyboards, Bluetooth keyboards                         |
+| Assistive touch        | No interference | App must work with iOS AssistiveTouch and Android switch access |
 
 ---
 
@@ -240,6 +240,7 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 ```
 
 **Tab bar (4 tabs max):**
+
 1. **Nearby** — Map + list of services near current location (default)
 2. **Categories** — Filter by service type (Food, Shelter, Healthcare, etc.)
 3. **Help** — Emergency contacts, crisis mode, audio help tutorials
@@ -247,15 +248,15 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 
 ### 7.2 Navigation Principles
 
-| Principle | Implementation |
-|-----------|---------------|
-| **Maximum 3 taps to any service** | Home → Category → Service detail = 3 taps max |
-| **No login required** | Zero account creation, zero personal data |
-| **No hidden menus** | All navigation visible; no hamburger menus or drawer navigation |
-| **Breadcrumb-less** | Do not show path breadcrumbs; use clear tab labels instead |
-| **Persistent emergency button** | Always-visible, always-accessible from any screen |
-| **One question per screen** | Never ask multiple questions on one screen |
-| **Visual progress indicators** | When a flow has steps (e.g., getting directions), show a simple step indicator |
+| Principle                         | Implementation                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------ |
+| **Maximum 3 taps to any service** | Home → Category → Service detail = 3 taps max                                  |
+| **No login required**             | Zero account creation, zero personal data                                      |
+| **No hidden menus**               | All navigation visible; no hamburger menus or drawer navigation                |
+| **Breadcrumb-less**               | Do not show path breadcrumbs; use clear tab labels instead                     |
+| **Persistent emergency button**   | Always-visible, always-accessible from any screen                              |
+| **One question per screen**       | Never ask multiple questions on one screen                                     |
+| **Visual progress indicators**    | When a flow has steps (e.g., getting directions), show a simple step indicator |
 
 ### 7.3 Onboarding & First-Run Experience
 
@@ -266,13 +267,13 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 
 ### 7.4 Error Handling & Recovery
 
-| Situation | Behavior |
-|-----------|----------|
-| No network | Show cached data + "Offline" badge; never show blank screen or error-only state |
-| Empty search results | Show "No services found for this category. Try a different category or check nearby." |
-| Location unavailable | Prompt with "Enable location?" → link to settings; fall back to manual area selection |
-| App crash on relaunch | Resume to home screen, not error screen; restore previous scroll position |
-| Data sync failure | Show "Will sync when online" badge; queue operations; never lose user data |
+| Situation             | Behavior                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| No network            | Show cached data + "Offline" badge; never show blank screen or error-only state       |
+| Empty search results  | Show "No services found for this category. Try a different category or check nearby." |
+| Location unavailable  | Prompt with "Enable location?" → link to settings; fall back to manual area selection |
+| App crash on relaunch | Resume to home screen, not error screen; restore previous scroll position             |
+| Data sync failure     | Show "Will sync when online" badge; queue operations; never lose user data            |
 
 ---
 
@@ -281,6 +282,7 @@ The app must be fully navigable with **VoiceOver** (iOS) and **TalkBack** (Andro
 ### 8.1 Framework Considerations
 
 For cross-platform iOS + Android development, the framework must provide:
+
 - Built-in accessibility semantics support
 - Dynamic type / text scaling
 - Screen reader integration
@@ -288,23 +290,23 @@ For cross-platform iOS + Android development, the framework must provide:
 
 **Recommended approaches:**
 
-| Framework | Accessibility Strengths | Offline Storage | Notes |
-|-----------|------------------------|-----------------|-------|
-| **Flutter** | Built-in Semantics widget, Material Design accessibility, `flutter_accessibility_helper` package | Hive, SQLite, Isar | Strong accessibility API, single codebase |
-| **React Native** | `AccessibilityInfo` API, `expo-accessibility-plus` (Expo), `react-native-accessibility-toolkit` | WatermelonDB, AsyncStorage, MMKV | Rich ecosystem of accessibility packages |
-| **Kotlin Multiplatform** | Native Android accessibility; iOS via Swift interop | SQLDelight, Realm | Best native performance; more platform-specific code |
+| Framework                | Accessibility Strengths                                                                          | Offline Storage                  | Notes                                                |
+| ------------------------ | ------------------------------------------------------------------------------------------------ | -------------------------------- | ---------------------------------------------------- |
+| **Flutter**              | Built-in Semantics widget, Material Design accessibility, `flutter_accessibility_helper` package | Hive, SQLite, Isar               | Strong accessibility API, single codebase            |
+| **React Native**         | `AccessibilityInfo` API, `expo-accessibility-plus` (Expo), `react-native-accessibility-toolkit`  | WatermelonDB, AsyncStorage, MMKV | Rich ecosystem of accessibility packages             |
+| **Kotlin Multiplatform** | Native Android accessibility; iOS via Swift interop                                              | SQLDelight, Realm                | Best native performance; more platform-specific code |
 
 ### 8.2 Essential Accessibility Plugins/Libraries
 
-| Platform | Package | Purpose |
-|----------|---------|---------|
-| Flutter | `flutter_accessibility_helper` | Screen reader optimization, focus management, semantic support |
-| Flutter | `accessibility_tools` | Debug checker for tap targets, font overflow, image labels |
-| Flutter | `flutter_adaptive_assist` | Unified API for platform accessibility settings (bold text, high contrast, reduce motion) |
-| React Native | `expo-accessibility-plus` | Extended accessibility flags beyond stock `AccessibilityInfo` |
-| React Native | `@accessibility-rn-js/react-native-accessibility-toolkit` | TTS, screen reader, color adjustments, accessibility profiles |
-| React Native | `react-native-voice` | Voice input for search and commands |
-| Cross-platform | Workbox (PWA) or equivalent | Service worker caching strategies |
+| Platform       | Package                                                   | Purpose                                                                                   |
+| -------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Flutter        | `flutter_accessibility_helper`                            | Screen reader optimization, focus management, semantic support                            |
+| Flutter        | `accessibility_tools`                                     | Debug checker for tap targets, font overflow, image labels                                |
+| Flutter        | `flutter_adaptive_assist`                                 | Unified API for platform accessibility settings (bold text, high contrast, reduce motion) |
+| React Native   | `expo-accessibility-plus`                                 | Extended accessibility flags beyond stock `AccessibilityInfo`                             |
+| React Native   | `@accessibility-rn-js/react-native-accessibility-toolkit` | TTS, screen reader, color adjustments, accessibility profiles                             |
+| React Native   | `react-native-voice`                                      | Voice input for search and commands                                                       |
+| Cross-platform | Workbox (PWA) or equivalent                               | Service worker caching strategies                                                         |
 
 ### 8.3 Testing & QA Requirements
 
@@ -322,35 +324,35 @@ For cross-platform iOS + Android development, the framework must provide:
 
 This specification aligns with:
 
-| Standard | Level | Application |
-|----------|-------|-------------|
-| WCAG 2.2 | AA minimum, AAA where possible | All UI content, color, navigation, input |
-| W3C Mobile Accessibility Extension | All applicable success criteria | Touch gestures, screen reader compatibility |
-| W3C Guidance on Applying WCAG 2.2 to Mobile | All applicable guidance | Mobile-specific patterns |
-| Section 508 (where applicable) | — | Government service requirements |
-| GDPR / Data Protection | — | No personal data collected; anonymity is a design requirement |
+| Standard                                    | Level                           | Application                                                   |
+| ------------------------------------------- | ------------------------------- | ------------------------------------------------------------- |
+| WCAG 2.2                                    | AA minimum, AAA where possible  | All UI content, color, navigation, input                      |
+| W3C Mobile Accessibility Extension          | All applicable success criteria | Touch gestures, screen reader compatibility                   |
+| W3C Guidance on Applying WCAG 2.2 to Mobile | All applicable guidance         | Mobile-specific patterns                                      |
+| Section 508 (where applicable)              | —                               | Government service requirements                               |
+| GDPR / Data Protection                      | —                               | No personal data collected; anonymity is a design requirement |
 
 ---
 
 ## 10. Priority Matrix
 
-| Feature | Priority | Phase |
-|---------|----------|-------|
-| Offline-first data caching (full dataset) | **P0 — Critical** | MVP |
-| Large text / dynamic type | **P0 — Critical** | MVP |
-| Screen reader support (VoiceOver/TalkBack) | **P0 — Critical** | MVP |
-| High contrast mode | **P0 — Critical** | MVP |
-| Emergency button (always visible) | **P0 — Critical** | MVP |
-| Low-data mode (image blocking, adaptive loading) | **P1 — High** | MVP+1 |
-| Voice search | **P1 — High** | MVP+1 |
-| Linear navigation (flat hierarchy) | **P1 — High** | MVP |
-| Category-based filtering | **P1 — High** | MVP |
-| Haptic feedback | **P2 — Medium** | Post-MVP |
-| Switch control / external input | **P2 — Medium** | Post-MVP |
-| Audio/video help tutorials | **P2 — Medium** | Post-MVP |
-| Data budget controls | **P2 — Medium** | Post-MVP |
-| Onboarding coach marks | **P3 — Low** | Post-MVP |
-| Advanced offline map tiles | **P3 — Low** | Post-MVP |
+| Feature                                          | Priority          | Phase    |
+| ------------------------------------------------ | ----------------- | -------- |
+| Offline-first data caching (full dataset)        | **P0 — Critical** | MVP      |
+| Large text / dynamic type                        | **P0 — Critical** | MVP      |
+| Screen reader support (VoiceOver/TalkBack)       | **P0 — Critical** | MVP      |
+| High contrast mode                               | **P0 — Critical** | MVP      |
+| Emergency button (always visible)                | **P0 — Critical** | MVP      |
+| Low-data mode (image blocking, adaptive loading) | **P1 — High**     | MVP+1    |
+| Voice search                                     | **P1 — High**     | MVP+1    |
+| Linear navigation (flat hierarchy)               | **P1 — High**     | MVP      |
+| Category-based filtering                         | **P1 — High**     | MVP      |
+| Haptic feedback                                  | **P2 — Medium**   | Post-MVP |
+| Switch control / external input                  | **P2 — Medium**   | Post-MVP |
+| Audio/video help tutorials                       | **P2 — Medium**   | Post-MVP |
+| Data budget controls                             | **P2 — Medium**   | Post-MVP |
+| Onboarding coach marks                           | **P3 — Low**      | Post-MVP |
+| Advanced offline map tiles                       | **P3 — Low**      | Post-MVP |
 
 ---
 

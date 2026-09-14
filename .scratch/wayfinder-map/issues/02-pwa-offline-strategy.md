@@ -8,6 +8,7 @@
 **Question:** What is the offline strategy for a static PWA hosted on GitHub Pages? The app must work without internet, cache service data locally, and support large text and low-data mode. All data is static JSON served alongside the PWA.
 
 **Acceptance criteria:**
+
 - Service Worker caching strategy (Cache API, stale-while-revalidate, network-first vs cache-first)
 - Static JSON data caching approach
 - Offline fallback page design

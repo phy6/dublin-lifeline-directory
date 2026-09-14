@@ -7,6 +7,7 @@
 **Question:** What is the data model for the service directory? Define schemas for locations, services, schedules, and healthcare clinics based on the flyer data and the chosen framework's storage capabilities.
 
 **Acceptance criteria:**
+
 - Location schema (name, address, coordinates, services offered, contact info)
 - Service schema (name, category, description)
 - Schedule schema (day → hours per location, walk-in vs appointment)

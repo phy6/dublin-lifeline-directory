@@ -1,4 +1,5 @@
 # Offline-First Architecture Research Report
+
 ## Dublin City Support Services — Wayfinder Map
 
 **Date:** 2026-09-14  
@@ -34,6 +35,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 **Stack:** SQLite (via `sqflite` or `drift` for Flutter) + custom sync queue + WorkManager/BGTasks
 
 **How it works:**
+
 - Local SQLite database is the **source of truth** for all reads
 - Writes go to SQLite first, then a sync queue persists pending operations
 - When connectivity is detected, a background worker processes the queue
@@ -41,6 +43,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - Conflict resolution via last-write-wins with timestamp metadata
 
 **Strengths:**
+
 - **Mature and battle-tested:** SQLite is the most widely used embedded database in mobile (Android ships with it, iOS uses it via FMDB or GRDB)
 - **ACID compliance:** Transactions guarantee data integrity even if the app crashes mid-write
 - **Complex queries:** SQL enables filtering, sorting, and joining service categories, locations, and hours efficiently
@@ -51,6 +54,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - **Proven in similar domains:** Health services, field work apps, and community services apps all use this pattern
 
 **Weaknesses:**
+
 - Requires building custom sync logic (though patterns are well-documented)
 - Schema migrations need manual management
 - More initial development effort than an all-in-one solution
@@ -64,12 +68,14 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 **Stack:** Hive (Dart-native NoSQL) + custom sync layer
 
 **How it works:**
+
 - Hive stores data as key-value "boxes" in a binary format
 - All data is deserialized into memory on open — extremely fast reads
 - Type-safe via code-generated adapters
 - Sync handled by custom logic pushing/pulling serialized records
 
 **Strengths:**
+
 - **Fastest read performance** among Flutter-local options (10x faster than SQLite for simple operations)
 - **Zero configuration:** No schemas, no migrations, pure Dart
 - **Smallest storage footprint** for structured data
@@ -78,6 +84,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - **AES encryption** available via separate package
 
 **Weaknesses:**
+
 - **No relational queries:** Cannot JOIN or do complex filtering across service types and locations
 - **Schema rigidity:** Changing data structures requires manual migration scripts
 - **Memory-bound:** All data loads into memory on box open — problematic if dataset grows significantly
@@ -94,6 +101,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 **Stack:** Couchbase Lite (embedded NoSQL) + Couchbase Sync Gateway + Capella (cloud)
 
 **How it works:**
+
 - Couchbase Lite is an embedded NoSQL database with built-in peer-to-peer sync
 - Sync Gateway handles bidirectional replication between devices and cloud
 - Change-based sync replicates only document changes
@@ -101,6 +109,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - Supports channels and access control for data partitioning
 
 **Strengths:**
+
 - **Built-in sync:** No custom sync engine needed — the hardest problem is solved
 - **Bi-directional replication:** Automatic conflict resolution
 - **Delta sync:** Only changed documents are transmitted
@@ -110,6 +119,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - **Channels/access control:** Natural fit for partitioning service data by category or region
 
 **Weaknesses:**
+
 - **Heavy dependency:** Requires a Couchbase Sync Gateway server (or Capella cloud service)
 - **Complex infrastructure:** Even for simple deployments, running Sync Gateway adds operational burden
 - **Large binary size:** Couchbase Lite SDK is significantly larger than SQLite
@@ -124,19 +134,19 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 
 ### 3.4 Comparison Matrix
 
-| Criterion | SQLite + Sync Queue | Hive | Couchbase Lite |
-|---|---|---|---|
-| **Offline reliability** | Excellent | Excellent | Excellent |
-| **Query flexibility** | Excellent (SQL) | Poor (key-value only) | Good (N1QL-like) |
-| **Sync complexity** | Medium (build own) | High (build own) | Low (built-in) |
-| **Storage footprint** | Small | Smallest | Largest |
-| **Performance (reads)** | Good | Excellent | Good |
-| **Flutter ecosystem** | Strong | Strong | Moderate |
-| **Encryption** | Via SQLCipher | Built-in | Built-in |
-| **Operational overhead** | Low | Low | High |
-| **Scalability** | Excellent | Limited | Excellent |
-| **Data integrity** | ACID | Eventual | ACID (within DB) |
-| **Best fit for this app** | ✅ **Yes** | ❌ No | ❌ Overkill |
+| Criterion                 | SQLite + Sync Queue | Hive                  | Couchbase Lite   |
+| ------------------------- | ------------------- | --------------------- | ---------------- |
+| **Offline reliability**   | Excellent           | Excellent             | Excellent        |
+| **Query flexibility**     | Excellent (SQL)     | Poor (key-value only) | Good (N1QL-like) |
+| **Sync complexity**       | Medium (build own)  | High (build own)      | Low (built-in)   |
+| **Storage footprint**     | Small               | Smallest              | Largest          |
+| **Performance (reads)**   | Good                | Excellent             | Good             |
+| **Flutter ecosystem**     | Strong              | Strong                | Moderate         |
+| **Encryption**            | Via SQLCipher       | Built-in              | Built-in         |
+| **Operational overhead**  | Low                 | Low                   | High             |
+| **Scalability**           | Excellent           | Limited               | Excellent        |
+| **Data integrity**        | ACID                | Eventual              | ACID (within DB) |
+| **Best fit for this app** | ✅ **Yes**          | ❌ No                 | ❌ Overkill      |
 
 ---
 
@@ -171,6 +181,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 ### 4.2 Database Schema
 
 **Locations table:**
+
 - `id` (TEXT, primary key) — unique identifier from scraper
 - `name` (TEXT) — service location name
 - `category` (TEXT) — Food, Hygiene, Healthcare, Connectivity, Employment
@@ -184,6 +195,7 @@ The app's core data consists of service locations (Day Support Centres, GP Clini
 - `is_active` (INTEGER) — additive updates only (never removed without confirmation)
 
 **Sync metadata table:**
+
 - `last_sync_timestamp` (INTEGER)
 - `last_sync_etag` (TEXT) — for conditional requests
 - `data_version` (INTEGER) — incrementing version counter
@@ -223,12 +235,14 @@ Given the data flow (scraper → server → app), the primary sync direction is 
 ```
 
 **Sync triggers:**
+
 1. **App launch** — check if data is stale (last sync > 6 hours)
 2. **Connectivity change** — when network becomes available after being offline
 3. **Manual refresh** — user pulls-to-refresh
 4. **Scheduled background sync** — WorkManager (Android) / BGProcessingTask (iOS), every 6 hours minimum
 
 **Delta sync implementation:**
+
 - Server responds with `ETag` header representing current data version
 - App sends `If-None-Match` header with last known ETag
 - If data unchanged (304 Not Modified): skip sync, save bandwidth
@@ -251,30 +265,33 @@ Push-based sync (like Couchbase's WebSocket replication) assumes bidirectional d
 ### 6.1 Strategy: ETag + Timestamp Hybrid
 
 **Primary mechanism — ETag validation:**
+
 - Server includes an `ETag` header on all API responses, computed from the scraper's last run timestamp
 - App stores the ETag alongside cached data
 - On sync, app sends `If-None-Match` with stored ETag
 - 304 response = data is fresh; 200 response = data has changed, fetch new data
 
 **Secondary mechanism — Last-updated timestamps:**
+
 - Each location record includes `last_updated` (Unix timestamp from scraper)
 - App displays freshness indicator: "Last updated: 2 hours ago"
 - If `last_updated` > 24 hours, show a "Data may be outdated" warning
 
 **Freshness thresholds:**
 
-| Age of data | Display behavior |
-|---|---|
-| < 1 hour | ✅ "Data is current" (green indicator) |
-| 1–6 hours | ⚠️ "Updated X hours ago" (yellow indicator) |
-| 6–24 hours | ⚠️ "Updated X hours ago — refresh when online" (amber indicator) |
-| > 24 hours | ❌ "Data may be outdated" (red indicator, auto-sync attempted) |
+| Age of data | Display behavior                                                 |
+| ----------- | ---------------------------------------------------------------- |
+| < 1 hour    | ✅ "Data is current" (green indicator)                           |
+| 1–6 hours   | ⚠️ "Updated X hours ago" (yellow indicator)                      |
+| 6–24 hours  | ⚠️ "Updated X hours ago — refresh when online" (amber indicator) |
+| > 24 hours  | ❌ "Data may be outdated" (red indicator, auto-sync attempted)   |
 
 **Why this matters for the user base:** People experiencing homelessness need reliable information about shelter hours, meal times, and clinic availability. Stale data could mean arriving at a closed facility. The freshness indicators ensure users can make informed decisions.
 
 ### 6.2 Staleness Detection for User-Generated Content
 
 Any user-created content (favorites, notes) uses a separate `isSynced` boolean flag:
+
 - `isSynced = false` → data exists only locally, not yet pushed to server
 - `isSynced = true` → data confirmed on server
 
@@ -317,14 +334,14 @@ The accessibility requirement is that large text must work **without internet**.
 
 ### 7.2 Offline Accessibility Guarantees
 
-| Feature | Online | Offline |
-|---|---|---|
-| Large text (system setting) | ✅ | ✅ (data is local) |
-| Screen reader navigation | ✅ | ✅ (labels are local) |
-| High contrast mode | ✅ | ✅ (theme is local) |
-| Service search/filter | ✅ | ✅ (queries against local DB) |
-| Map rendering | ✅ (online tiles) | ⚠️ (cached tiles only) |
-| Service directions | ⚠️ (requires network) | ❌ (cached addresses only) |
+| Feature                     | Online                | Offline                       |
+| --------------------------- | --------------------- | ----------------------------- |
+| Large text (system setting) | ✅                    | ✅ (data is local)            |
+| Screen reader navigation    | ✅                    | ✅ (labels are local)         |
+| High contrast mode          | ✅                    | ✅ (theme is local)           |
+| Service search/filter       | ✅                    | ✅ (queries against local DB) |
+| Map rendering               | ✅ (online tiles)     | ⚠️ (cached tiles only)        |
+| Service directions          | ⚠️ (requires network) | ❌ (cached addresses only)    |
 
 **Key insight:** The offline accessibility gap is primarily **map tiles and directions**. The fix: cache map tiles for the Dublin area and provide text-only directions (street address + distance) as a fallback when offline.
 
@@ -344,29 +361,34 @@ When low-data mode is active, the app should:
 ### 8.2 Data Reduction Strategies
 
 **1. Text-Only Mode (Primary Strategy):**
+
 - Disable map image loading; show text-only service list
 - Replace thumbnails/icons with text labels
 - Use lightweight vector icons (SVG/FontAwesome) instead of bitmap images
 - This reduces data usage by ~80% compared to full map mode
 
 **2. Progressive Data Loading:**
+
 - **Tier 1 (always cached):** Service name, category, address, phone, hours — essential info stored in local SQLite
 - **Tier 2 (conditional download):** Detailed descriptions, notes, accessibility features — only downloaded on Wi-Fi or when user explicitly requests
 - **Tier 3 (never auto-download):** Map tiles, photos, large media — only on Wi-Fi or explicit user action
 
 **3. Aggressive Caching:**
+
 - Cache all API responses with `Cache-Control: max-age=21600` (6 hours)
 - Use HTTP 304 Not Modified responses for ETag validation (saves full payload)
 - Pre-cache the full service directory on first Wi-Fi connection
 - Store cached data with no expiry for the core directory (stale-while-revalidate)
 
 **4. Sync Optimization:**
+
 - Delta sync only (already recommended in Section 5)
 - Sync throttling: In low-data mode, delay background sync until Wi-Fi
 - Batch all pending writes into a single request when connectivity returns
 - Compress sync payloads (gzip)
 
 **5. Data Usage Indicators:**
+
 - Show data usage in settings: "This session used X MB"
 - Warn before downloading large content: "This will use ~500KB of data"
 - Default to low-data mode on cellular connections
@@ -397,16 +419,16 @@ Normal Mode:
 
 ### 9.1 Technology Stack (Flutter)
 
-| Layer | Technology | Rationale |
-|---|---|---|
-| Local Database | `drift` (SQLite ORM) or `sqflite` | `drift` provides compile-time SQL validation, type-safe queries, and better Dart integration than raw `sqflite` |
-| State Management | Riverpod or Provider | Reactive state that observes local DB changes |
-| Sync Scheduler | `workmanager` (Android) + `bg_tasks` (iOS) | Platform-native background processing |
-| Network Monitoring | `connectivity_plus` | Detects connectivity changes to trigger sync |
-| Encryption | `sqflite_sqlcipher` or `drift_sqlcipher` | AES-256 encryption for local database |
-| HTTP Client | `dio` with interceptors | Interceptors for ETag handling, retry logic, compression |
-| Accessibility | Platform-native | `MediaQuery` (Android), `Dynamic Type` (iOS) |
-| Map | `flutter_map` + offline tile caching | OpenStreetMap tiles cached locally |
+| Layer              | Technology                                 | Rationale                                                                                                       |
+| ------------------ | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Local Database     | `drift` (SQLite ORM) or `sqflite`          | `drift` provides compile-time SQL validation, type-safe queries, and better Dart integration than raw `sqflite` |
+| State Management   | Riverpod or Provider                       | Reactive state that observes local DB changes                                                                   |
+| Sync Scheduler     | `workmanager` (Android) + `bg_tasks` (iOS) | Platform-native background processing                                                                           |
+| Network Monitoring | `connectivity_plus`                        | Detects connectivity changes to trigger sync                                                                    |
+| Encryption         | `sqflite_sqlcipher` or `drift_sqlcipher`   | AES-256 encryption for local database                                                                           |
+| HTTP Client        | `dio` with interceptors                    | Interceptors for ETag handling, retry logic, compression                                                        |
+| Accessibility      | Platform-native                            | `MediaQuery` (Android), `Dynamic Type` (iOS)                                                                    |
+| Map                | `flutter_map` + offline tile caching       | OpenStreetMap tiles cached locally                                                                              |
 
 ### 9.2 Migration Path
 
@@ -428,13 +450,13 @@ Normal Mode:
 
 ## 10. Risks and Mitigations
 
-| Risk | Severity | Mitigation |
-|---|---|---|
-| SQLite migration complexity | Medium | Use `drift` for automated migration support; keep schema simple |
-| Sync engine bugs | High | Thorough testing with offline/online cycling; exponential backoff prevents server overload |
-| Data grows too large for low-end devices | Low | Service directory is small (hundreds of records); SQLite is compact |
-| Scraper changes API format | Medium | Abstract API layer; versioned data model; migration scripts |
-| Map tiles expire on device storage | Low | Cache management with LRU eviction; text-only fallback |
+| Risk                                     | Severity | Mitigation                                                                                 |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------ |
+| SQLite migration complexity              | Medium   | Use `drift` for automated migration support; keep schema simple                            |
+| Sync engine bugs                         | High     | Thorough testing with offline/online cycling; exponential backoff prevents server overload |
+| Data grows too large for low-end devices | Low      | Service directory is small (hundreds of records); SQLite is compact                        |
+| Scraper changes API format               | Medium   | Abstract API layer; versioned data model; migration scripts                                |
+| Map tiles expire on device storage       | Low      | Cache management with LRU eviction; text-only fallback                                     |
 
 ---
 

@@ -1,0 +1,30 @@
+node_modules
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+# OS
+.DS_Store
+Thumbs.db
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+# GitHub
+.github/workflowes/*.yml
+!/.github/workflowes/scraper.yml
+!/.github/workflowes/webhook.yml
+# Secrets
+secrets.json
+*.pem
+*.key
+# Static assets (generated)
+static/icons/*.png
+!/static/icons/README.md

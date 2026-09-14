@@ -7,6 +7,7 @@
 **Question:** Build the data pipeline: integrate the existing scraper with the defined data model, set up local storage, and establish the sync mechanism for updating flyer data.
 
 **Acceptance criteria:**
+
 - Scraper connected to data model, produces valid JSON output
 - Local storage populated with flyer dataset
 - Sync mechanism for updates (from flyer/scraper to local cache)

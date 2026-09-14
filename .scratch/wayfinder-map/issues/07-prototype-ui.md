@@ -7,6 +7,7 @@
 **Question:** Build a throwaway prototype showing how the service finder UI works — searching, filtering by category, viewing hours, and displaying locations on a map. Test with real flyer data.
 
 **Acceptance criteria:**
+
 - Working UI prototype with search and filter
 - Service list view with locations, categories, hours
 - Map view showing all locations

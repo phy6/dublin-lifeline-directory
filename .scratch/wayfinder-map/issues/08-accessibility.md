@@ -7,6 +7,7 @@
 **Question:** Implement the accessibility features: offline mode, large text, low-data mode, screen reader support, and intuitive navigation for users with limited tech experience.
 
 **Acceptance criteria:**
+
 - Offline mode with cached data display
 - Large text mode (configurable font sizes)
 - Low-data mode (minimal network usage, cached-first)

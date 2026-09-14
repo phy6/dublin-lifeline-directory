@@ -1,196 +1,189 @@
 {
-  "source": "www.primarycaresafetynet.ie",
-  "extracted_date": "2026-09-14",
-  "day_support_centres": [
-    {
-      "id": "mendicity-institute",
-      "name": "Mendicity Institute",
-      "address": "9 Island St., Dublin 8",
-      "phone": null,
-      "website": null,
-      "hours": {
-        "monday": "08:30-22:30",
-        "tuesday": "08:30-22:30",
-        "wednesday": "08:30-22:30",
-        "thursday": "08:30-22:30",
-        "friday": "08:30-22:30",
-        "saturday": null,
-        "sunday": "09:30-14:30, 16:30-22:30"
-      },
-      "services": [
-        "Food",
-        "Shower & Clothes washing",
-        "WiFi & phone charging",
-        "Employment Clinic (Mon 6:15pm)"
-      ],
-      "services_categories": ["Food", "Hygiene", "Connectivity", "Employment"],
-      "healthcare_services": [],
-      "special_notes": "Employment Clinic on Mondays at 6:15pm"
-    },
-    {
-      "id": "capuchin-day-centre",
-      "name": "Capuchin Day Centre",
-      "address": "29 Bow St, Dublin 7",
-      "phone": null,
-      "website": null,
-      "hours": {
-        "monday": "07:30-11:30, 12:30-15:00",
-        "tuesday": "07:30-11:30, 12:30-15:00",
-        "wednesday": "07:30-11:30, 12:30-15:00",
-        "thursday": "07:30-11:30, 12:30-15:00",
-        "friday": "07:30-11:30, 12:30-15:00",
-        "saturday": "07:30-11:30, 12:30-15:00",
-        "sunday": null
-      },
-      "services": [
-        "Hot Meals (Breakfast & Lunch)",
-        "WiFi & Phone Charging",
-        "Shower/Clothing",
-        "Doctor/Nurse/Dentist/Chiropodist/Optician"
-      ],
-      "services_categories": ["Food", "Connectivity", "Hygiene", "Healthcare"],
-      "healthcare_services": ["Doctor", "Nurse", "Dentist", "Chiropodist", "Optician"],
-      "special_notes": "On-site GP clinic also operates here"
-    },
-    {
-      "id": "lighthouse-cafe",
-      "name": "The Lighthouse Cafe",
-      "address": "28 Pearse Street, Dublin 2",
-      "phone": null,
-      "website": null,
-      "hours": {
-        "monday": "08:30-11:30, 19:00-22:00",
-        "tuesday": "13:00-17:00, 19:00-22:00",
-        "wednesday": "13:00-17:00, 19:00-22:00",
-        "thursday": "13:00-17:00, 19:00-22:00",
-        "friday": "08:30-11:30, 19:00-22:00",
-        "saturday": "15:00-18:00",
-        "sunday": "15:00-18:00"
-      },
-      "services": [
-        "Food & phone charging",
-        "Clothes (market on Fridays 16:00)"
-      ],
-      "services_categories": ["Food", "Connectivity", "Hygiene"],
-      "healthcare_services": [],
-      "special_notes": "Clothes market held on Fridays at 16:00"
-    },
-    {
-      "id": "merchants-quay-ireland",
-      "name": "Merchants Quay Ireland",
-      "address": "13/14 Merchants Quay, Dublin 8",
-      "phone": null,
-      "website": null,
-      "hours": {
-        "monday": "08:00-19:00",
-        "tuesday": "08:00-19:00",
-        "wednesday": "08:00-19:00",
-        "thursday": "08:00-19:00",
-        "friday": "08:00-19:00",
-        "saturday": null,
-        "sunday": "08:00-14:00"
-      },
-      "services": [
-        "Food & phone charging",
-        "Shower",
-        "Doctor/nurse/dentist"
-      ],
-      "services_categories": ["Food", "Connectivity", "Hygiene", "Healthcare"],
-      "healthcare_services": ["Doctor", "Nurse", "Dentist"],
-      "special_notes": "On-site GP clinic also operates here"
-    },
-    {
-      "id": "inclusion-health-hub",
-      "name": "Inclusion Health Hub",
-      "address": "60 Amiens St, Dublin 1",
-      "phone": null,
-      "website": null,
-      "hours": null,
-      "services": ["GP Clinic services"],
-      "services_categories": ["Healthcare"],
-      "healthcare_services": ["Doctor"],
-      "special_notes": "Listed as a Free Doctor Clinic location. Day Support Centre hours not specified on flyer."
-    }
-  ],
-  "free_doctor_clinics": [
-    {
-      "id": "inclusion-health-hub-gp",
-      "name": "Inclusion Health Hub GP Clinic",
-      "location_id": "inclusion-health-hub",
-      "address": "60 Amiens St, Dublin 1",
-      "schedule": {
-        "mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
-        "saturday": null,
-        "sunday": null
-      },
-      "appointment_available": true,
-      "walk_in_available": true,
-      "schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not specified on flyer"
-    },
-    {
-      "id": "capuchin-day-centre-gp",
-      "name": "Capuchin Day Centre GP Clinic",
-      "location_id": "capuchin-day-centre",
-      "address": "29 Bow St, Dublin 7",
-      "schedule": {
-        "mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
-        "saturday": null,
-        "sunday": null
-      },
-      "appointment_available": true,
-      "walk_in_available": true,
-      "schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
-    },
-    {
-      "id": "merchants-quay-ireland-gp",
-      "name": "Merchants Quay Ireland GP Clinic",
-      "location_id": "merchants-quay-ireland",
-      "address": "13-14 Merchant's Quay, Dublin 8",
-      "schedule": {
-        "mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
-        "saturday": null,
-        "sunday": null
-      },
-      "appointment_available": true,
-      "walk_in_available": true,
-      "schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
-    },
-    {
-      "id": "mendicity-institute-gp",
-      "name": "Mendicity Institute GP Clinic",
-      "location_id": "mendicity-institute",
-      "address": "9 Island St, Dublin 8",
-      "schedule": {
-        "mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
-        "saturday": null,
-        "sunday": null
-      },
-      "appointment_available": true,
-      "walk_in_available": true,
-      "schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
-    },
-    {
-      "id": "mobile-health-unit",
-      "name": "Mobile Health Unit (MHU)",
-      "location_id": null,
-      "address": "Travels to different locations on scheduled days",
-      "phone": null,
-      "website": null,
-      "hours": null,
-      "schedule": {
-        "mon_fri": "Visiting different locations on scheduled days (specific schedule not detailed on flyer)",
-        "saturday": null,
-        "sunday": null
-      },
-      "appointment_available": null,
-      "walk_in_available": null,
-      "schedule_details": "Mobile unit visits various locations on scheduled days; specific locations and times not detailed on flyer"
-    }
-  ],
-  "contact_information": {
-    "note": "No phone numbers or website URLs were present on the flyer for any location",
-    "source_website": "www.primarycaresafetynet.ie",
-    "phone_numbers": {},
-    "websites": {}
-  }
+	"source": "www.primarycaresafetynet.ie",
+	"extracted_date": "2026-09-14",
+	"day_support_centres": [
+		{
+			"id": "mendicity-institute",
+			"name": "Mendicity Institute",
+			"address": "9 Island St., Dublin 8",
+			"phone": null,
+			"website": null,
+			"hours": {
+				"monday": "08:30-22:30",
+				"tuesday": "08:30-22:30",
+				"wednesday": "08:30-22:30",
+				"thursday": "08:30-22:30",
+				"friday": "08:30-22:30",
+				"saturday": null,
+				"sunday": "09:30-14:30, 16:30-22:30"
+			},
+			"services": [
+				"Food",
+				"Shower & Clothes washing",
+				"WiFi & phone charging",
+				"Employment Clinic (Mon 6:15pm)"
+			],
+			"services_categories": ["Food", "Hygiene", "Connectivity", "Employment"],
+			"healthcare_services": [],
+			"special_notes": "Employment Clinic on Mondays at 6:15pm"
+		},
+		{
+			"id": "capuchin-day-centre",
+			"name": "Capuchin Day Centre",
+			"address": "29 Bow St, Dublin 7",
+			"phone": null,
+			"website": null,
+			"hours": {
+				"monday": "07:30-11:30, 12:30-15:00",
+				"tuesday": "07:30-11:30, 12:30-15:00",
+				"wednesday": "07:30-11:30, 12:30-15:00",
+				"thursday": "07:30-11:30, 12:30-15:00",
+				"friday": "07:30-11:30, 12:30-15:00",
+				"saturday": "07:30-11:30, 12:30-15:00",
+				"sunday": null
+			},
+			"services": [
+				"Hot Meals (Breakfast & Lunch)",
+				"WiFi & Phone Charging",
+				"Shower/Clothing",
+				"Doctor/Nurse/Dentist/Chiropodist/Optician"
+			],
+			"services_categories": ["Food", "Connectivity", "Hygiene", "Healthcare"],
+			"healthcare_services": ["Doctor", "Nurse", "Dentist", "Chiropodist", "Optician"],
+			"special_notes": "On-site GP clinic also operates here"
+		},
+		{
+			"id": "lighthouse-cafe",
+			"name": "The Lighthouse Cafe",
+			"address": "28 Pearse Street, Dublin 2",
+			"phone": null,
+			"website": null,
+			"hours": {
+				"monday": "08:30-11:30, 19:00-22:00",
+				"tuesday": "13:00-17:00, 19:00-22:00",
+				"wednesday": "13:00-17:00, 19:00-22:00",
+				"thursday": "13:00-17:00, 19:00-22:00",
+				"friday": "08:30-11:30, 19:00-22:00",
+				"saturday": "15:00-18:00",
+				"sunday": "15:00-18:00"
+			},
+			"services": ["Food & phone charging", "Clothes (market on Fridays 16:00)"],
+			"services_categories": ["Food", "Connectivity", "Hygiene"],
+			"healthcare_services": [],
+			"special_notes": "Clothes market held on Fridays at 16:00"
+		},
+		{
+			"id": "merchants-quay-ireland",
+			"name": "Merchants Quay Ireland",
+			"address": "13/14 Merchants Quay, Dublin 8",
+			"phone": null,
+			"website": null,
+			"hours": {
+				"monday": "08:00-19:00",
+				"tuesday": "08:00-19:00",
+				"wednesday": "08:00-19:00",
+				"thursday": "08:00-19:00",
+				"friday": "08:00-19:00",
+				"saturday": null,
+				"sunday": "08:00-14:00"
+			},
+			"services": ["Food & phone charging", "Shower", "Doctor/nurse/dentist"],
+			"services_categories": ["Food", "Connectivity", "Hygiene", "Healthcare"],
+			"healthcare_services": ["Doctor", "Nurse", "Dentist"],
+			"special_notes": "On-site GP clinic also operates here"
+		},
+		{
+			"id": "inclusion-health-hub",
+			"name": "Inclusion Health Hub",
+			"address": "60 Amiens St, Dublin 1",
+			"phone": null,
+			"website": null,
+			"hours": null,
+			"services": ["GP Clinic services"],
+			"services_categories": ["Healthcare"],
+			"healthcare_services": ["Doctor"],
+			"special_notes": "Listed as a Free Doctor Clinic location. Day Support Centre hours not specified on flyer."
+		}
+	],
+	"free_doctor_clinics": [
+		{
+			"id": "inclusion-health-hub-gp",
+			"name": "Inclusion Health Hub GP Clinic",
+			"location_id": "inclusion-health-hub",
+			"address": "60 Amiens St, Dublin 1",
+			"schedule": {
+				"mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
+				"saturday": null,
+				"sunday": null
+			},
+			"appointment_available": true,
+			"walk_in_available": true,
+			"schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not specified on flyer"
+		},
+		{
+			"id": "capuchin-day-centre-gp",
+			"name": "Capuchin Day Centre GP Clinic",
+			"location_id": "capuchin-day-centre",
+			"address": "29 Bow St, Dublin 7",
+			"schedule": {
+				"mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
+				"saturday": null,
+				"sunday": null
+			},
+			"appointment_available": true,
+			"walk_in_available": true,
+			"schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
+		},
+		{
+			"id": "merchants-quay-ireland-gp",
+			"name": "Merchants Quay Ireland GP Clinic",
+			"location_id": "merchants-quay-ireland",
+			"address": "13-14 Merchant's Quay, Dublin 8",
+			"schedule": {
+				"mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
+				"saturday": null,
+				"sunday": null
+			},
+			"appointment_available": true,
+			"walk_in_available": true,
+			"schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
+		},
+		{
+			"id": "mendicity-institute-gp",
+			"name": "Mendicity Institute GP Clinic",
+			"location_id": "mendicity-institute",
+			"address": "9 Island St, Dublin 8",
+			"schedule": {
+				"mon_fri": "Appointment and walk-in times available (specific times not detailed on flyer)",
+				"saturday": null,
+				"sunday": null
+			},
+			"appointment_available": true,
+			"walk_in_available": true,
+			"schedule_details": "Mon-Fri operating with both appointment and walk-in options; exact times not detailed on flyer"
+		},
+		{
+			"id": "mobile-health-unit",
+			"name": "Mobile Health Unit (MHU)",
+			"location_id": null,
+			"address": "Travels to different locations on scheduled days",
+			"phone": null,
+			"website": null,
+			"hours": null,
+			"schedule": {
+				"mon_fri": "Visiting different locations on scheduled days (specific schedule not detailed on flyer)",
+				"saturday": null,
+				"sunday": null
+			},
+			"appointment_available": null,
+			"walk_in_available": null,
+			"schedule_details": "Mobile unit visits various locations on scheduled days; specific locations and times not detailed on flyer"
+		}
+	],
+	"contact_information": {
+		"note": "No phone numbers or website URLs were present on the flyer for any location",
+		"source_website": "www.primarycaresafetynet.ie",
+		"phone_numbers": {},
+		"websites": {}
+	}
 }
