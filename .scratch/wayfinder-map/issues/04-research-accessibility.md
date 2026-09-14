@@ -13,3 +13,13 @@
 - Low-data mode implementation strategy
 - Screen reader and gesture navigation support
 - Output: accessibility specification document
+
+---
+
+**Resolution:** ✅ Complete. Full accessibility specification at `research/accessibility-spec.md`. WCAG 2.2 compliance, crisis button, max 3 taps, list-first layout.
+
+**Resolution date:** 2026-09-14
+
+---
+
+**Status:** closed

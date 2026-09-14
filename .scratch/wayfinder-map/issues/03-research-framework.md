@@ -13,3 +13,13 @@
 - Accessibility feature support in each framework
 - Performance and data usage considerations
 - Output: framework recommendation with rationale
+
+---
+
+**Resolution:** ✅ Complete. Recommended framework: Flutter. Mapbox for map rendering (not Google Maps). Report at `research/framework-comparison.md`.
+
+**Resolution date:** 2026-09-14
+
+---
+
+**Status:** closed

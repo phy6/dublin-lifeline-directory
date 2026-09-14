@@ -12,3 +12,13 @@
 - Approach for handling data freshness (how to know if cached data is stale)
 - Accessibility implementation strategy (offline-compatible large text, low-data)
 - Output: architecture recommendation with trade-offs
+
+---
+
+**Resolution:** ✅ Complete. Recommended architecture: SQLite + Sync Queue with Delta Sync. Flutter with sqflite/drift. ETag-based pull sync. Report at `research/offline-architecture.md`.
+
+**Resolution date:** 2026-09-14
+
+---
+
+**Status:** closed

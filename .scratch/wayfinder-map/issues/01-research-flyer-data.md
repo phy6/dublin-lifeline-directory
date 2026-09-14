@@ -12,3 +12,13 @@
 - Mobile Health Unit schedule documented
 - Gap analysis: what fields are present vs missing
 - Output: a structured JSON/CSV dataset representing the flyer data
+
+---
+
+**Resolution:** ✅ Complete. Full dataset extracted to `research/flyer-data.json`. All 5 Day Support Centres + 5 GP clinics + MHU documented with hours, services, addresses. Gap analysis at `research/gap-analysis.md`.
+
+**Resolution date:** 2026-09-14
+
+---
+
+**Status:** closed
