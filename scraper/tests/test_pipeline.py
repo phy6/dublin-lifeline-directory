@@ -1,0 +1,278 @@
+import json
+import os
+import sys
+import tempfile
+import pytest
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from pipeline import (
+    load_flyer_data,
+    merge_location,
+    normalize_services,
+    compute_diff,
+    bump_version,
+    write_services,
+    run_pipeline,
+)
+
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+FLYER_PATH = os.path.join(PROJECT_ROOT, ".scratch", "wayfinder-map", "research", "flyer-data.json")
+SCRAPED_PATH = os.path.join(PROJECT_ROOT, "scraper", "output", "scraped_output.json")
+SERVICES_PATH = os.path.join(PROJECT_ROOT, "src", "lib", "data", "services.json")
+
+
+@pytest.fixture
+def flyer_data():
+    return {
+        "day_support_centres": [
+            {
+                "id": "test-centre",
+                "name": "Test Centre",
+                "address": "1 Test St",
+                "phone": "01 123 4567",
+                "email": "test@test.ie",
+                "website": "https://test.ie",
+                "coordinates": {"latitude": 53.35, "longitude": -6.25},
+                "hours": {"monday": "09:00-17:00"},
+                "services": ["Hot Meals", "Doctor/Nurse", "WiFi & phone charging"],
+                "services_categories": ["Food", "Healthcare", "Connectivity"],
+                "healthcare_services": ["Doctor"],
+            }
+        ],
+        "free_doctor_clinics": [],
+    }
+
+
+@pytest.fixture
+def scraped_data():
+    return {
+        "id": "test-centre",
+        "name": "Test Centre",
+        "address": "1 Old St",
+        "phone": "+353-1-999-9999",
+        "email": "old@test.ie",
+        "website": "https://old.ie",
+        "latitude": 53.34,
+        "longitude": -6.26,
+        "services": ["shelter", "food"],
+        "tags": ["homeless"],
+        "category": "Emergency Shelter",
+        "description": "Old description",
+        "fallback": {},
+    }
+
+
+@pytest.fixture
+def fallback_data():
+    return {
+        "name": "Test Centre",
+        "address": "1 Fallback St",
+        "phone": "+353-1-000-0000",
+        "latitude": 53.30,
+        "longitude": -6.30,
+        "services": ["counselling"],
+        "tags": ["support"],
+        "category": "Community Support",
+        "description": "Fallback description",
+    }
+
+
+def test_merge_location_prefers_flyer_over_scraped(flyer_data, scraped_data, fallback_data):
+    flyer = flyer_data["day_support_centres"][0]
+    result = merge_location(scraped_data, flyer, fallback_data)
+
+    assert result["phone"] == flyer["phone"]
+    assert result["email"] == flyer["email"]
+    assert result["website"] == flyer["website"]
+    assert result["hours"] == flyer["hours"]
+    assert result["latitude"] == flyer["coordinates"]["latitude"]
+    assert result["longitude"] == flyer["coordinates"]["longitude"]
+    assert "food" in result["services"]
+    assert "medical" in result["services"]
+    assert "connectivity" in result["services"]
+
+
+def test_merge_location_uses_scraped_for_null_flyer_fields(flyer_data, scraped_data, fallback_data):
+    flyer = flyer_data["day_support_centres"][0]
+    flyer["phone"] = None
+    flyer["email"] = None
+    result = merge_location(scraped_data, flyer, fallback_data)
+
+    assert result["phone"] == scraped_data["phone"]
+    assert result["email"] == scraped_data["email"]
+
+
+def test_merge_location_sets_data_source_and_timestamps(scraped_data, flyer_data, fallback_data):
+    flyer = flyer_data["day_support_centres"][0]
+    result = merge_location(scraped_data, flyer, fallback_data)
+
+    assert result["dataSource"] == "merged"
+    assert "lastScraped" in result
+    assert result["scrapeSuccess"] is True
+
+
+def test_normalize_services_converts_hot_meals_to_food():
+    services = ["Hot Meals", "Doctor/Nurse", "WiFi & phone charging", "Shower & Clothes washing"]
+    result = normalize_services(services)
+
+    assert "food" in result
+    assert "medical" in result
+    assert "connectivity" in result
+    assert "hygiene" in result
+
+
+def test_normalize_services_returns_sorted_unique():
+    services = ["Food", "food", "Medical", "food"]
+    result = normalize_services(services)
+
+    assert result == ["food", "medical"]
+
+
+def test_bump_version_patch_for_metadata_only():
+    diffs = {"additions": [], "updates": [], "deletions": []}
+    result = bump_version("3.1.0", diffs)
+    assert result == "3.1.1"
+
+
+def test_bump_version_minor_for_additions():
+    diffs = {"additions": [{"id": "new-place"}], "updates": [], "deletions": []}
+    result = bump_version("3.1.0", diffs)
+    assert result == "3.2.0"
+
+
+def test_bump_version_minor_for_updates():
+    diffs = {"additions": [], "updates": [{"id": "updated-place"}], "deletions": []}
+    result = bump_version("3.1.0", diffs)
+    assert result == "3.2.0"
+
+
+def test_bump_version_major_for_deletions():
+    diffs = {"additions": [], "updates": [], "deletions": [{"id": "removed-place"}]}
+    result = bump_version("3.1.0", diffs)
+    assert result == "4.0.0"
+
+
+def test_compute_diff_detects_additions():
+    old = {"services": [{"id": "a", "name": "Place A"}]}
+    new = {"services": [{"id": "a", "name": "Place A"}, {"id": "b", "name": "Place B"}]}
+    diffs = compute_diff(old, new)
+
+    assert len(diffs["additions"]) == 1
+    assert diffs["additions"][0]["id"] == "b"
+    assert diffs["updates"] == []
+    assert diffs["deletions"] == []
+
+
+def test_compute_diff_detects_updates():
+    old = {"services": [{"id": "a", "name": "Place A", "phone": "111"}]}
+    new = {"services": [{"id": "a", "name": "Place A", "phone": "222"}]}
+    diffs = compute_diff(old, new)
+
+    assert len(diffs["updates"]) == 1
+    assert diffs["updates"][0]["phone"] == "222"
+
+
+def test_compute_diff_detects_deletions():
+    old = {"services": [{"id": "a", "name": "Place A"}, {"id": "b", "name": "Place B"}]}
+    new = {"services": [{"id": "a", "name": "Place A"}]}
+    diffs = compute_diff(old, new)
+
+    assert len(diffs["deletions"]) == 1
+    assert diffs["deletions"][0]["id"] == "b"
+
+
+def test_compute_diff_no_changes():
+    old = {"services": [{"id": "a", "name": "Place A"}]}
+    new = {"services": [{"id": "a", "name": "Place A"}]}
+    diffs = compute_diff(old, new)
+
+    assert diffs["additions"] == []
+    assert diffs["updates"] == []
+    assert diffs["deletions"] == []
+
+
+def test_load_flyer_data():
+    data = load_flyer_data(FLYER_PATH)
+    assert "day_support_centres" in data
+    assert "free_doctor_clinics" in data
+    assert len(data["day_support_centres"]) > 0
+
+
+def test_write_services_writes_to_both_paths():
+    tmp_dir = tempfile.mkdtemp()
+    src_lib_dir = os.path.join(tmp_dir, "src", "lib", "data")
+    static_dir = os.path.join(tmp_dir, "static")
+    os.makedirs(src_lib_dir, exist_ok=True)
+    os.makedirs(static_dir, exist_ok=True)
+
+    test_data = {
+        "version": "1.0.0",
+        "lastUpdated": "2026-09-17T00:00:00.000Z",
+        "generatedBy": "Test",
+        "services": [],
+        "metadata": {"totalServices": 0},
+    }
+
+    import pipeline
+    original_write = pipeline.write_services
+    original_get_root = pipeline._get_project_root
+
+    def mock_get_root():
+        return tmp_dir
+
+    pipeline._get_project_root = mock_get_root
+
+    def mock_write(data):
+        with open(os.path.join(src_lib_dir, "services.json"), "w") as f:
+            json.dump(data, f)
+        with open(os.path.join(static_dir, "services.json"), "w") as f:
+            json.dump(data, f)
+
+    pipeline.write_services = mock_write
+    try:
+        mock_write(test_data)
+        with open(os.path.join(src_lib_dir, "services.json")) as f:
+            src_data = json.load(f)
+        with open(os.path.join(static_dir, "services.json")) as f:
+            static_data = json.load(f)
+        assert src_data["version"] == "1.0.0"
+        assert static_data["version"] == "1.0.0"
+    finally:
+        pipeline.write_services = original_write
+        pipeline._get_project_root = original_get_root
+        import shutil
+        shutil.rmtree(tmp_dir)
+
+
+def test_run_pipeline_returns_result():
+    if not os.path.exists(SCRAPED_PATH):
+        pytest.skip("scraped_output.json not found")
+    if not os.path.exists(FLYER_PATH):
+        pytest.skip("flyer-data.json not found")
+
+    import pipeline
+    original_write = pipeline.write_services
+    original_get_root = pipeline._get_project_root
+    project_root = _project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    def mock_get_root():
+        return project_root
+
+    pipeline._get_project_root = mock_get_root
+
+    written_data = {}
+
+    def mock_write(data):
+        written_data.update(data)
+
+    pipeline.write_services = mock_write
+
+    try:
+        result = run_pipeline(SCRAPED_PATH, FLYER_PATH, "")
+        assert "version" in result
+        assert "totalServices" in result
+        assert "diffs" in result
+        assert "metadata" in result
+    finally:
+        pipeline.write_services = original_write
+        pipeline._get_project_root = original_get_root
