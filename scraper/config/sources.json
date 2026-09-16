@@ -1,0 +1,1108 @@
+{
+  "version": "3.1.0",
+  "lastUpdated": "2026-09-13",
+  "targets": [
+    {
+      "id": "capuchin-day-centre",
+      "name": "Capuchin Day Centre",
+      "url": "https://capuchindaycentre.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          "p.phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Capuchin Day Centre",
+        "address": "29 Bow St, Dublin 7",
+        "phone": "+353-1-878-0404",
+        "hours": {
+          "mon-fri": "08:30-15:30",
+          "sat": "09:00-13:00",
+          "sun": "closed"
+        },
+        "email": "info@capuchindaycentre.ie",
+        "website": "https://capuchindaycentre.ie",
+        "services": [
+          "food",
+          "shelter",
+          "medical",
+          "counselling",
+          "support",
+          "clothing",
+          "health",
+          "social",
+          "information",
+          "policy"
+        ],
+        "tags": [
+          "homeless",
+          "emergency",
+          "food",
+          "medical",
+          "support",
+          "family",
+          "children"
+        ],
+        "category": "Emergency Shelter",
+        "latitude": 53.3481,
+        "longitude": -6.2758,
+        "description": "Capuchin Day Centre provides emergency shelter, food, medical care, and support services to people experiencing homelessness and poverty in Dublin."
+      }
+    },
+    {
+      "id": "merchants-quay-ireland",
+      "name": "Merchants Quay Ireland",
+      "url": "https://mqi.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Merchants Quay Ireland",
+        "address": "8 Merchants Quay, Dublin 8",
+        "phone": "+353-1-874-3805",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@mqi.ie",
+        "website": "https://mqi.ie",
+        "services": [
+          "addiction",
+          "recovery",
+          "support",
+          "food",
+          "medical",
+          "homelessness",
+          "community",
+          "advice",
+          "health",
+          "social",
+          "volunteering"
+        ],
+        "tags": [
+          "addiction",
+          "recovery",
+          "harm-reduction",
+          "homeless",
+          "community"
+        ],
+        "category": "Addiction Support",
+        "latitude": 53.3449,
+        "longitude": -6.2733,
+        "description": "Merchants Quay Ireland provides addiction treatment, recovery services, and support for people affected by substance misuse in Dublin."
+      }
+    },
+    {
+      "id": "focus-ireland",
+      "name": "Focus Ireland",
+      "url": "https://www.focusireland.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-contact"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Focus Ireland",
+        "address": "218-222 Phibsborough Road, Dublin 7",
+        "phone": "+353-1-885-5900",
+        "hours": {
+          "mon-fri": "09:00-17:30",
+          "default": "09:00-17:30"
+        },
+        "email": "info@focusireland.ie",
+        "website": "https://www.focusireland.ie",
+        "services": [
+          "homelessness",
+          "housing",
+          "support"
+        ],
+        "tags": [
+          "homelessness",
+          "housing",
+          "support"
+        ],
+        "category": "Housing Support",
+        "latitude": 53.3592,
+        "longitude": -6.2742,
+        "description": "Focus Ireland provides housing and support services for people experiencing homelessness in Dublin."
+      }
+    },
+    {
+      "id": "dublin-simon-community",
+      "name": "Dublin Simon Community",
+      "url": "https://www.dubsimon.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Dublin Simon Community",
+        "address": "85 Capel Street, Dublin 1",
+        "phone": "+353-1-674-5656",
+        "hours": {
+          "mon-fri": "09:00-17:30"
+        },
+        "email": "info@dubsimon.ie",
+        "website": "https://www.dubsimon.ie",
+        "services": [
+          "homelessness",
+          "emergency",
+          "accommodation"
+        ],
+        "tags": [
+          "homelessness",
+          "emergency",
+          "accommodation"
+        ],
+        "category": "Emergency Shelter",
+        "latitude": 53.3496,
+        "longitude": -6.2687,
+        "description": "Dublin Simon Community provides emergency accommodation and support for people experiencing homelessness in Dublin."
+      }
+    },
+    {
+      "id": "samaritans-ireland",
+      "name": "Samaritans Ireland",
+      "url": "https://www.samaritans.org/ireland/samaritans-ireland/",
+      "selectors": {
+        "phone": [
+          ".helpline-number",
+          ".phone-number",
+          "a[href^=\"tel\"]",
+          ".call-us",
+          ".footer-phone"
+        ],
+        "address": [
+          ".address",
+          ".location",
+          "[itemprop=\"address\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          ".contact-email",
+          "a[href^=\"mailto\"]",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".about-text",
+          ".mission",
+          ".intro-text",
+          ".page-content p",
+          ".services-description"
+        ]
+      },
+      "fallback": {
+        "name": "Samaritans Ireland",
+        "address": "191 Great Denmark Street, Dublin 1",
+        "phone": "+353-1-677-3333",
+        "hours": {
+          "mon-sun": "09:00-21:00"
+        },
+        "email": "dublin@samaritans.ie",
+        "website": "https://www.samaritans.org/ireland/samaritans-ireland/",
+        "services": [
+          "mental-health",
+          "crisis-support",
+          "suicide-prevention"
+        ],
+        "tags": [
+          "crisis",
+          "mental-health",
+          "helpline"
+        ],
+        "category": "Crisis Support",
+        "latitude": 53.3556,
+        "longitude": -6.2558,
+        "description": "Samaritans Ireland provides confidential emotional support to people in distress or at risk of suicide."
+      }
+    },
+    {
+      "id": "crosscare",
+      "name": "Crosscare",
+      "url": "https://crosscare.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Crosscare",
+        "address": "127 Parnell Square West, Dublin 1",
+        "phone": "+353-1-874-1919",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@crosscare.ie",
+        "website": "https://crosscare.ie",
+        "services": [
+          "elderly",
+          "community",
+          "support"
+        ],
+        "tags": [
+          "elderly",
+          "community",
+          "support"
+        ],
+        "category": "Community Support",
+        "latitude": 53.3533,
+        "longitude": -6.2625,
+        "description": "Crosscare provides community support, elderly care, and social services in Dublin."
+      }
+    },
+    {
+      "id": "mendicity-institution",
+      "name": "Mendicity Institution",
+      "url": "https://www.mendicity.org/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Mendicity Institution",
+        "address": "115 Usher's Island, Dublin 8",
+        "phone": "+353-1-677-3939",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@mendicity.org",
+        "website": "https://www.mendicity.org",
+        "services": [
+          "elderly",
+          "community",
+          "social"
+        ],
+        "tags": [
+          "elderly",
+          "community",
+          "social"
+        ],
+        "category": "Community Support",
+        "latitude": 53.3461,
+        "longitude": -6.2818,
+        "description": "Mendicity Institution provides support and services for elderly and vulnerable people in Dublin."
+      }
+    },
+    {
+      "id": "peter-mcverry-trust",
+      "name": "Peter McVerry Trust",
+      "url": "https://www.petermcverrytrust.org/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Peter McVerry Trust",
+        "address": "10 South Cumberland Street, Dublin 1",
+        "phone": "+353-1-878-0404",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@petermcverrytrust.org",
+        "website": "https://www.petermcverrytrust.org",
+        "services": [
+          "homelessness",
+          "housing",
+          "support",
+          "addiction"
+        ],
+        "tags": [
+          "homelessness",
+          "housing",
+          "addiction",
+          "support",
+          "youth"
+        ],
+        "category": "Housing Support",
+        "latitude": 53.3491,
+        "longitude": -6.2617,
+        "description": "Peter McVerry Trust works with homeless young people and those at risk of homelessness in Dublin."
+      }
+    },
+    {
+      "id": "cope-ireland",
+      "name": "COPE Ireland",
+      "url": "https://www.copeireland.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "COPE Ireland",
+        "address": "22 North Cumberland Street, Dublin 1",
+        "phone": "+353-1-874-1141",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@copeireland.ie",
+        "website": "https://www.copeireland.ie",
+        "services": [
+          "elderly",
+          "community",
+          "support",
+          "health"
+        ],
+        "tags": [
+          "elderly",
+          "community",
+          "support",
+          "health",
+          "carers"
+        ],
+        "category": "Community Support",
+        "latitude": 53.3528,
+        "longitude": -6.2605,
+        "description": "COPE Ireland provides support services for older people and their carers in Dublin."
+      }
+    },
+    {
+      "id": "simon-community-employment",
+      "name": "Simon Community Employment",
+      "url": "https://www.simoncommunity.ie/employment/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone",
+          ".header-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule",
+          ".opening-times"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email",
+          ".footer-email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
+          ".footer-link"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Simon Community Employment",
+        "address": "115 Capel Street, Dublin 1",
+        "phone": "+353-1-674-5656",
+        "hours": {
+          "mon-fri": "09:00-17:30"
+        },
+        "email": "info@simoncommunity.ie",
+        "website": "https://www.simoncommunity.ie",
+        "services": [
+          "employment",
+          "training",
+          "support",
+          "homelessness"
+        ],
+        "tags": [
+          "employment",
+          "training",
+          "homelessness",
+          "support",
+          "community"
+        ],
+        "category": "Community Support",
+        "latitude": 53.3492,
+        "longitude": -6.2689,
+        "description": "Simon Community Employment provides training and employment services for people experiencing homelessness."
+      }
+    },
+    {
+      "id": "alone",
+      "name": "ALONE",
+      "url": "https://alone.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "ALONE",
+        "address": "Olympic House, Pleasants Street, Dublin 8",
+        "phone": "+353-1-679-1032",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "hello@alone.ie",
+        "website": "https://alone.ie",
+        "services": [
+          "elderly",
+          "befriending",
+          "support",
+          "community",
+          "isolation",
+          "health"
+        ],
+        "tags": [
+          "elderly",
+          "community",
+          "support",
+          "befriending",
+          "isolation"
+        ],
+        "category": "Community Support",
+        "latitude": 53.3362,
+        "longitude": -6.2718,
+        "description": "ALONE supports older people to age at home through befriending, support coordination and housing services."
+      }
+    },
+    {
+      "id": "inner-city-helping-homeless",
+      "name": "Inner City Helping Homeless",
+      "url": "https://www.ichh.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Inner City Helping Homeless",
+        "address": "30/31 Francis Street, Dublin 8",
+        "phone": "+353-1-453-6161",
+        "hours": {
+          "mon-sun": "09:00-17:00"
+        },
+        "email": "info@ichh.ie",
+        "website": "https://www.ichh.ie",
+        "services": [
+          "homelessness",
+          "emergency",
+          "outreach",
+          "food",
+          "clothing",
+          "support"
+        ],
+        "tags": [
+          "homeless",
+          "emergency",
+          "outreach",
+          "food",
+          "clothing"
+        ],
+        "category": "Emergency Shelter",
+        "latitude": 53.3405,
+        "longitude": -6.2758,
+        "description": "ICHH provides outreach, emergency support and advocacy for people experiencing homelessness in Dublin."
+      }
+    },
+    {
+      "id": "safetynet-primary-care",
+      "name": "Safetynet Primary Care",
+      "url": "https://www.primarycaresafetynet.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Safetynet Primary Care",
+        "address": "27-29 Merchant's Quay, Dublin 8",
+        "phone": "+353-1-868-0166",
+        "hours": {
+          "mon-fri": "09:30-16:30"
+        },
+        "email": "info@primarycaresafetynet.ie",
+        "website": "https://www.primarycaresafetynet.ie",
+        "services": [
+          "medical",
+          "GP clinic",
+          "health",
+          "homelessness",
+          "primary care",
+          "nursing"
+        ],
+        "tags": [
+          "medical",
+          "health",
+          "homeless",
+          "GP"
+        ],
+        "category": "Health Support",
+        "latitude": 53.3429,
+        "longitude": -6.2742,
+        "description": "Safetynet provides GP and primary care services to homeless and vulnerable people in Dublin."
+      }
+    },
+    {
+      "id": "ana-liffey-drug-project",
+      "name": "Ana Liffey Drug Project",
+      "url": "https://www.aldp.ie/",
+      "selectors": {
+        "phone": [
+          "a[href^=\"tel\"]",
+          ".phone",
+          ".contact-number",
+          ".footer-phone"
+        ],
+        "address": [
+          ".address",
+          ".location-address",
+          "[itemprop=\"streetAddress\"]",
+          ".footer-address",
+          "address"
+        ],
+        "hours": [
+          ".opening-hours",
+          ".hours",
+          "[itemprop=\"openingHours\"]",
+          ".schedule"
+        ],
+        "email": [
+          "a[href^=\"mailto\"]",
+          ".contact-email",
+          ".email"
+        ],
+        "website": [
+          ".website-link",
+          "a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+        ],
+        "description": [
+          ".services-description",
+          ".about-text",
+          ".mission-statement",
+          ".intro-text",
+          ".page-content p"
+        ]
+      },
+      "fallback": {
+        "name": "Ana Liffey Drug Project",
+        "address": "48 Middle Abbey Street, Dublin 1",
+        "phone": "+353-1-878-6111",
+        "hours": {
+          "mon-fri": "09:00-17:00"
+        },
+        "email": "info@aldp.ie",
+        "website": "https://www.aldp.ie",
+        "services": [
+          "addiction",
+          "harm reduction",
+          "needle exchange",
+          "counselling",
+          "support",
+          "outreach"
+        ],
+        "tags": [
+          "addiction",
+          "harm-reduction",
+          "needle exchange",
+          "counselling",
+          "outreach"
+        ],
+        "category": "Addiction Support",
+        "latitude": 53.3486,
+        "longitude": -6.2602,
+        "description": "Ana Liffey provides harm reduction, needle exchange and support services for people who use drugs in Dublin."
+      }
+    }
+  ],
+  "discovery": {
+    "urls": [
+      "https://www.dublincity.ie/living-here/community-and-volunteering/voluntary-organisations/",
+      "https://www.charitynavigator.org/search?q=dublin&country=IE",
+      "https://www.chaarities.ie/",
+      "https://www.alone.ie/",
+      "https://www.siara.org/",
+      "https://www.dublincare.org/",
+      "https://www.corkcitycommunity.org/"
+    ],
+    "selectors": {
+      "name": [
+        "h2 a",
+        ".org-name",
+        ".listing-title",
+        ".title a",
+        "h3 a"
+      ],
+      "url": [
+        "a[href]",
+        ".org-link",
+        ".listing-url",
+        "h2 a"
+      ],
+      "description": [
+        ".description",
+        ".summary",
+        ".listing-description",
+        ".org-description",
+        "p"
+      ],
+      "phone": [
+        "a[href^=\"tel\"]",
+        ".phone",
+        ".contact-phone"
+      ],
+      "category": [
+        ".category",
+        ".tag",
+        ".service-type",
+        ".org-category"
+      ],
+      "address": [
+        ".address",
+        ".location",
+        ".org-address"
+      ]
+    },
+    "interval": 60000,
+    "maxResults": 50
+  },
+  "rateLimit": {
+    "requestsPerMinute": 10,
+    "timeout": 5000,
+    "retryAttempts": 3,
+    "retryDelay": 2000
+  },
+  "globalSelectors": {
+    "hours": [
+      ".opening-hours",
+      ".hours",
+      "[itemprop=\"openingHours\"]",
+      "time[datetime]"
+    ],
+    "address": [
+      ".address",
+      ".location",
+      "[itemprop=\"streetAddress\"]",
+      "[itemprop=\"address\"]"
+    ],
+    "phone": [
+      "a[href^=\"tel\"]",
+      ".phone",
+      ".phone-number",
+      "[itemprop=\"telephone\"]"
+    ],
+    "email": [
+      "a[href^=\"mailto\"]",
+      ".email",
+      "[itemprop=\"email\"]"
+    ]
+  },
+  "schedule": {
+    "cron": "0 6 * * 1",
+    "timezone": "Europe/Dublin"
+  }
+}
