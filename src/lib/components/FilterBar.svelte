@@ -3,11 +3,15 @@
 
 	let {
 		categories,
+		selectedCategory = 'All',
+		selectedDay = 'all',
 		onFilter,
 		onSearch,
 		onDayFilter
 	}: {
 		categories: string[];
+		selectedCategory?: string;
+		selectedDay?: string;
 		onFilter: (cat: string) => void;
 		onSearch: (q: string) => void;
 		onDayFilter: (day: string) => void;
@@ -24,24 +28,24 @@
 	/>
 	<div class="filter-chips" role="group" aria-label="Filter by category">
 		<button
-			class:active={!categories.length || true}
+			class:active={selectedCategory === 'All'}
 			onclick={() => onFilter('All')}
-			aria-pressed={true}
+			aria-pressed={selectedCategory === 'All'}
 		>
 			All Categories
 		</button>
 		{#each categories as cat (cat)}
-			<button class:active={false} onclick={() => onFilter(cat)} aria-pressed={false}>
+			<button class:active={selectedCategory === cat} onclick={() => onFilter(cat)} aria-pressed={selectedCategory === cat}>
 				{cat}
 			</button>
 		{/each}
 	</div>
 	<div class="filter-chips" role="group" aria-label="Filter by day">
-		<button class:active={true} onclick={() => onDayFilter('all')} aria-pressed={true}>
+		<button class:active={selectedDay === 'all'} onclick={() => onDayFilter('all')} aria-pressed={selectedDay === 'all'}>
 			All Days
 		</button>
 		{#each DAY_KEYS as day, i (day)}
-			<button class:active={false} onclick={() => onDayFilter(day)} aria-pressed={false}>
+			<button class:active={selectedDay === day} onclick={() => onDayFilter(day)} aria-pressed={selectedDay === day}>
 				{DAY_LABELS[i]}
 			</button>
 		{/each}

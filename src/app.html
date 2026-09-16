@@ -5,10 +5,50 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#1a73e8" />
 		<meta name="text-scale" content="scale" />
+		<meta
+			name="description"
+			content="Find nearby support services in Dublin City — day centres, GP clinics, and the Mobile Health Unit. Service directory for people experiencing homelessness."
+		/>
 		<link rel="manifest" href="/manifest.webmanifest" />
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
+		<a href="#main-content" class="skip-link">Skip to main content</a>
+		<div id="status-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+		<div id="status-assertive" aria-live="assertive" aria-atomic="true" class="sr-only"></div>
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
+<style>
+	html, body {
+		overflow-y: auto;
+		margin: 0;
+		padding: 0;
+	}
+	.skip-link {
+			position: absolute;
+			top: -100%;
+			left: 0;
+			background: #1a73e8;
+			color: white;
+			padding: 0.5rem 1rem;
+			z-index: 10000;
+			font-size: 1rem;
+			text-decoration: none;
+		}
+		.skip-link:focus {
+			top: 0;
+		}
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+			border-width: 0;
+		}
+	</style>
 </html>

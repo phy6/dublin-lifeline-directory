@@ -11,7 +11,7 @@
 </script>
 
 {#if service}
-	<main>
+	<main id="main-content">
 		<a href="/">← Back</a>
 		<div class="service-detail">
 			<div class="category">{service.category}</div>

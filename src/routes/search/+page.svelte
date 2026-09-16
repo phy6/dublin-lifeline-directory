@@ -8,6 +8,7 @@
 	let services = $state<ServiceLocation[]>([]);
 	let filtered = $state<ServiceLocation[]>([]);
 	let categories = $state<string[]>([]);
+	let selectedCategory = $state<string>('All');
 	let selectedDay = $state<string>('all');
 	let loading = $state(true);
 
@@ -21,21 +22,25 @@
 	});
 
 	function handleFilter(category: string) {
-		if (category === 'All') {
-			filtered = applyDayFilter(services, selectedDay);
-		} else {
-			filtered = applyDayFilter(
-				services.filter((s) => s.category === category),
-				selectedDay
-			);
+		selectedCategory = category;
+		let base = services;
+		if (category !== 'All') {
+			base = base.filter((s) => s.category === category);
 		}
+		if (selectedDay !== 'all') {
+			base = base.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
+		}
+		filtered = base;
 	}
 
 	function handleSearch(query: string) {
 		const q = query.toLowerCase();
 		let base = services;
+		if (selectedCategory !== 'All') {
+			base = base.filter((s) => s.category === selectedCategory);
+		}
 		if (selectedDay !== 'all') {
-			base = services.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
+			base = base.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
 		}
 		if (!q) {
 			filtered = base;
@@ -52,16 +57,15 @@
 
 	function handleDayFilter(day: string) {
 		selectedDay = day;
-		if (day === 'all') {
-			filtered = services;
-		} else {
-			filtered = services.filter((s) => isOpenOnDay(s.hours, day as DayKey));
+		let base = services;
+		if (selectedCategory !== 'All') {
+			base = base.filter((s) => s.category === selectedCategory);
 		}
-	}
-
-	function applyDayFilter(list: ServiceLocation[], day: string): ServiceLocation[] {
-		if (day === 'all') return list;
-		return list.filter((s) => isOpenOnDay(s.hours, day as DayKey));
+		if (day === 'all') {
+			filtered = base;
+		} else {
+			filtered = base.filter((s) => isOpenOnDay(s.hours, day as DayKey));
+		}
 	}
 </script>
 
@@ -70,6 +74,8 @@
 	{#if !loading}
 		<FilterBar
 			{categories}
+			selectedCategory={selectedCategory}
+			selectedDay={selectedDay}
 			onFilter={handleFilter}
 			onSearch={handleSearch}
 			onDayFilter={handleDayFilter}

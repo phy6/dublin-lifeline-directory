@@ -1,0 +1,66 @@
+{
+	"version": "3.1.0",
+	"lastUpdated": "2026-09-14T09:53:39.731Z",
+	"metadata": {
+		"nextSync": "2026-09-21T00:00:00.000Z",
+		"dataRetentionDays": 7,
+		"lowDataCompactAvailable": true
+	},
+	"services": [
+		{
+			"id": "capuchin-day-centre",
+			"name": "Capuchin Day Centre",
+			"category": "Emergency Shelter",
+			"latitude": 53.3493,
+			"longitude": -6.2759,
+			"phone": "01 872 0770",
+			"tags": ["food", "water", "meal", "medical", "support"],
+			"hours": { "mon-fri": "07:30-11:30, 12:30-15:00", "sat": "07:30-11:30, 12:30-15:00" },
+			"openNow": false
+		},
+		{
+			"id": "mendicity-institute",
+			"name": "Mendicity Institute",
+			"category": "Emergency Shelter",
+			"latitude": 53.3435,
+			"longitude": -6.27,
+			"phone": "01 677 3308",
+			"tags": ["food", "water", "meal", "medical", "support"],
+			"hours": { "monday-saturday": "08:30-22:30", "sunday": "09:30-14:30, 16:30-22:30" },
+			"openNow": false
+		},
+		{
+			"id": "lighthouse-cafe",
+			"name": "The Lighthouse Cafe",
+			"category": "Food",
+			"latitude": 53.3465,
+			"longitude": -6.255,
+			"phone": "+353 89 707 8166",
+			"tags": ["food", "water", "meal", "clothing"],
+			"hours": { "monday-friday": "varied", "saturday": "15:00-18:00", "sunday": "15:00-18:00" },
+			"openNow": false
+		},
+		{
+			"id": "merchants-quay-ireland",
+			"name": "Merchants Quay Ireland",
+			"category": "Emergency Shelter",
+			"latitude": 53.343,
+			"longitude": -6.269,
+			"phone": "01 524 0160",
+			"tags": ["food", "water", "meal", "medical", "support"],
+			"hours": { "monday-friday": "08:00-19:00", "sunday": "08:00-14:00" },
+			"openNow": false
+		},
+		{
+			"id": "inclusion-health-hub",
+			"name": "Inclusion Health Hub",
+			"category": "Healthcare",
+			"latitude": 53.3514,
+			"longitude": -6.2497,
+			"phone": "01 233 6990",
+			"tags": ["medical", "water"],
+			"hours": { "mon-fri": "09:30-12:00 (appointment), 13:30-16:00 (walk-in)" },
+			"openNow": false
+		}
+	]
+}

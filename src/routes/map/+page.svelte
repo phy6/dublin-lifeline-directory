@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { ServiceLocation } from '$lib/types';
+	import 'leaflet/dist/leaflet.css';
 
 	let services = $state<ServiceLocation[]>([]);
 	let mapEl: HTMLDivElement | null = null;
@@ -8,7 +9,6 @@
 
 	onMount(async () => {
 		const L = await import('leaflet');
-		await import('leaflet/dist/leaflet.css');
 
 		const icon = L.icon({
 			iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -23,7 +23,7 @@
 		services = data.services;
 
 		if (mapEl) {
-			map = L.map(mapEl).setView([53.3496, -6.2687], 12);
+			map = L.map(mapEl, { preferCanvas: true }).setView([53.3496, -6.2687], 12);
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; OpenStreetMap contributors'
 			}).addTo(map);
@@ -36,24 +36,21 @@
 					);
 				}
 			});
+			map.invalidateSize();
 		}
 	});
 </script>
 
-<svelte:head>
-	<title>Map — Dublin City Support</title>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</svelte:head>
-
-<main>
+<main id="main-content">
 	<h1>Map View</h1>
 	<p>All Dublin City support services at a glance.</p>
-	<div bind:this={mapEl} id="map" style="height: 600px; border-radius: 12px;"></div>
+	<div bind:this={mapEl} id="map" style="width: 100%; height: 600px;"></div>
 </main>
 
 <style>
 	#map {
 		width: 100%;
+		min-height: 400px;
 	}
 	main {
 		max-width: 100%;

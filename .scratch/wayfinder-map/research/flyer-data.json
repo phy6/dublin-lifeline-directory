@@ -6,8 +6,11 @@
 			"id": "mendicity-institute",
 			"name": "Mendicity Institute",
 			"address": "9 Island St., Dublin 8",
-			"phone": null,
+			"eircode": "D08 KW8H",
+			"phone": "01 677 3308",
 			"website": null,
+			"email": null,
+			"coordinates": { "latitude": 53.3435, "longitude": -6.27 },
 			"hours": {
 				"monday": "08:30-22:30",
 				"tuesday": "08:30-22:30",
@@ -31,8 +34,11 @@
 			"id": "capuchin-day-centre",
 			"name": "Capuchin Day Centre",
 			"address": "29 Bow St, Dublin 7",
-			"phone": null,
+			"eircode": "D07 HP7Y",
+			"phone": "01 872 0770",
 			"website": null,
+			"email": null,
+			"coordinates": { "latitude": 53.3493, "longitude": -6.2759 },
 			"hours": {
 				"monday": "07:30-11:30, 12:30-15:00",
 				"tuesday": "07:30-11:30, 12:30-15:00",
@@ -56,8 +62,11 @@
 			"id": "lighthouse-cafe",
 			"name": "The Lighthouse Cafe",
 			"address": "28 Pearse Street, Dublin 2",
-			"phone": null,
+			"eircode": "D02 NA48",
+			"phone": "+353 89 707 8166",
 			"website": null,
+			"email": null,
+			"coordinates": { "latitude": 53.3465, "longitude": -6.255 },
 			"hours": {
 				"monday": "08:30-11:30, 19:00-22:00",
 				"tuesday": "13:00-17:00, 19:00-22:00",
@@ -76,8 +85,11 @@
 			"id": "merchants-quay-ireland",
 			"name": "Merchants Quay Ireland",
 			"address": "13/14 Merchants Quay, Dublin 8",
-			"phone": null,
+			"eircode": "D08 X7YK",
+			"phone": "01 524 0160",
 			"website": null,
+			"email": null,
+			"coordinates": { "latitude": 53.343, "longitude": -6.269 },
 			"hours": {
 				"monday": "08:00-19:00",
 				"tuesday": "08:00-19:00",
@@ -96,8 +108,11 @@
 			"id": "inclusion-health-hub",
 			"name": "Inclusion Health Hub",
 			"address": "60 Amiens St, Dublin 1",
-			"phone": null,
+			"eircode": "D01 E086",
+			"phone": "01 233 6990",
 			"website": null,
+			"email": null,
+			"coordinates": { "latitude": 53.3514, "longitude": -6.2497 },
 			"hours": null,
 			"services": ["GP Clinic services"],
 			"services_categories": ["Healthcare"],
@@ -167,23 +182,36 @@
 			"name": "Mobile Health Unit (MHU)",
 			"location_id": null,
 			"address": "Travels to different locations on scheduled days",
-			"phone": null,
+			"phone": "087 470 4399",
 			"website": null,
 			"hours": null,
 			"schedule": {
-				"mon_fri": "Visiting different locations on scheduled days (specific schedule not detailed on flyer)",
+				"tuesday_evening": "7:00pm–10:00pm at Mendicity Institute",
+				"wednesday_evening": "7:00pm–10:00pm at Lighthouse Café",
+				"thursday_evening": "7:00pm–10:00pm at Mendicity Institute",
 				"saturday": null,
 				"sunday": null
 			},
 			"appointment_available": null,
 			"walk_in_available": null,
-			"schedule_details": "Mobile unit visits various locations on scheduled days; specific locations and times not detailed on flyer"
+			"schedule_details": "Mobile unit visits Mendicity Institute (Tue/Thu) and Lighthouse Café (Wed) 7pm–10pm"
 		}
 	],
 	"contact_information": {
-		"note": "No phone numbers or website URLs were present on the flyer for any location",
+		"note": "Phone numbers sourced from web research (primarycaresafetynet.ie, capuchindaycentre.ie, dcmlive.ie, mqi.ie). Coordinates approximate, derived from postal district centroids and Wikipedia. Verify before production use.",
 		"source_website": "www.primarycaresafetynet.ie",
-		"phone_numbers": {},
-		"websites": {}
+		"phone_numbers": {
+			"Mendicity Institute": "01 677 3308",
+			"Capuchin Day Centre": "01 872 0770",
+			"Capuchin GP Clinic": "01 873 3301",
+			"Lighthouse Cafe": "+353 89 707 8166",
+			"Merchants Quay Ireland": "01 524 0160",
+			"MQI Doctor": "083 303 5918",
+			"MQI Nurse": "01 524 0189",
+			"Inclusion Health Hub / Safetynet": "01 233 6990",
+			"Safetynet Evening Outreach (MHU)": "087 470 4399"
+		},
+		"websites": {},
+		"coordinates_source": "Approximate from postal district centroids, Wikipedia, LinkedIn, Buildings of Ireland Irish Grid references"
 	}
 }

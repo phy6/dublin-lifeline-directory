@@ -10,8 +10,22 @@
 			"phone": "+353-1-878-0404",
 			"email": "info@capuchindaycentre.ie",
 			"website": "https://capuchindaycentre.ie/",
-			"hours": { "mon-fri": "08:30-15:30", "sat": "09:00-13:00", "sun": "closed" },
-			"tags": ["homeless", "food", "medical", "support", "family", "children", "emergency"],
+			"hours": {
+				"mon-fri": "08:30-15:30",
+				"sat": "09:00-13:00",
+				"sun": "closed"
+			},
+			"tags": [
+				"homeless",
+				"food",
+				"water",
+				"meal",
+				"medical",
+				"support",
+				"family",
+				"children",
+				"emergency"
+			],
 			"services": [
 				"food",
 				"shelter",
@@ -50,10 +64,14 @@
 			"phone": "+353-1-524-0160",
 			"email": "info@mqi.ie",
 			"website": "https://mqi.ie/",
-			"hours": { "mon-fri": "09:00-17:00" },
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"tags": [
 				"homeless",
 				"food",
+				"water",
+				"meal",
 				"medical",
 				"addiction",
 				"recovery",
@@ -113,15 +131,31 @@
 			"phone": "+353-1-885-5900",
 			"email": "info@focusireland.ie",
 			"website": "https://www.focusireland.ie/",
-			"hours": { "mon-fri": "09:00-17:30" },
-			"tags": ["housing", "support", "homelessness"],
-			"services": ["homelessness", "housing", "support"],
+			"hours": {
+				"mon-fri": "09:00-17:30"
+			},
+			"tags": [
+				"housing",
+				"support",
+				"homelessness",
+				"water",
+				"meal"
+			],
+			"services": [
+				"homelessness",
+				"housing",
+				"support"
+			],
 			"category": "Housing Support",
 			"latitude": 53.3592,
 			"longitude": -6.2742,
 			"description": "Focus Ireland provides housing support and homelessness services, helping people find and maintain stable accommodation across Dublin.",
 			"lastVerified": "2026-09-12",
-			"dynamicActivities": ["housing", "homelessness", "support"],
+			"dynamicActivities": [
+				"housing",
+				"homelessness",
+				"support"
+			],
 			"activityMatchCount": 3,
 			"dataSource": "scraped",
 			"lastScraped": "2026-09-12T22:00:02.044Z"
@@ -133,7 +167,9 @@
 			"phone": "+353-1-671-5551",
 			"email": "info@dubsimon.ie",
 			"website": "https://www.dubsimon.ie",
-			"hours": { "mon-fri": "09:00-17:30" },
+			"hours": {
+				"mon-fri": "09:00-17:30"
+			},
 			"tags": [
 				"homeless",
 				"emergency",
@@ -149,7 +185,9 @@
 				"outreach",
 				"family",
 				"children",
-				"volunteer"
+				"volunteer",
+				"water",
+				"meal"
 			],
 			"services": [
 				"homelessness",
@@ -205,7 +243,9 @@
 			"phone": "+353-1-161-123",
 			"email": "dublin@samaritans.ie",
 			"website": "https://www.samaritans.org/ireland/samaritans-ireland/",
-			"hours": { "mon-sun": "09:00-21:00" },
+			"hours": {
+				"mon-sun": "09:00-21:00"
+			},
 			"tags": [
 				"emergency",
 				"legal",
@@ -215,7 +255,9 @@
 				"mental-health",
 				"helpline",
 				"men",
-				"volunteer"
+				"volunteer",
+				"water",
+				"meal"
 			],
 			"services": [
 				"mental-health",
@@ -258,7 +300,9 @@
 			"phone": "+353-1-874-1919",
 			"email": "info@crosscare.ie",
 			"website": "https://crosscare.ie",
-			"hours": { "mon-fri": "09:00-17:00" },
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"tags": [
 				"homeless",
 				"emergency",
@@ -270,7 +314,9 @@
 				"youth",
 				"vulnerable",
 				"volunteer",
-				"elderly"
+				"elderly",
+				"water",
+				"meal"
 			],
 			"services": [
 				"elderly",
@@ -321,7 +367,9 @@
 			"phone": "+353-1-677-3308",
 			"email": "info@mendicity.org",
 			"website": "https://www.mendicity.org/services/",
-			"hours": { "mon-fri": "09:00-17:00" },
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"tags": [
 				"homeless",
 				"food",
@@ -333,7 +381,9 @@
 				"family",
 				"volunteer",
 				"community",
-				"social"
+				"social",
+				"water",
+				"meal"
 			],
 			"services": [
 				"elderly",
@@ -377,9 +427,26 @@
 			"phone": "+353-1-872-2222",
 			"email": "info@peterpmv.ie",
 			"website": "https://www.peterpmv.ie/",
-			"hours": { "mon-fri": "09:00-17:00" },
-			"tags": ["housing", "youth", "homelessness", "support", "addiction"],
-			"services": ["housing", "homelessness", "youth", "support", "addiction", "community"],
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
+			"tags": [
+				"housing",
+				"youth",
+				"homelessness",
+				"support",
+				"addiction",
+				"water",
+				"meal"
+			],
+			"services": [
+				"housing",
+				"homelessness",
+				"youth",
+				"support",
+				"addiction",
+				"community"
+			],
 			"category": "Housing Support",
 			"latitude": 53.3545,
 			"longitude": -6.2553,
@@ -397,8 +464,18 @@
 			"phone": "+353-1-671-5551",
 			"email": "employment@dubsimon.ie",
 			"website": "https://www.dubsimon.ie/employment/",
-			"hours": { "mon-fri": "09:00-17:30" },
-			"tags": ["employment", "training", "homelessness", "community", "support"],
+			"hours": {
+				"mon-fri": "09:00-17:30"
+			},
+			"tags": [
+				"employment",
+				"training",
+				"homelessness",
+				"community",
+				"support",
+				"water",
+				"meal"
+			],
 			"services": [
 				"employment",
 				"training",
@@ -426,9 +503,24 @@
 			"phone": "+353-1-874-1141",
 			"email": "info@copeireland.ie",
 			"website": "https://www.copeireland.ie/",
-			"hours": { "mon-fri": "09:00-17:00" },
-			"tags": ["elderly", "community", "support", "health", "carers"],
-			"services": ["elderly", "community", "support", "health"],
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
+			"tags": [
+				"elderly",
+				"community",
+				"support",
+				"health",
+				"carers",
+				"water",
+				"meal"
+			],
+			"services": [
+				"elderly",
+				"community",
+				"support",
+				"health"
+			],
 			"category": "Community Support",
 			"latitude": 53.3528,
 			"longitude": -6.2605,
@@ -444,9 +536,26 @@
 			"phone": "+353-1-679-1032",
 			"email": "hello@alone.ie",
 			"website": "https://alone.ie/",
-			"hours": { "mon-fri": "09:00-17:00" },
-			"tags": ["elderly", "community", "support", "befriending", "isolation"],
-			"services": ["elderly", "befriending", "support", "community", "isolation", "health"],
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
+			"tags": [
+				"elderly",
+				"community",
+				"support",
+				"befriending",
+				"isolation",
+				"water",
+				"meal"
+			],
+			"services": [
+				"elderly",
+				"befriending",
+				"support",
+				"community",
+				"isolation",
+				"health"
+			],
 			"category": "Community Support",
 			"latitude": 53.3362,
 			"longitude": -6.2718,
@@ -462,9 +571,26 @@
 			"phone": "+353-1-453-6161",
 			"email": "info@ichh.ie",
 			"website": "https://www.ichh.ie/",
-			"hours": { "mon-sun": "09:00-17:00" },
-			"tags": ["homeless", "emergency", "outreach", "food", "clothing"],
-			"services": ["homelessness", "emergency", "outreach", "food", "clothing", "support"],
+			"hours": {
+				"mon-sun": "09:00-17:00"
+			},
+			"tags": [
+				"homeless",
+				"emergency",
+				"outreach",
+				"food",
+				"clothing",
+				"water",
+				"meal"
+			],
+			"services": [
+				"homelessness",
+				"emergency",
+				"outreach",
+				"food",
+				"clothing",
+				"support"
+			],
 			"category": "Emergency Shelter",
 			"latitude": 53.3405,
 			"longitude": -6.2758,
@@ -480,9 +606,25 @@
 			"phone": "+353-1-868-0166",
 			"email": "info@primarycaresafetynet.ie",
 			"website": "https://www.primarycaresafetynet.ie/",
-			"hours": { "mon-fri": "09:30-16:30" },
-			"tags": ["medical", "health", "homeless", "GP"],
-			"services": ["medical", "GP clinic", "health", "homelessness", "primary care", "nursing"],
+			"hours": {
+				"mon-fri": "09:30-16:30"
+			},
+			"tags": [
+				"medical",
+				"health",
+				"homeless",
+				"GP",
+				"water",
+				"meal"
+			],
+			"services": [
+				"medical",
+				"GP clinic",
+				"health",
+				"homelessness",
+				"primary care",
+				"nursing"
+			],
 			"category": "Health Support",
 			"latitude": 53.3429,
 			"longitude": -6.2742,
@@ -498,8 +640,18 @@
 			"phone": "+353-1-878-6111",
 			"email": "info@aldp.ie",
 			"website": "https://www.aldp.ie/",
-			"hours": { "mon-fri": "09:00-17:00" },
-			"tags": ["addiction", "harm-reduction", "needle-exchange", "counselling", "outreach"],
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
+			"tags": [
+				"addiction",
+				"harm-reduction",
+				"needle-exchange",
+				"counselling",
+				"outreach",
+				"water",
+				"meal"
+			],
 			"services": [
 				"addiction",
 				"harm reduction",

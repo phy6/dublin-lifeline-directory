@@ -29,21 +29,22 @@ A **Progressive Web App (PWA)** that helps Dublin City residents experiencing ho
 
 - **Data model (01)**: ✅ Flyer data extracted to `research/flyer-data.json`. All 5 Day Support Centres + 5 GP clinics documented. Gap analysis at `research/gap-analysis.md`.
 - **Offline architecture (02)**: ⚠️ **SUPERSEDED by PWA pivot.** SQLite + Sync Queue was researched for native apps. Now replaced by Service Worker + Cache API for static PWA architecture.
-- **Framework (03)**: ⚠️ **SUPERSEDED by PWA pivot.** Flutter was researched for native apps. Now needs re-evaluation for PWA — SvelteKit, Next.js, or Nuxt.js for static PWA generation.
+- **Framework (03)**: ⚠️ **SUPERSEDED by PWA pivot.** Flutter was researched for native apps. Now re-evaluated → **Continue with SvelteKit** (`@vite-pwa/sveltekit` + `@sveltejs/adapter-static`). Zero-friction GitHub Pages deployment, built-in accessibility platform, PWA plugin already configured. See [→ 03-pwa-framework.md](03-pwa-framework.md) and `research/pwa-framework-recommendation.md`
 - **Accessibility (04)**: ✅ Full spec at `research/accessibility-spec.md`. WCAG 2.2 / Mobile Accessibility Extension compliance. Principles framework-agnostic. [→ 04-research-accessibility.md](04-research-accessibility.md)
+- **PWA offline strategy (02-pwa-offline-strategy)**: ✅ Service Worker architecture and caching strategy documented at `research/offline-strategy.md`. CacheFirst for app shell, StaleWhileRevalidate for JSON, NetworkFirst for navigation, CacheOnly for offline fallback. Version-based freshness detection. Low-data mode with CacheOnly + Network Information API. WCAG 2.2 AA for offline page. [→ 02-pwa-offline-strategy.md](02-pwa-offline-strategy.md)
+- **Data gap fill**: ✅ Coordinates and phone numbers filled for all 5 locations from web research. GP clinic schedules obtained for 3/5 locations. MHU schedule obtained (Tues/Wed/Thu 7pm-10pm). See `research/data-gap-fill.md` and updated `research/flyer-data.json`
+- **Framework (03)**: ⚠️ **SUPERSEDED by PWA pivot → re-evaluated → Continue with SvelteKit** (`@vite-pwa/sveltekit` + `@sveltejs/adapter-static`). Zero-friction GH Pages deployment, built-in accessibility platform, PWA plugin already configured. See [→ 03-pwa-framework.md](03-pwa-framework.md)
+
+### Implementation resolutions
+
+- **PWA accessibility (08-accessibility)**: ✅ Full implementation complete. Service Worker caching, offline fallback page, ARIA live regions, skip links, text scale toggle (100%–200%), low-data mode toggle (auto-detect + manual), emergency FAB, high contrast, reduced motion. 25 tests passing (unit/integration/E2E). See `research/accessibility-implementation-plan.md` and `src/lib/components/`.
+- **PWA icons**: ✅ 7 icon sizes (72→512) generated from SVG (Dublin castle + medical cross), updated manifest in `vite.config.ts`.
+- **QR code generation**: ✅ Build-time script (`npm run qr:generate`), outputs `static/qr-code.svg` (SVG, error correction H, URL: `https://dublin-city-support.github.io/`).
+- **Testing infrastructure**: ✅ Vitest + Playwright + axe-core configured. 19 unit/integration tests + 6 E2E tests passing. GitHub Actions CI workflow. CI scripts: `test`, `test:unit`, `test:e2e`, `lint`, `check`, `build` all passing.
 
 ## Not yet specified
 
-- PWA framework selection — SvelteKit vs Next.js vs Nuxt.js for static PWA generation
-- Data model schema — how are locations, services, hours structured?
-- Scraper architecture — how does the scraper fetch and transform flyer data into static JSON?
-- Service Worker strategy — what caching patterns for offline support?
-- Map rendering — what library for map rendering in a PWA? Mapbox GL JS? Leaflet?
-- Search and filtering — how do users find services by category, proximity, or day?
-- PWA manifest — app name, icons, theme colors, display mode
-- QR code generation — how to generate and distribute QR codes on flyers?
-- Testing strategy — how to verify data accuracy and PWA reliability?
-- Data gap resolution — how to fill missing fields (phone numbers, coordinates, GP clinic hours, MHU schedule)?
+- 07-prototype-ui — **awaiting human review** of `research/prototype-ui.html`
 
 ## Out of scope
 

@@ -1,0 +1,1926 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<title>Dublin Lifeline Directory & Support Services — Prototype</title>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+			integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+			crossorigin=""
+		/>
+		<script
+			src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+			integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+			crossorigin=""
+		></script>
+		<style>
+			:root {
+				--bg: #0d1117;
+				--panel: #151b23;
+				--text: #f4f7fa;
+				--muted: #b8c1cb;
+				--line: #38424d;
+				--accent: #62a8ff;
+				--accent-dark: #3a82f7;
+				--accent2: #4ee09b;
+				--danger: #ff6d7a;
+				--warn: #ffc266;
+				--chip: #202934;
+				--shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+				--font-scale: 1;
+				--radius: 10px;
+			}
+
+			[data-theme='light'] {
+				--bg: #f7f8fa;
+				--panel: #ffffff;
+				--text: #101318;
+				--muted: #505a66;
+				--line: #c7cdd4;
+				--accent: #005fcc;
+				--accent-dark: #0047a3;
+				--accent2: #007a45;
+				--danger: #b00020;
+				--warn: #9a4d00;
+				--chip: #eef2f6;
+				--shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+			}
+
+			body.high-contrast {
+				--bg: #000000;
+				--panel: #111111;
+				--text: #ffffff;
+				--muted: #ffffff;
+				--line: #ffffff;
+				--accent: #ffff00;
+				--accent2: #00ff00;
+				--danger: #ff0000;
+				--warn: #ffaa00;
+				--chip: #222222;
+			}
+
+			*, *::before, *::after {
+				box-sizing: border-box;
+			}
+
+			html {
+				font-size: calc(100% * var(--font-scale));
+			}
+
+			body {
+				margin: 0;
+				padding: 0;
+				background: var(--bg);
+				color: var(--text);
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+				line-height: 1.5;
+				min-height: 100vh;
+			}
+
+			:focus-visible {
+				outline: 3px solid var(--accent);
+				outline-offset: 2px;
+			}
+
+			.skip-link {
+				position: absolute;
+				top: -100%;
+				left: 0;
+				background: var(--accent);
+				color: #fff;
+				padding: 0.75rem 1.5rem;
+				z-index: 10000;
+				font-weight: 700;
+				text-decoration: none;
+				border-radius: 0 0 var(--radius) 0;
+			}
+			.skip-link:focus {
+				top: 0;
+			}
+
+			.sr-only {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				padding: 0;
+				margin: -1px;
+				overflow: hidden;
+				clip: rect(0, 0, 0, 0);
+				white-space: nowrap;
+				border: 0;
+			}
+
+			/* EMERGENCY BAR */
+			.emergency-bar {
+				background: #23080b;
+				border-bottom: 1px solid var(--danger);
+				color: #ffccd0;
+				padding: 0.5rem 1rem;
+				font-size: 0.88rem;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.75rem;
+			}
+			.emergency-bar .brand {
+				font-weight: 700;
+				color: #fff;
+				display: flex;
+				align-items: center;
+				gap: 0.4rem;
+			}
+			.emergency-bar a {
+				color: #ff8a95;
+				font-weight: 700;
+				text-decoration: underline;
+			}
+			.emergency-bar a:hover {
+				color: #ffffff;
+			}
+
+			/* HEADER */
+			header {
+				background: var(--panel);
+				border-bottom: 1px solid var(--line);
+				padding: 1rem 1.25rem;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+			}
+			header h1 {
+				margin: 0;
+				font-size: 1.4rem;
+				color: var(--accent);
+			}
+			header p {
+				margin: 0.2rem 0 0;
+				font-size: 0.88rem;
+				color: var(--muted);
+			}
+			.header-actions {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				flex-wrap: wrap;
+			}
+
+			.btn {
+				background: var(--chip);
+				color: var(--text);
+				border: 1px solid var(--line);
+				padding: 0.5rem 0.85rem;
+				border-radius: var(--radius);
+				font-weight: 600;
+				font-size: 0.88rem;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.35rem;
+				min-height: 40px;
+			}
+			.btn:hover {
+				border-color: var(--accent);
+			}
+			.btn-primary {
+				background: var(--accent);
+				color: #000;
+				border-color: var(--accent);
+			}
+			[data-theme="dark"] .btn-primary {
+				color: #0d1117;
+			}
+			.btn-primary:hover {
+				background: var(--accent-dark);
+				color: #fff;
+			}
+
+			/* LANG SELECTOR */
+			.lang-select-wrapper {
+				display: flex;
+				align-items: center;
+				gap: 0.3rem;
+				background: var(--chip);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 0 0.5rem;
+			}
+			.lang-select {
+				background: transparent;
+				color: var(--text);
+				border: none;
+				padding: 0.5rem 0.2rem;
+				font-weight: 600;
+				font-size: 0.88rem;
+				cursor: pointer;
+			}
+
+			/* MAIN NAV TABS */
+			.nav-tabs {
+				display: flex;
+				background: var(--panel);
+				border-bottom: 1px solid var(--line);
+				padding: 0 1rem;
+				gap: 0.5rem;
+				overflow-x: auto;
+			}
+			.tab-btn {
+				background: transparent;
+				border: none;
+				border-bottom: 3px solid transparent;
+				color: var(--muted);
+				font-weight: 700;
+				font-size: 0.95rem;
+				padding: 0.85rem 1rem;
+				cursor: pointer;
+				white-space: nowrap;
+			}
+			.tab-btn:hover {
+				color: var(--text);
+			}
+			.tab-btn.active {
+				color: var(--accent);
+				border-bottom-color: var(--accent);
+			}
+
+			/* CONTENT PAGES */
+			main {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 1.25rem;
+			}
+			.page-view {
+				display: none;
+			}
+			.page-view.active {
+				display: block;
+			}
+
+			/* GPS BAR */
+			.gps-bar {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 0.75rem;
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 0.75rem 1rem;
+				margin-bottom: 0.85rem;
+				flex-wrap: wrap;
+			}
+			.gps-bar p {
+				margin: 0;
+				font-size: 0.82rem;
+				color: var(--muted);
+			}
+
+			/* MAP CONTAINER */
+			#map {
+				width: 100%;
+				height: 380px;
+				border-radius: var(--radius);
+				border: 1px solid var(--line);
+				margin-bottom: 1rem;
+				background: #111;
+			}
+
+			/* DARK OSM TILE FILTER */
+			[data-theme='dark'] .leaflet-tile-pane {
+				filter: brightness(0.65) contrast(1.25) invert(0.9) hue-rotate(180deg);
+			}
+
+			/* EMOJI MARKERS */
+			.emoji-marker {
+				background: var(--panel);
+				border: 2px solid var(--accent);
+				border-radius: 50%;
+				width: 32px;
+				height: 32px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.1rem;
+				box-shadow: var(--shadow);
+			}
+			.emoji-marker.user-location {
+				border-color: var(--accent2);
+				background: #000;
+			}
+
+			/* CONTROLS & CHIPS */
+			.filter-section {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1rem;
+				margin-bottom: 1rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.75rem;
+			}
+			.filter-row {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.75rem;
+				align-items: center;
+			}
+			.search-input {
+				flex: 1 1 240px;
+				background: var(--bg);
+				color: var(--text);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 0.65rem 0.85rem;
+				font-size: 0.95rem;
+			}
+			.chip-group {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.35rem;
+			}
+			.chip {
+				background: var(--chip);
+				color: var(--text);
+				border: 1px solid var(--line);
+				border-radius: 20px;
+				padding: 0.4rem 0.85rem;
+				font-size: 0.85rem;
+				font-weight: 600;
+				cursor: pointer;
+			}
+			.chip.active {
+				background: var(--accent);
+				color: #000;
+				border-color: var(--accent);
+			}
+
+			/* SERVICE CARDS GRID */
+			.cards-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+				gap: 1rem;
+			}
+			.card {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1.1rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.5rem;
+				box-shadow: var(--shadow);
+			}
+			.card h3 {
+				margin: 0;
+				font-size: 1.1rem;
+				color: var(--text);
+			}
+			.card .kind {
+				font-size: 0.82rem;
+				color: var(--accent);
+				font-weight: 700;
+				text-transform: uppercase;
+			}
+			.card .hours-line {
+				font-size: 0.88rem;
+				color: var(--muted);
+			}
+			.badge-open {
+				color: var(--accent2);
+				font-weight: 700;
+			}
+			.badge-closed {
+				color: var(--danger);
+				font-weight: 700;
+			}
+			.card-actions {
+				margin-top: auto;
+				display: flex;
+				gap: 0.5rem;
+				flex-wrap: wrap;
+				padding-top: 0.5rem;
+			}
+
+			/* TIMETABLE */
+			.timetable-toolbar {
+				display: flex;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+			.day-focus-card {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1.25rem;
+			}
+			.week-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+				gap: 0.6rem;
+			}
+			.day-box {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 0.75rem;
+				min-height: 110px;
+			}
+			.day-box .day-name {
+				font-weight: 700;
+				color: var(--accent);
+				margin-bottom: 0.4rem;
+				font-size: 0.9rem;
+			}
+
+			/* SCHEDULE/PLANNER */
+			.schedule-toolbar {
+				display: flex;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+			.schedule-views {
+				display: flex;
+				gap: 0.35rem;
+			}
+			.schedule-view-btn {
+				background: var(--chip);
+				color: var(--text);
+				border: 1px solid var(--line);
+				padding: 0.5rem 0.85rem;
+				border-radius: var(--radius);
+				font-size: 0.85rem;
+				font-weight: 600;
+				cursor: pointer;
+			}
+			.schedule-view-btn.active {
+				background: var(--accent);
+				color: #000;
+				border-color: var(--accent);
+			}
+			.my-schedule-btn {
+				margin-left: auto;
+				background: var(--accent2);
+				color: #000;
+			}
+			.my-schedule-btn:hover {
+				background: #3bd38b;
+			}
+			.schedule-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+				gap: 0.75rem;
+			}
+			.day-column {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1rem;
+				min-height: 200px;
+			}
+			.day-column .day-header {
+				font-weight: 700;
+				color: var(--accent);
+				margin-bottom: 0.75rem;
+				padding-bottom: 0.5rem;
+				border-bottom: 1px solid var(--line);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.day-column .day-name {
+				font-size: 1rem;
+				font-weight: 700;
+			}
+			.day-column .day-date {
+				font-size: 0.8rem;
+				color: var(--muted);
+			}
+			.schedule-item {
+				background: var(--bg);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 0.75rem;
+				margin-bottom: 0.5rem;
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+			.schedule-item:hover {
+				border-color: var(--accent);
+				box-shadow: var(--shadow);
+			}
+			.schedule-item.personal {
+				border-left: 4px solid var(--accent2);
+			}
+			.schedule-item .item-time {
+				font-size: 0.78rem;
+				color: var(--accent);
+				font-weight: 700;
+				margin-bottom: 0.25rem;
+			}
+			.schedule-item .item-title {
+				font-weight: 700;
+				margin-bottom: 0.25rem;
+			}
+			.schedule-item .item-location {
+				font-size: 0.82rem;
+				color: var(--muted);
+			}
+			.schedule-item .item-category {
+				display: inline-block;
+				background: var(--chip);
+				color: var(--accent);
+				padding: 0.15rem 0.5rem;
+				border-radius: 4px;
+				font-size: 0.7rem;
+				font-weight: 600;
+				margin-top: 0.35rem;
+			}
+			.schedule-item .item-notes {
+				font-size: 0.75rem;
+				color: var(--muted);
+				margin-top: 0.35rem;
+			}
+			.empty-schedule {
+				color: var(--muted);
+				font-size: 0.85rem;
+				text-align: center;
+				padding: 2rem;
+			}
+
+			/* MY SCHEDULE PANEL */
+			.my-schedule-panel {
+				background: var(--panel);
+				border: 2px solid var(--accent2);
+				border-radius: var(--radius);
+				padding: 1rem;
+				margin-bottom: 1rem;
+			}
+			.my-schedule-panel h3 {
+				margin: 0 0 0.75rem;
+				color: var(--accent2);
+			}
+			.my-schedule-list {
+				max-height: 300px;
+				overflow-y: auto;
+			}
+			.my-schedule-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0.5rem;
+				background: var(--bg);
+				border: 1px solid var(--line);
+				border-radius: 6px;
+				margin-bottom: 0.35rem;
+			}
+			.my-schedule-item .item-info {
+				flex: 1;
+			}
+			.my-schedule-item .item-time {
+				font-weight: 700;
+				color: var(--accent);
+				font-size: 0.85rem;
+			}
+			.my-schedule-item .item-title {
+				font-weight: 600;
+			}
+			.my-schedule-item .item-remove {
+				background: var(--danger);
+				color: #fff;
+				border: none;
+				border-radius: 4px;
+				padding: 0.25rem 0.5rem;
+				font-size: 0.75rem;
+				cursor: pointer;
+			}
+			.empty-schedule {
+				color: var(--muted);
+				font-size: 0.9rem;
+				text-align: center;
+				padding: 2rem;
+			}
+
+			/* SERVICE DETAIL MODAL */
+			.schedule-modal {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.7);
+				z-index: 2000;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 1rem;
+				visibility: hidden;
+				opacity: 0;
+				transition: opacity 0.2s, visibility 0.2s;
+			}
+			.schedule-modal.open {
+				visibility: visible;
+				opacity: 1;
+			}
+			.modal-box {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1.5rem;
+				max-width: 500px;
+				width: 100%;
+				max-height: 85vh;
+				overflow-y: auto;
+				box-shadow: var(--shadow);
+			}
+			.modal-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 1rem;
+				padding-bottom: 0.75rem;
+				border-bottom: 1px solid var(--line);
+			}
+			.modal-header h3 {
+				margin: 0;
+				color: var(--accent);
+			}
+			.modal-close {
+				background: none;
+				border: none;
+				font-size: 1.5rem;
+				color: var(--muted);
+				cursor: pointer;
+				padding: 0.25rem;
+			}
+			.modal-body {
+				display: grid;
+				gap: 1rem;
+			}
+			.modal-field label {
+				display: block;
+				font-size: 0.8rem;
+				color: var(--muted);
+				margin-bottom: 0.25rem;
+			}
+			.modal-field input,
+			.modal-field select,
+			.modal-field textarea {
+				width: 100%;
+				padding: 0.65rem;
+				border: 1px solid var(--line);
+				border-radius: 6px;
+				background: var(--bg);
+				color: var(--text);
+				font-size: 0.95rem;
+			}
+			.modal-field input:focus,
+			.modal-field select:focus,
+			.modal-field textarea:focus {
+				border-color: var(--accent);
+				outline: none;
+			}
+			.modal-actions {
+				display: flex;
+				gap: 0.5rem;
+				justify-content: flex-end;
+				margin-top: 1rem;
+				padding-top: 1rem;
+				border-top: 1px solid var(--line);
+			}
+			.modal-actions .btn {
+				flex: 1;
+				justify-content: center;
+			}
+			.time-slot {
+				display: inline-block;
+				background: var(--chip);
+				border: 1px solid var(--line);
+				border-radius: 6px;
+				padding: 0.35rem 0.75rem;
+				margin: 0.25rem;
+				font-size: 0.85rem;
+				cursor: pointer;
+				transition: all 0.15s;
+			}
+			.time-slot:hover,
+			.time-slot.selected {
+				background: var(--accent);
+				color: #000;
+				border-color: var(--accent);
+			}
+			.time-slot.service-food { border-left: 3px solid #f59e0b; }
+			.time-slot.service-medical { border-left: 3px solid #ef4444; }
+			.time-slot.service-hygiene { border-left: 3px solid #3b82f6; }
+			.time-slot.service-support { border-left: 3px solid #8b5cf6; }
+			.time-slot.service-employment { border-left: 3px solid #ec4899; }
+			.time-slot.service-connectivity { border-left: 3px solid #06b6d4; }
+
+			/* MY SCHEDULE PANEL */
+			.my-schedule-panel {
+				background: var(--panel);
+				border: 2px solid var(--accent2);
+				border-radius: var(--radius);
+				padding: 1rem;
+				margin-bottom: 1rem;
+			}
+			.my-schedule-panel h3 {
+				margin: 0 0 0.75rem;
+				color: var(--accent2);
+			}
+			.my-schedule-list {
+				max-height: 300px;
+				overflow-y: auto;
+			}
+			.my-schedule-item {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0.5rem;
+				background: var(--bg);
+				border: 1px solid var(--line);
+				border-radius: 6px;
+				margin-bottom: 0.35rem;
+			}
+			.my-schedule-item .item-info {
+				flex: 1;
+			}
+			.my-schedule-item .item-time {
+				font-weight: 700;
+				color: var(--accent);
+				font-size: 0.85rem;
+			}
+			.my-schedule-item .item-title {
+				font-weight: 600;
+			}
+			.my-schedule-item .item-remove {
+				background: var(--danger);
+				color: #fff;
+				border: none;
+				border-radius: 4px;
+				padding: 0.25rem 0.5rem;
+				font-size: 0.75rem;
+				cursor: pointer;
+			}
+			.empty-schedule {
+				color: var(--muted);
+				font-size: 0.9rem;
+				text-align: center;
+				padding: 2rem;
+			}
+
+			/* TIMETABLE */
+			.timetable-toolbar {
+				display: flex;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+				flex-wrap: wrap;
+				align-items: center;
+			}
+			.day-focus-card {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				padding: 1.25rem;
+			}
+			.week-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+				gap: 0.6rem;
+			}
+			.day-box {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: 8px;
+				padding: 0.75rem;
+				min-height: 110px;
+			}
+			.day-box .day-name {
+				font-weight: 700;
+				color: var(--accent);
+				margin-bottom: 0.4rem;
+				font-size: 0.9rem;
+			}
+
+			/* GUIDE ACCORDIONS */
+			.guide-acc {
+				background: var(--panel);
+				border: 1px solid var(--line);
+				border-radius: var(--radius);
+				margin-bottom: 0.75rem;
+				overflow: hidden;
+			}
+			.guide-acc summary {
+				cursor: pointer;
+				font-weight: 700;
+				padding: 1rem;
+				color: var(--accent);
+				font-size: 1.05rem;
+			}
+			.guide-acc[open] summary {
+				border-bottom: 1px solid var(--line);
+			}
+			.guide-content {
+				padding: 1rem;
+			}
+
+			/* ACCESSIBILITY PANEL MODAL / OVERLAY */
+			.a11y-modal {
+				display: none;
+				position: fixed;
+				bottom: 4.5rem;
+				right: 1.25rem;
+				background: var(--panel);
+				border: 2px solid var(--accent);
+				border-radius: var(--radius);
+				padding: 1.25rem;
+				box-shadow: var(--shadow);
+				z-index: 1000;
+				width: 300px;
+			}
+			.a11y-modal.open {
+				display: block;
+			}
+
+			/* MACHINE TRANSLATION TAG */
+			[data-mt='true']::after {
+				content: ' 🤖';
+				font-size: 0.75em;
+				opacity: 0.7;
+			}
+
+			/* OFFLINE INDICATOR */
+			.offline-indicator {
+				display: none;
+				background: var(--warn);
+				color: #000;
+				font-weight: 700;
+				text-align: center;
+				padding: 0.5rem;
+				border-radius: var(--radius);
+				margin-bottom: 0.85rem;
+			}
+
+			/* FOOTER */
+			footer {
+				text-align: center;
+				padding: 2rem 1rem;
+				color: var(--muted);
+				font-size: 0.85rem;
+				border-top: 1px solid var(--line);
+				margin-top: 2rem;
+			}
+		</style>
+	</head>
+	<body>
+		<a href="#main-content" class="skip-link">Skip to main content</a>
+		<div id="status-announcer" class="sr-only" aria-live="polite"></div>
+
+		<!-- EMERGENCY HEADER BAR -->
+		<div class="emergency-bar" role="region" aria-label="Emergency Contacts">
+			<div class="brand">🚨 <span data-i18n="app.title">Dublin Lifeline Directory</span></div>
+			<div>
+				<a href="tel:1800707707" data-i18n="emergency.shelter">Need emergency shelter tonight: 1800 707 707</a>
+				&bull;
+				<a href="tel:999" data-i18n="emergency.life">Life-threatening emergency: 999 / 112</a>
+			</div>
+		</div>
+
+		<!-- HEADER -->
+		<header role="banner">
+			<div>
+				<h1 data-i18n="app.title">Dublin City Support Services</h1>
+				<p data-i18n="app.tagline">Find day support centres, free doctor clinics, and essential services near you</p>
+			</div>
+			<div class="header-actions">
+				<div class="lang-select-wrapper" title="Select language">
+					🌐
+					<select id="langSelect" class="lang-select" aria-label="Select language">
+						<option value="en">English</option>
+						<option value="ga">Gaeilge 🤖</option>
+						<option value="pl">Polski 🤖</option>
+						<option value="ro">Română 🤖</option>
+						<option value="lt">Lietuvių 🤖</option>
+					</select>
+				</div>
+				<button class="btn" id="themeBtn" aria-label="Toggle theme">☀️ Light</button>
+				<button class="btn btn-primary" id="a11yBtn" aria-label="Accessibility settings">♿ A11y</button>
+			</div>
+		</header>
+
+		<!-- NAV TABS -->
+		<nav class="nav-tabs" role="tablist" aria-label="Main navigation">
+			<button class="tab-btn active" role="tab" id="tab-home" aria-selected="true" data-i18n="tabs.map">📍 Map & Directory</button>
+			<button class="tab-btn" role="tab" id="tab-timetable" aria-selected="false" data-i18n="tabs.timetable">📅 Timetable</button>
+			<button class="tab-btn" role="tab" id="tab-guide" aria-selected="false" data-i18n="tabs.guide">📖 Guide</button>
+			<button class="tab-btn" role="tab" id="tab-pathways" aria-selected="false" data-i18n="tabs.pathways">📋 Pathways</button>
+		</nav>
+
+		<!-- MAIN CONTAINER -->
+		<main id="main-content" role="main">
+			<div id="offlineIndicator" class="offline-indicator" data-i18n="offline.banner">📡 You are offline — showing cached data.</div>
+
+			<!-- TAB 1: MAP & DIRECTORY -->
+			<section id="view-home" class="page-view active">
+				<div class="gps-bar">
+					<div>
+						<span id="locationStatus">📍 Dublin City Centre</span>
+						<p data-i18n="gps.privacy">GPS location stays on this device only — never stored or sent to any server.</p>
+					</div>
+					<button class="btn btn-primary" id="gpsBtn">📍 <span data-i18n="gps.button">Use GPS</span></button>
+				</div>
+
+				<div id="map" aria-label="Interactive Dublin Map"></div>
+
+				<div class="filter-section">
+					<div class="filter-row">
+						<input type="search" id="searchInput" class="search-input" placeholder="Search by name, address, or service..." data-i18n-attr="placeholder:search.placeholder" />
+					</div>
+					<div>
+						<label style="font-size:0.82rem;color:var(--muted);margin-bottom:0.25rem;display:block" data-i18n="filter.category">Category</label>
+						<div class="chip-group" id="categoryChips"></div>
+					</div>
+					<div>
+						<label style="font-size:0.82rem;color:var(--muted);margin-bottom:0.25rem;display:block" data-i18n="filter.day">Day filter</label>
+						<div class="chip-group" id="dayChips"></div>
+					</div>
+				</div>
+
+				<div id="statsBar" style="color:var(--muted);font-size:0.88rem;margin-bottom:0.85rem"></div>
+				<div id="cardsGrid" class="cards-grid"></div>
+			</section>
+
+			<!-- TAB 2: TIMETABLE / PERSONAL PLANNER -->
+			<section id="view-timetable" class="page-view">
+				<div class="schedule-toolbar">
+					<div class="schedule-views">
+						<button class="schedule-view-btn active" id="ttDayBtn" data-i18n="timetable.day">Day</button>
+						<button class="schedule-view-btn" id="ttWeekBtn" data-i18n="timetable.week">Week</button>
+						<button class="schedule-view-btn" id="ttMonthBtn" data-i18n="timetable.month">Month</button>
+					</div>
+					<button class="btn my-schedule-btn" id="myScheduleBtn">
+						📋 <span data-i18n="timetable.mySchedule">My Schedule</span>
+					</button>
+				</div>
+
+				<!-- MY PERSONAL SCHEDULE PANEL -->
+				<div class="my-schedule-panel" id="mySchedulePanel" style="display: none;">
+					<h3 data-i18n="timetable.mySchedule">📋 My Personal Schedule</h3>
+					<div class="my-schedule-list" id="myScheduleList"></div>
+				</div>
+
+				<!-- SCHEDULE VIEWS -->
+				<div class="schedule-grid" id="scheduleGrid">
+					<!-- Day columns will be rendered here -->
+				</div>
+			</section>
+
+			<!-- TAB 3: GUIDE -->
+			<section id="view-guide" class="page-view">
+				<div id="guideContent"></div>
+				<div style="margin-top:1.5rem;padding:1rem;background:var(--panel);border:1px dashed var(--accent);border-radius:var(--radius);text-align:center">
+					<p data-i18n="lang.machine">🤖 Machine translated — help us improve!</p>
+					<a href="https://github.com/phy6/dublin-lifeline-directory/issues" target="_blank" rel="noopener" style="font-weight:700" data-i18n="lang.help">Help translate this app →</a>
+				</div>
+			</section>
+
+			<!-- TAB 4: PATHWAYS -->
+			<section id="view-pathways" class="page-view">
+				<div id="pathwaysContent"></div>
+			</section>
+		</main>
+
+		<!-- SERVICE DETAIL / ADD TO SCHEDULE MODAL -->
+		<div id="scheduleModal" class="schedule-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+			<div class="modal-box">
+				<div class="modal-header">
+					<h3 id="modalTitle">Add to My Schedule</h3>
+					<button class="modal-close" id="modalClose" aria-label="Close modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="modal-field">
+						<label data-i18n="timetable.service">Service / Activity</label>
+						<select id="modalService" class="modal-field-select">
+							<option value="">Select a service...</option>
+						</select>
+					</div>
+					<div class="modal-field">
+						<label data-i18n="timetable.date">Date</label>
+						<input type="date" id="modalDate" class="modal-field-input" />
+					</div>
+					<div class="modal-field">
+						<label>Time Slot</label>
+						<div id="timeSlots" style="display:flex;flex-wrap:wrap;gap:0.35rem"></div>
+					</div>
+					<div class="modal-field">
+						<label data-i18n="timetable.notes">Notes (e.g., "Breakfast at 8am, Doctor at 10am")</label>
+						<textarea id="modalNotes" class="modal-field-textarea" rows="3" placeholder="Add details like: Breakfast at 8am, then Doctor at 10am..."></textarea>
+					</div>
+					<div class="modal-field">
+						<label>
+							<input type="checkbox" id="modalRemind" />
+							<span data-i18n="timetable.remind">Remind me 30 minutes before</span>
+						</label>
+					</div>
+				</div>
+				<div class="modal-actions">
+					<button class="btn" id="modalCancel" data-i18n="button.close">Cancel</button>
+					<button class="btn btn-primary" id="modalAdd" data-i18n="timetable.addToSchedule">Add to My Schedule</button>
+				</div>
+			</div>
+		</div>
+			<h3 style="margin-top:0">♿ Accessibility Settings</h3>
+			<div style="margin-bottom:1rem">
+				<label for="scaleRange" style="display:block;font-size:0.85rem;margin-bottom:0.3rem" data-i18n="a11y.textSize">Text Size (100% - 200%):</label>
+				<input type="range" id="scaleRange" min="100" max="200" step="10" value="100" style="width:100%" />
+			</div>
+			<div style="margin-bottom:1rem">
+				<label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+					<input type="checkbox" id="contrastCheck" />
+					<span data-i18n="a11y.contrast">High Contrast Mode</span>
+				</label>
+			</div>
+			<div>
+				<label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+					<input type="checkbox" id="motionCheck" />
+					<span data-i18n="a11y.reducedMotion">Reduced Motion</span>
+				</label>
+			</div>
+			<button class="btn btn-primary" id="a11yClose" style="width:100%;margin-top:1rem;justify-content:center" data-i18n="button.close">Close</button>
+		</div>
+
+		<footer>
+			Dublin Lifeline Directory &bull; All data verified against primary care & support sources &bull; Offline PWA Enabled
+		</footer>
+
+		<script>
+			// DICTIONARIES
+			const I18N = {
+				en: {
+					"app.title": "Dublin City Support Services",
+					"app.tagline": "Find day support centres, free doctor clinics, and essential services near you",
+					"emergency.shelter": "Need emergency shelter tonight: 1800 707 707",
+					"emergency.life": "Life-threatening emergency: 999 / 112",
+					"tabs.map": "📍 Map & Directory",
+					"tabs.timetable": "📅 Timetable",
+					"tabs.guide": "📖 Guide",
+					"tabs.pathways": "📋 Pathways",
+					"search.placeholder": "Search by name, address, or service...",
+					"category.all": "All Categories",
+					"filter.category": "Category",
+					"filter.day": "Day filter",
+					"gps.button": "Use GPS",
+					"gps.privacy": "GPS location stays on this device only — never stored or sent to any server.",
+					"offline.banner": "📡 You are offline — showing cached data.",
+					"timetable.day": "Day",
+					"timetable.week": "Week",
+					"timetable.month": "Month",
+					"timetable.today": "Today",
+					"timetable.mySchedule": "My Schedule",
+					"timetable.emptySchedule": "No items in your schedule yet. Tap a service on any day to add it.",
+					"timetable.addToSchedule": "Add to My Schedule",
+					"timetable.service": "Service",
+					"timetable.date": "Date",
+					"timetable.time": "Time",
+					"timetable.notes": "Notes",
+					"timetable.remind": "Remind me 30 minutes before",
+					"timetable.addToSchedule": "Add to My Schedule",
+					"button.remove": "Remove",
+					"a11y.textSize": "Text Size (100% - 200%)",
+					"a11y.contrast": "High Contrast Mode",
+					"a11y.reducedMotion": "Reduced Motion",
+					"button.close": "Close",
+					"lang.machine": "🤖 Machine translated — help us improve!",
+					"lang.help": "Help translate this app"
+				},
+				ga: {
+					"app.title": "Seirbhísí Tacaíochta Chathair Bhaile Átha Cliath",
+					"app.tagline": "Aimsigh lárionaid tacaíochta lae, clainne saor in aisce, agus seirbhísí riachtanacha",
+					"emergency.shelter": "Teastaíonn teach oíche éigeandála uait inniu: 1800 707 707",
+					"emergency.life": "Éigeandáil bheatha: 999 / 112",
+					"tabs.map": "📍 Léarscáil & Clár",
+					"tabs.timetable": "📅 Amchlár",
+					"tabs.guide": "📖 Treoir",
+					"tabs.pathways": "📋 Bealaí",
+					"search.placeholder": "Cuardaigh le hainm, seoladh, nó seirbhís...",
+					"category.all": "Gach gátaegóir",
+					"filter.category": "Catagóir",
+					"filter.day": "Scagaire lá",
+					"gps.button": "Bain úsáid as GPS",
+					"gps.privacy": "Fanann do shocrú GPS ar an gcóras seo amháin — ní stóráiltear é.",
+					"offline.banner": "Tá tú oflaigh — ag taispeáint sonraí cachaithe.",
+					"timetable.day": "Lá",
+					"timetable.week": "Seachtain",
+					"timetable.month": "Mí",
+					"a11y.textSize": "Méid an teicst (100% - 200%)",
+					"a11y.contrast": "Contraste ard",
+					"a11y.reducedMotion": "Gluaiseacht laghdaithe",
+					"button.close": "Dún",
+					"lang.machine": "🤖 Aistrithe go huathoibríoch — cabhraigh linn a fheabhsú!",
+					"lang.help": "Cabhraigh linn an t-aip a aistriú"
+				},
+				pl: {
+					"app.title": "Usługi Wspierania Miasta Dublina",
+					"app.tagline": "Znajdź centrum wsparcia dziennego, darmowe kliniki lekarskie i niezbędne usługi w Twojej okolicy",
+					"emergency.shelter": "Potrzebujesz noclegu awaryjnego na dzisiaj: 1800 707 707",
+					"emergency.life": "Zagrożenie życia: 999 / 112",
+					"tabs.map": "📍 Mapa i Katalog",
+					"tabs.timetable": "📅 Rozkład",
+					"tabs.guide": "📖 Poradnik",
+					"tabs.pathways": "📋 Ścieżki",
+					"search.placeholder": "Szukaj po nazwie, adresie lub usłudze...",
+					"category.all": "Wszystkie kategorie",
+					"filter.category": "Kategoria",
+					"filter.day": "Filtr dnia",
+					"gps.button": "Użyj GPS",
+					"gps.privacy": "Twoja lokalizacja GPS pozostaje na tym urządzeniu — nie jest przechowywana.",
+					"offline.banner": "Jesteś offline — wyświetlam dane pamięci podręcznej.",
+					"timetable.day": "Dzień",
+					"timetable.week": "Tydzień",
+					"timetable.month": "Miesiąc",
+					"a11y.textSize": "Rozmiar tekstu (100% - 200%)",
+					"a11y.contrast": "Wysoki kontrast",
+					"a11y.reducedMotion": "Zredukowane animacje",
+					"button.close": "Zamknij",
+					"lang.machine": "🤖 Przetłumaczone automatycznie — pomóż nam to poprawić!",
+					"lang.help": "Pomóż nam przetłumaczyć tę aplikację"
+				},
+				ro: {
+					"app.title": "Servicii de Suport ale Orașului Dublin",
+					"app.tagline": "Găsește centre de zi, clinici medicale gratuite și servicii esențiale în apropiere",
+					"emergency.shelter": "Ai nevoie de adăpost de urgență azi: 1800 707 707",
+					"emergency.life": "Urgentă vitală: 999 / 112",
+					"tabs.map": "📍 Hartă & Director",
+					"tabs.timetable": "📅 Program",
+					"tabs.guide": "📖 Ghid",
+					"tabs.pathways": "📋 Căi",
+					"search.placeholder": "Caută după nume, adresă sau serviciu...",
+					"category.all": "Toate categoriile",
+					"filter.category": "Categorie",
+					"filter.day": "Filtru zi",
+					"gps.button": "Folosește GPS",
+					"gps.privacy": "Locația GPS rămâne pe acest dispozitiv — nu este stocată.",
+					"offline.banner": "Ești offline — afișăm datele salvate.",
+					"timetable.day": "Zi",
+					"timetable.week": "Săptămână",
+					"timetable.month": "Lună",
+					"a11y.textSize": "Dimensiune text (100% - 200%)",
+					"a11y.contrast": "Contrast ridicat",
+					"a11y.reducedMotion": "Mișcare redusă",
+					"button.close": "Închide",
+					"lang.machine": "🤖 Tradus automat — ajută-ne să îmbunătățim!",
+					"lang.help": "Ajută-ne să traducem aplicația"
+				},
+				lt: {
+					"app.title": "Dublino Miesto Palaikymo Paslaugos",
+					"app.tagline": "Raskite dieninių paramos centrus, nemokamas gydytoju klinikas ir būtinas paslaugas",
+					"emergency.shelter": "Reikia avarijinio nakvynės šiandien: 1800 707 707",
+					"emergency.life": "Gyvybę grėsinti avarija: 999 / 112",
+					"tabs.map": "📍 Žemėlapis & Katalogas",
+					"tabs.timetable": "📅 Tvarkaraštis",
+					"tabs.guide": "📖 Vadovas",
+					"tabs.pathways": "📋 Keliai",
+					"search.placeholder": "Ieškokite pagal pavadinimą, adresą ar paslaugą...",
+					"category.all": "Visos kategorijos",
+					"filter.category": "Kategorija",
+					"filter.day": "Dienos filtratas",
+					"gps.button": "Naudoti GPS",
+					"gps.privacy": "Jūsų GPS lokacija lieka šiame įrenginyje.",
+					"offline.banner": "Jūs esate neprisijungę — rodoma saugomu duomenu.",
+					"timetable.day": "Diena",
+					"timetable.week": "Savaitė",
+					"timetable.month": "Mėnuo",
+					"a11y.textSize": "Teksto dydis (100% - 200%)",
+					"a11y.contrast": "Aukštas kontrastas",
+					"a11y.reducedMotion": "Sumažinta animacija",
+					"button.close": "Uždaryti",
+					"lang.machine": "🤖 Išversta automatiškai — padėkite mums patobulinti!",
+					"lang.help": "Padėkite mums išversti šią programėlę"
+				}
+			};
+
+			const SERVICES_DATA = [
+				{
+					id: "capuchin-day-centre",
+					name: "Capuchin Day Centre",
+					address: "29 Bow St, Dublin 7",
+					phone: "01 872 0770",
+					email: "info@capuchindaycentre.ie",
+					website: "https://capuchindaycentre.ie/",
+					category: "Emergency Shelter",
+					emoji: "🍲",
+					latitude: 53.3493,
+					longitude: -6.2759,
+					tags: ["food", "medical", "support", "clothing", "hygiene"],
+					hours: { mon: "07:30-15:00", tue: "07:30-15:00", wed: "07:30-15:00", thu: "07:30-15:00", fri: "07:30-15:00", sat: "07:30-15:00" },
+					description: "Free hot breakfast & lunch, showers, clothing, GP/dentist/nurse clinics."
+				},
+				{
+					id: "mendicity-institute",
+					name: "Mendicity Institute",
+					address: "9 Island St., Dublin 8",
+					phone: "01 677 3308",
+					email: "info@mendicity.org",
+					website: "https://www.mendicity.org/",
+					category: "Emergency Shelter",
+					emoji: "🏠",
+					latitude: 53.3435,
+					longitude: -6.2700,
+					tags: ["food", "hygiene", "employment", "connectivity"],
+					hours: { mon: "08:30-22:30", tue: "08:30-22:30", wed: "08:30-22:30", thu: "08:30-22:30", fri: "08:30-22:30", sun: "09:30-22:30" },
+					description: "Day support, food, showers, WiFi, phone charging, employment clinic."
+				},
+				{
+					id: "lighthouse-cafe",
+					name: "The Lighthouse Cafe",
+					address: "28 Pearse Street, Dublin 2",
+					phone: "+353 89 707 8166",
+					email: "info@dcmlive.ie",
+					website: "https://www.dcmlive.ie/",
+					category: "Food",
+					emoji: "☕",
+					latitude: 53.3465,
+					longitude: -6.2550,
+					tags: ["food", "connectivity", "hygiene"],
+					hours: { mon: "08:30-22:00", tue: "13:00-22:00", wed: "13:00-22:00", thu: "13:00-22:00", fri: "08:30-22:00", sat: "15:00-18:00", sun: "15:00-18:00" },
+					description: "Free meals, warm drinks, phone charging, Friday clothes market."
+				},
+				{
+					id: "merchants-quay-ireland",
+					name: "Merchants Quay Ireland",
+					address: "13/14 Merchants Quay, Dublin 8",
+					phone: "01 524 0160",
+					email: "info@mqi.ie",
+					website: "https://mqi.ie/",
+					category: "Healthcare",
+					emoji: "🩺",
+					latitude: 53.3430,
+					longitude: -6.2690,
+					tags: ["food", "medical", "support", "hygiene"],
+					hours: { mon: "08:00-19:00", tue: "08:00-19:00", wed: "08:00-19:00", thu: "08:00-19:00", fri: "08:00-19:00", sun: "08:00-14:00" },
+					description: "Open access food, showers, GP doctor & nurse services, harm reduction."
+				},
+				{
+					id: "inclusion-health-hub",
+					name: "Inclusion Health Hub",
+					address: "60 Amiens St, Dublin 1",
+					phone: "01 233 6990",
+					email: "info@primarycaresafetynet.ie",
+					website: "https://www.primarycaresafetynet.ie/",
+					category: "Healthcare",
+					emoji: "🏥",
+					latitude: 53.3514,
+					longitude: -6.2497,
+					tags: ["medical", "healthcare"],
+					hours: { mon: "09:30-16:00", tue: "09:30-16:00", wed: "09:30-16:00", thu: "09:30-16:00", fri: "09:30-16:00" },
+					description: "Safetynet free open access GP clinic (appointment & walk-in)."
+				}
+			];
+
+const DAYS = [
+				{ id: "all", label: "All" },
+				{ id: "mon", label: "Mon" },
+				{ id: "tue", label: "Tue" },
+				{ id: "wed", label: "Wed" },
+				{ id: "thu", label: "Thu" },
+				{ id: "fri", label: "Fri" },
+				{ id: "sat", label: "Sat" },
+				{ id: "sun", label: "Sun" }
+			];
+
+			const DAY_KEYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+			const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+			const CATEGORIES = ["All", "Emergency Shelter", "Food", "Healthcare"];
+
+			let state = {
+				lang: localStorage.getItem('dublin-lifeline-lang') || 'en',
+				search: '',
+				category: 'All',
+				day: 'all',
+				theme: localStorage.getItem('dublin-lifeline-theme') || 'dark',
+				userLat: null,
+				userLng: null,
+				scheduleView: 'week',
+				showMySchedule: false,
+				personalSchedule: JSON.parse(localStorage.getItem('dublin-lifeline-personal-schedule') || '[]')
+			};
+
+			let map = null;
+			let markersGroup = null;
+			let userMarker = null;
+
+			// INIT
+			document.addEventListener('DOMContentLoaded', () => {
+				applyTheme(state.theme);
+				initI18n();
+				initTabs();
+				initMap();
+				renderFilters();
+				renderDirectory();
+				initSchedule('week');
+				initGuide();
+				initGPS();
+				initA11y();
+				initScheduleModal();
+			});
+
+			function applyTheme(theme) {
+				state.theme = theme;
+				document.documentElement.setAttribute('data-theme', theme);
+				localStorage.setItem('dublin-lifeline-theme', theme);
+				document.getElementById('themeBtn').textContent = theme === 'dark' ? '☀️ Light' : '☾ Dark';
+			}
+
+			function initI18n() {
+				const select = document.getElementById('langSelect');
+				select.value = state.lang;
+				select.addEventListener('change', (e) => {
+					state.lang = e.target.value;
+					localStorage.setItem('dublin-lifeline-lang', state.lang);
+					updateTranslations();
+				});
+				updateTranslations();
+			}
+
+			function updateTranslations() {
+				const dict = I18N[state.lang] || I18N.en;
+				const isMachine = state.lang !== 'en';
+
+				document.querySelectorAll('[data-i18n]').forEach((el) => {
+					const key = el.getAttribute('data-i18n');
+					if (dict[key]) {
+						el.textContent = dict[key];
+						if (isMachine) el.setAttribute('data-mt', 'true');
+						else el.removeAttribute('data-mt');
+					}
+				});
+
+				document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+					const [attr, key] = el.getAttribute('data-i18n-attr').split(':');
+					if (dict[key]) el.setAttribute(attr, dict[key]);
+				});
+			}
+
+			function initTabs() {
+				const tabs = document.querySelectorAll('.tab-btn');
+				tabs.forEach((tab) => {
+					tab.addEventListener('click', () => {
+						tabs.forEach((t) => {
+							t.classList.remove('active');
+							t.setAttribute('aria-selected', 'false');
+						});
+						tab.classList.add('active');
+						tab.setAttribute('aria-selected', 'true');
+
+						document.querySelectorAll('.page-view').forEach((p) => p.classList.remove('active'));
+						if (tab.id === 'tab-home') document.getElementById('view-home').classList.add('active');
+						if (tab.id === 'tab-timetable') {
+							document.getElementById('view-timetable').classList.add('active');
+							setTimeout(() => initSchedule(state.scheduleView), 50);
+						}
+						if (tab.id === 'tab-guide') document.getElementById('view-guide').classList.add('active');
+						if (tab.id === 'tab-pathways') document.getElementById('view-pathways').classList.add('active');
+
+						if (tab.id === 'tab-home' && map) setTimeout(() => map.invalidateSize(), 200);
+					});
+				});
+
+				// Timetable view buttons
+				document.getElementById('ttDayBtn')?.addEventListener('click', () => initSchedule('day'));
+				document.getElementById('ttWeekBtn')?.addEventListener('click', () => initSchedule('week'));
+				document.getElementById('ttMonthBtn')?.addEventListener('click', () => initSchedule('month'));
+
+				// My Schedule toggle
+				document.getElementById('myScheduleBtn')?.addEventListener('click', toggleMySchedule);
+			}
+
+			function initMap() {
+				map = L.map('map').setView([53.3498, -6.2603], 13);
+				L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					attribution: '&copy; OpenStreetMap contributors'
+				}).addTo(map);
+
+				markersGroup = L.layerGroup().addTo(map);
+				renderMapMarkers();
+			}
+
+			function renderMapMarkers() {
+				if (!markersGroup) return;
+				markersGroup.clearLayers();
+
+				const filtered = getFilteredServices();
+				filtered.forEach((s) => {
+					const icon = L.divIcon({
+						className: 'emoji-marker',
+						html: s.emoji || '📍',
+						iconSize: [32, 32],
+						iconAnchor: [16, 16]
+					});
+
+					const marker = L.marker([s.latitude, s.longitude], { icon }).addTo(markersGroup);
+					marker.bindPopup(`<strong>${s.name}</strong><br>${s.address}<br>📞 <a href="tel:${s.phone}">${s.phone}</a>`);
+				});
+			}
+
+			function initGPS() {
+				document.getElementById('gpsBtn').addEventListener('click', () => {
+					if (!navigator.geolocation) {
+						alert('GPS is not supported by your browser.');
+						return;
+					}
+					navigator.geolocation.getCurrentPosition(
+						(pos) => {
+							state.userLat = pos.coords.latitude;
+							state.userLng = pos.coords.longitude;
+							document.getElementById('locationStatus').textContent = `📍 GPS: ${state.userLat.toFixed(4)}, ${state.userLng.toFixed(4)}`;
+
+							if (userMarker) map.removeLayer(userMarker);
+							const icon = L.divIcon({
+								className: 'emoji-marker user-location',
+								html: '📍',
+								iconSize: [34, 34],
+								iconAnchor: [17, 17]
+							});
+							userMarker = L.marker([state.userLat, state.userLng], { icon }).addTo(map);
+							userMarker.bindPopup('📍 Your location').openPopup();
+							map.setView([state.userLat, state.userLng], 15);
+						},
+						() => alert('Unable to retrieve location. Please check permissions.')
+					);
+				});
+			}
+
+			function renderFilters() {
+				const catContainer = document.getElementById('categoryChips');
+				catContainer.innerHTML = '';
+				CATEGORIES.forEach((cat) => {
+					const btn = document.createElement('button');
+					btn.className = `chip ${state.category === cat ? 'active' : ''}`;
+					btn.textContent = cat;
+					btn.addEventListener('click', () => {
+						state.category = cat;
+						renderFilters();
+						renderDirectory();
+						renderMapMarkers();
+					});
+					catContainer.appendChild(btn);
+				});
+
+				const dayContainer = document.getElementById('dayChips');
+				dayContainer.innerHTML = '';
+				DAYS.forEach((d) => {
+					const btn = document.createElement('button');
+					btn.className = `chip ${state.day === d.id ? 'active' : ''}`;
+					btn.textContent = d.label;
+					btn.addEventListener('click', () => {
+						state.day = state.day === d.id ? 'all' : d.id;
+						renderFilters();
+						renderDirectory();
+						renderMapMarkers();
+					});
+					dayContainer.appendChild(btn);
+				});
+
+				document.getElementById('searchInput').addEventListener('input', (e) => {
+					state.search = e.target.value;
+					renderDirectory();
+					renderMapMarkers();
+				});
+			}
+
+			function getFilteredServices() {
+				return SERVICES_DATA.filter((s) => {
+					const matchSearch =
+						!state.search ||
+						s.name.toLowerCase().includes(state.search.toLowerCase()) ||
+						s.address.toLowerCase().includes(state.search.toLowerCase()) ||
+						s.tags.some((t) => t.toLowerCase().includes(state.search.toLowerCase()));
+
+					const matchCat = state.category === 'All' || s.category === state.category;
+
+					const matchDay = state.day === 'all' || (s.hours && s.hours[state.day]);
+
+					return matchSearch && matchCat && matchDay;
+				});
+			}
+
+			function renderDirectory() {
+				const grid = document.getElementById('cardsGrid');
+				const filtered = getFilteredServices();
+				document.getElementById('statsBar').textContent = `Showing ${filtered.length} of ${SERVICES_DATA.length} providers`;
+
+				grid.innerHTML = '';
+				if (filtered.length === 0) {
+					grid.innerHTML = '<div style="color:var(--muted);padding:2rem;text-align:center">No services found matching filters.</div>';
+					return;
+				}
+
+				filtered.forEach((s) => {
+					const card = document.createElement('div');
+					card.className = 'card';
+					card.innerHTML = `
+						<div class="kind">${s.category}</div>
+						<h3>${s.emoji} ${s.name}</h3>
+						<div style="font-size:0.9rem;color:var(--muted)">📍 ${s.address}</div>
+						<div class="hours-line">🕒 ${s.hours[state.day] || s.hours.mon || 'See schedule'}</div>
+						<p style="font-size:0.88rem;margin:0.25rem 0">${s.description}</p>
+						<div class="card-actions">
+							<a href="tel:${s.phone}" class="btn">📞 Call</a>
+							<a href="${s.website}" target="_blank" rel="noopener" class="btn">🌐 Website</a>
+							<button class="btn btn-primary" onclick="centerMap(${s.latitude}, ${s.longitude})">📍 Map</button>
+						</div>
+					`;
+					grid.appendChild(card);
+				});
+			}
+
+			window.centerMap = function(lat, lng) {
+				if (map) {
+					map.setView([lat, lng], 15);
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+				}
+			};
+
+			function initTimetable(mode) {
+				const content = document.getElementById('timetableContent');
+				let html = '<div class="week-grid">';
+				DAYS.slice(1).forEach((d) => {
+					const dayServices = SERVICES_DATA.filter((s) => s.hours && s.hours[d.id]);
+					html += `
+						<div class="day-box">
+							<div class="day-name">${d.label}</div>
+							${dayServices.map((s) => `<div style="font-size:0.82rem;margin-bottom:0.25rem"><strong>${s.name}</strong><br><span style="color:var(--muted)">${s.hours[d.id]}</span></div>`).join('')}
+						</div>
+					`;
+				});
+				html += '</div>';
+				content.innerHTML = html;
+			}
+
+			function initGuide() {
+				const guide = document.getElementById('guideContent');
+				guide.innerHTML = `
+					<details class="guide-acc" open>
+						<summary>🍲 Free Meals & Food Parcels</summary>
+						<div class="guide-content">Capuchin Day Centre (07:30-15:00), Mendicity Institute, The Lighthouse Cafe</div>
+					</details>
+					<details class="guide-acc">
+						<summary>🏠 Emergency Shelter & Housing</summary>
+						<div class="guide-content">Call DRHE Freephone 1800 707 707 daily at 10:00 AM</div>
+					</details>
+					<details class="guide-acc">
+						<summary>🩺 Healthcare & Free GP Clinics</summary>
+						<div class="guide-content">Inclusion Health Hub (60 Amiens St), Merchants Quay Ireland, Capuchin GP Clinic</div>
+					</details>
+				`;
+
+				const pathways = document.getElementById('pathwaysContent');
+				pathways.innerHTML = `
+					<div class="day-focus-card">
+						<h3>System Pathways & Welfare</h3>
+						<p><strong>1. Supplementary Welfare Allowance:</strong> Local Intreo Centre</p>
+						<p><strong>2. Urgent Needs Payment:</strong> One-off emergency support</p>
+						<p><strong>3. Medical Cards & Safetynet:</strong> Free doctor access for rough sleepers</p>
+					</div>
+				`;
+			}
+
+			// SCHEDULE / PERSONAL PLANNER
+			function initSchedule(mode) {
+				state.scheduleView = mode;
+				const container = document.getElementById('scheduleGrid');
+				const toolbar = document.querySelector('.schedule-toolbar');
+				if (!container) return;
+
+				if (mode === 'day') {
+					renderDayView(container);
+				} else if (mode === 'week') {
+					renderWeekView(container);
+				} else if (mode === 'month') {
+					renderMonthView(container);
+				}
+
+				if (toolbar) {
+					toolbar.querySelectorAll('.schedule-view-btn').forEach(btn => {
+						btn.classList.toggle('active', btn.id === `tt${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`);
+					});
+				}
+			}
+
+			function renderDayView(container) {
+				const today = new Date();
+				const dayKey = DAY_KEYS[today.getDay() === 0 ? 6 : today.getDay() - 1];
+				const dayName = today.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+				const dayServices = SERVICES_DATA.filter(s => s.hours && s.hours[dayKey]);
+
+				let html = `
+					<div class="day-focus-card">
+						<div class="day-header">
+							<div class="day-name">${dayName}</div>
+							<div class="day-date">${today.toLocaleDateString()}</div>
+						</div>
+						${dayServices.length === 0 ? '<p class="empty-schedule" data-i18n="timetable.noServices">No services open today</p>' : ''}
+						${dayServices.map(s => `
+							<div class="schedule-item" data-service-id="${s.id}" onclick="openScheduleModal('${s.id}')">
+								<div class="item-time">${s.hours[dayKey] || 'All day'}</div>
+								<div class="item-title">${s.emoji} ${s.name}</div>
+								<div class="item-location">${s.address}</div>
+								<span class="item-category">${s.category}</span>
+							</div>
+						`).join('')}
+					</div>
+				`;
+				container.innerHTML = html;
+			}
+
+			function renderWeekView(container) {
+				const today = new Date();
+				const todayIdx = today.getDay() === 0 ? 6 : today.getDay() - 1;
+
+				let html = '';
+				DAYS.slice(1).forEach((d, idx) => {
+					const dayServices = SERVICES_DATA.filter(s => s.hours && s.hours[d.id]);
+					const isToday = idx === todayIdx;
+					html += `
+						<div class="day-column ${isToday ? 'today' : ''}">
+							<div class="day-header">
+								<div class="day-name">${d.label}${isToday ? ' <span style="font-size:0.7rem;background:var(--accent2);color:#000;padding:0.1rem 0.35rem;border-radius:4px" data-i18n="timetable.today">Today</span>' : ''}</div>
+							</div>
+							${dayServices.length === 0 ? '<div class="empty-schedule" data-i18n="timetable.noServices">No services</div>' : ''}
+							${dayServices.map(s => `
+								<div class="schedule-item ${state.personalSchedule.some(p => p.serviceId === s.id && p.day === d.id) ? 'personal' : ''}" data-service-id="${s.id}" onclick="openScheduleModal('${s.id}', '${d.id}')">
+									<div class="item-time">${s.hours[d.id] || 'All day'}</div>
+									<div class="item-title">${s.emoji} ${s.name}</div>
+									<div class="item-location">${s.address}</div>
+									<span class="item-category">${s.category}</span>
+								</div>
+							`).join('')}
+						</div>
+					</div>
+				`;
+				container.innerHTML = html;
+			}
+
+			function renderMonthView(container) {
+				const today = new Date();
+				const year = today.getFullYear();
+				const month = today.getMonth();
+				const firstDay = new Date(year, month, 1).getDay();
+				const daysInMonth = new Date(year, month + 1, 0).getDate();
+				const startOffset = (firstDay === 0 ? 6 : firstDay - 1);
+
+				let html = '<div class="month-grid">';
+				for (let i = 0; i < startOffset; i++) {
+					html += '<div class="cell empty"></div>';
+				}
+
+				for (let d = 1; d <= daysInMonth; d++) {
+					const isToday = d === today.getDate() && month === today.getMonth();
+					const date = new Date(year, month, d);
+					const dayIndex = date.getDay() === 0 ? 6 : date.getDay() - 1;
+					const dayKey = DAY_KEYS[dayIndex];
+					const providers = SERVICES_DATA.filter(p => p.hours && p.hours[dayKey]);
+					html += `<div class="cell${isToday ? ' today' : ''}"><div class="day-num">${d}</div>`;
+					providers.slice(0, 2).forEach(p => {
+						html += `<div style="font-size:11px;color:var(--muted);margin-bottom:2px">${p.emoji} ${escapeHtml(p.name)} <span style="color:var(--accent)">${p.hours[dayKey] || ''}</span></div>`;
+					});
+					if (providers.length > 2) {
+						html += `<div style="font-size:11px;color:var(--muted)">+${providers.length - 2} more</div>`;
+					}
+					html += '</div>';
+				}
+
+				const totalCells = startOffset + daysInMonth;
+				const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+				for (let i = 0; i < remaining; i++) {
+					html += '<div class="cell empty"></div>';
+				}
+				html += '</div>';
+				container.innerHTML = html;
+			}
+
+			function escapeHtml(str) {
+				if (typeof str !== 'string') return '';
+				const map = { '&': '&', '<': '<', '>': '>', '"': '"', "'": "&apos;" };
+				return str.replace(/[&<>"']/g, c => map[c]);
+			}
+
+			// MY PERSONAL SCHEDULE
+			function savePersonalSchedule() {
+				localStorage.setItem('dublin-lifeline-personal-schedule', JSON.stringify(state.personalSchedule));
+			}
+
+			function toggleMySchedule() {
+				state.showMySchedule = !state.showMySchedule;
+				const panel = document.getElementById('mySchedulePanel');
+				const btn = document.getElementById('myScheduleBtn');
+				panel.style.display = state.showMySchedule ? 'block' : 'none';
+				btn.classList.toggle('active', state.showMySchedule);
+				if (state.showMySchedule) renderMySchedule();
+			}
+
+			function renderMySchedule() {
+				const list = document.getElementById('myScheduleList');
+				if (!list) return;
+
+				if (state.personalSchedule.length === 0) {
+					list.innerHTML = '<div class="empty-schedule" data-i18n="timetable.emptySchedule">No items in your schedule yet. Tap a service on any day to add it.</div>';
+					return;
+				}
+
+				// Sort by date
+				const sorted = [...state.personalSchedule].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+				list.innerHTML = sorted.map((item, idx) => {
+					const service = SERVICES_DATA.find(s => s.id === item.serviceId);
+					if (!service) return '';
+					const date = new Date(item.date);
+					const dayName = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+					return `
+						<div class="my-schedule-item">
+							<div class="item-info">
+								<div class="item-time">${dayName} at ${item.time}</div>
+								<div class="item-title">${service.emoji} ${service.name}</div>
+								<div class="item-location">${item.notes || service.address}</div>
+							</div>
+							<button class="item-remove" onclick="removeFromSchedule(${idx})" data-i18n="button.remove">Remove</button>
+						</div>
+					`;
+				}).join('');
+			}
+
+			window.removeFromSchedule = function(idx) {
+				state.personalSchedule.splice(idx, 1);
+				savePersonalSchedule();
+				renderMySchedule();
+				// Re-render schedule views to update personal indicators
+				initSchedule(state.scheduleView);
+			};
+
+			// SCHEDULE MODAL
+			function initScheduleModal() {
+				const modal = document.getElementById('scheduleModal');
+				const closeBtn = document.getElementById('modalClose');
+				const cancelBtn = document.getElementById('modalCancel');
+				const addBtn = document.getElementById('modalAdd');
+				const cancelBtn2 = document.getElementById('modalCancel');
+
+				[closeBtn, cancelBtn].forEach(btn => {
+					btn?.addEventListener('click', () => modal.classList.remove('open'));
+				});
+
+				modal?.addEventListener('click', (e) => {
+					if (e.target === modal) modal.classList.remove('open');
+				});
+
+				document.addEventListener('keydown', (e) => {
+					if (e.key === 'Escape') {
+						modal?.classList.remove('open');
+						document.getElementById('a11yPanel')?.classList.remove('open');
+					}
+				});
+
+				addBtn?.addEventListener('click', () => addToSchedule());
+			}
+
+			window.openScheduleModal = function(serviceId, day = null) {
+				const service = SERVICES_DATA.find(s => s.id === serviceId);
+				if (!service) return;
+
+				const modal = document.getElementById('scheduleModal');
+				const select = document.getElementById('modalService');
+				const timeSlots = document.getElementById('timeSlots');
+				const dateInput = document.getElementById('modalDate');
+
+				// Populate service select
+				select.innerHTML = SERVICES_DATA.map(s => `<option value="${s.id}" ${s.id === service.id ? 'selected' : ''}>${s.emoji} ${s.name} (${s.category})</option>`).join('');
+
+				// Populate time slots based on service hours
+				const hours = service.hours || {};
+				const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+				timeSlots.innerHTML = '';
+				dayKeys.forEach(d => {
+					if (hours[d]) {
+						const slot = document.createElement('button');
+						slot.type = 'button';
+						slot.className = `time-slot service-${service.category.toLowerCase().replace(' ', '-')}`;
+						slot.textContent = `${DAY_LABELS[dayKeys.indexOf(d)]}: ${hours[d]}`;
+						slot.dataset.day = d;
+						slot.dataset.time = hours[d];
+						slot.addEventListener('click', () => {
+							timeSlots.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+							slot.classList.add('selected');
+						});
+						timeSlots.appendChild(slot);
+					}
+				});
+
+				// Set default date to today
+				const today = new Date();
+				dateInput.value = today.toISOString().split('T')[0];
+
+				// Pre-select day if provided
+				if (day) {
+					const dayBtn = timeSlots.querySelector(`[data-day="${day}"]`);
+					if (dayBtn) dayBtn.classList.add('selected');
+				}
+
+				// Store current service/day for add function
+				modal.dataset.serviceId = service.id;
+				modal.dataset.day = day || '';
+
+				modal.classList.add('open');
+				select.focus();
+			};
+
+			function addToSchedule() {
+				const modal = document.getElementById('scheduleModal');
+				const serviceId = modal.dataset.serviceId;
+				const service = SERVICES_DATA.find(s => s.id === serviceId);
+				if (!service) return;
+
+				const date = document.getElementById('modalDate').value;
+				const timeSlot = document.querySelector('#timeSlots .time-slot.selected');
+				const notes = document.getElementById('modalNotes').value;
+				const remind = document.getElementById('modalRemind').checked;
+				const serviceSelect = document.getElementById('modalService').value;
+
+				if (!date) {
+					alert('Please select a date');
+					return;
+				}
+
+				const time = timeSlot ? timeSlot.dataset.time : '';
+				const day = timeSlot ? timeSlot.dataset.day : '';
+
+				const item = {
+					id: Date.now(),
+					serviceId: serviceSelect || serviceId,
+					date,
+					time,
+					day,
+					notes,
+					remind,
+					createdAt: new Date().toISOString()
+				};
+
+				state.personalSchedule.push(item);
+				savePersonalSchedule();
+				renderMySchedule();
+				initSchedule(state.scheduleView); // Re-render to show personal indicators
+
+				modal.classList.remove('open');
+				alert('Added to your schedule!');
+			}
+
+			function toggleMySchedule() {
+				state.showMySchedule = !state.showMySchedule;
+				const panel = document.getElementById('mySchedulePanel');
+				const btn = document.getElementById('myScheduleBtn');
+				panel.style.display = state.showMySchedule ? 'block' : 'none';
+				btn.classList.toggle('active', state.showMySchedule);
+				if (state.showMySchedule) renderMySchedule();
+			}
+
+			function initA11y() {
+				const modal = document.getElementById('a11yPanel');
+				document.getElementById('a11yBtn').addEventListener('click', () => modal.classList.toggle('open'));
+				document.getElementById('a11yClose').addEventListener('click', () => modal.classList.remove('open'));
+
+				document.getElementById('scaleRange').addEventListener('input', (e) => {
+					document.documentElement.style.setProperty('--font-scale', e.target.value / 100);
+				});
+
+				document.getElementById('contrastCheck').addEventListener('change', (e) => {
+					document.body.classList.toggle('high-contrast', e.target.checked);
+				});
+
+				document.getElementById('themeBtn').addEventListener('click', () => {
+					const next = state.theme === 'dark' ? 'light' : 'dark';
+					applyTheme(next);
+				});
+			}
+
+			// INITIALIZE
+			document.addEventListener('DOMContentLoaded', () => {
+				applyTheme(state.theme);
+				initI18n();
+				initTabs();
+				try { initMap(); } catch (e) { console.warn('Map init failed:', e); }
+				renderFilters();
+				renderDirectory();
+				initSchedule(state.scheduleView);
+				initGuide();
+				try { initGPS(); } catch (e) { console.warn('GPS init failed:', e); }
+				initA11y();
+				initScheduleModal();
+			});
+		</script>
+	</body>
+</html>
