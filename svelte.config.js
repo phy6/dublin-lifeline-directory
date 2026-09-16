@@ -8,7 +8,8 @@ export default {
 		adapter: adapter({ strict: false, fallback: 'index.html' }),
 		prerender: {
 			entries: ['*', '/offline.html'],
-			handleUnseenRoutes: 'ignore'
+			handleUnseenRoutes: 'ignore',
+			handleMissingId: 'ignore'
 		}
 	}
 };

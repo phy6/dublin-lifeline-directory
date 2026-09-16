@@ -5,21 +5,13 @@
 	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 
-	let services = $state<ServiceLocation[]>([]);
-	let filtered = $state<ServiceLocation[]>([]);
-	let categories = $state<string[]>([]);
+	const { data } = $props();
+	const dataServices = data.services as ServiceLocation[];
+	let services = $state(dataServices);
+	let filtered = $state(dataServices);
+	let categories = $state(data.categories);
 	let selectedCategory = $state<string>('All');
 	let selectedDay = $state<string>('all');
-	let loading = $state(true);
-
-	onMount(async () => {
-		const res = await fetch('/services.json');
-		const data = await res.json();
-		services = data.services;
-		filtered = services;
-		categories = [...new Set(services.map((s) => s.category))].sort();
-		loading = false;
-	});
 
 	function handleFilter(category: string) {
 		selectedCategory = category;
@@ -71,27 +63,23 @@
 
 <main id="main-content">
 	<h1>Search Services</h1>
-	{#if !loading}
-		<FilterBar
-			{categories}
-			selectedCategory={selectedCategory}
-			selectedDay={selectedDay}
-			onFilter={handleFilter}
-			onSearch={handleSearch}
-			onDayFilter={handleDayFilter}
-		/>
-		<div class="stats">
-			{filtered.length} services found
-			{#if selectedDay !== 'all'}
-				open on {selectedDay.toUpperCase()}
-			{:else}
-				across {categories.length} categories
-			{/if}
-		</div>
-		<ServiceList services={filtered} />
-	{:else}
-		<p>Loading...</p>
-	{/if}
+	<FilterBar
+		{categories}
+		selectedCategory={selectedCategory}
+		selectedDay={selectedDay}
+		onFilter={handleFilter}
+		onSearch={handleSearch}
+		onDayFilter={handleDayFilter}
+	/>
+	<div class="stats">
+		{filtered.length} services found
+		{#if selectedDay !== 'all'}
+			open on {selectedDay.toUpperCase()}
+		{:else}
+			across {categories.length} categories
+		{/if}
+	</div>
+	<ServiceList services={filtered} />
 </main>
 
 <style>
@@ -99,13 +87,23 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 1rem;
+		box-sizing: border-box;
 	}
 	h1 {
 		color: #1a73e8;
+		font-size: 1.5rem;
 	}
 	.stats {
 		color: #666;
 		font-size: 0.9rem;
 		margin: 0.5rem 0;
+	}
+	@media (max-width: 600px) {
+		main {
+			padding: 0.5rem;
+		}
+		h1 {
+			font-size: 1.25rem;
+		}
 	}
 </style>

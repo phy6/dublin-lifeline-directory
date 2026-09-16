@@ -40,7 +40,10 @@
 </div>
 
 <div id="lang-fab">
-	<button onclick={toggleLang} aria-label="Switch language">{lang === 'en' ? '🇮🇪 Gaeilge' : '🇬🇧 English'}</button>
+	<select onchange={(e) => { lang = (e.target as HTMLSelectElement).value; document.documentElement.lang = lang; localStorage.setItem('dcs-language', lang); }} aria-label="Select language">
+		<option value="en" selected={lang === 'en'}>English</option>
+		<option value="ga" selected={lang === 'ga'}>Gaeilge</option>
+	</select>
 </div>
 
 {@render children()}
@@ -54,14 +57,16 @@
 	.top-nav {
 		display: flex;
 		gap: 1rem;
-		padding: 1rem;
+		padding: 0.75rem 1rem;
 		background: #1a73e8;
 		border-radius: 0 0 12px 12px;
+		flex-wrap: wrap;
 	}
 	.top-nav a {
 		color: #fff;
 		text-decoration: none;
 		font-weight: bold;
+		font-size: 1rem;
 	}
 	.top-nav a:hover {
 		text-decoration: underline;
@@ -79,25 +84,27 @@
 		border-radius: 8px;
 		text-decoration: none;
 		font-weight: bold;
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 		border: 2px solid #ffc900;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 	}
 	#emergency-fab a:hover {
 		background: #126b32;
 	}
-	#lang-fab button {
+	#lang-fab select {
 		position: fixed;
 		top: 0.5rem;
 		right: 0.5rem;
 		z-index: 9998;
-		padding: 0.4rem 0.8rem;
+		padding: 0.4rem 0.6rem;
 		border-radius: 8px;
 		border: 2px solid #ffc900;
-		background: #1a73e8;
-		color: white;
+		background: white;
+		color: #333;
 		cursor: pointer;
 		font-size: 0.85rem;
 		font-weight: bold;
+		min-width: 100px;
 	}
 	.a11y-fab {
 		position: fixed;
@@ -107,5 +114,34 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+	}
+	@media (max-width: 600px) {
+		.top-nav {
+			gap: 0.5rem;
+			padding: 0.5rem;
+			font-size: 0.9rem;
+		}
+		.top-nav a {
+			font-size: 0.85rem;
+			padding: 0.25rem 0.5rem;
+		}
+		#emergency-fab {
+			top: 0.25rem;
+			right: 7rem;
+		}
+		#emergency-fab a {
+			font-size: 0.9rem;
+			padding: 0.3rem 0.6rem;
+		}
+		#lang-fab select {
+			top: 0.25rem;
+			right: 0.25rem;
+			font-size: 0.8rem;
+			min-width: 80px;
+		}
+		.a11y-fab {
+			bottom: 0.25rem;
+			right: 0.25rem;
+		}
 	}
 </style>

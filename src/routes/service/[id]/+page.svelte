@@ -2,12 +2,9 @@
 	import { onMount } from 'svelte';
 	import type { ServiceLocation } from '$lib/types';
 
-	let { data } = $props();
-	let service = $state<ServiceLocation | null>(null);
-
-	onMount(async () => {
-		if (data.service) service = data.service as unknown as ServiceLocation;
-	});
+	const { data } = $props();
+	const dataService = data.service as ServiceLocation | null;
+	let service = $state<ServiceLocation | null>(dataService);
 </script>
 
 {#if service}

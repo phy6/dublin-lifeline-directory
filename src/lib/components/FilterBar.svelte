@@ -70,6 +70,8 @@
 		border: 1px solid #ddd;
 		border-radius: 8px;
 		font-size: 1rem;
+		box-sizing: border-box;
+		min-height: 44px;
 	}
 	.filter-chips {
 		display: flex;
@@ -86,7 +88,8 @@
 		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.15s;
-		min-height: 40px;
+		min-height: 44px;
+		min-width: 44px;
 	}
 	.filter-chips button:hover {
 		border-color: #1a73e8;
@@ -100,5 +103,19 @@
 	.filter-chips button:focus-visible {
 		outline: 3px solid #ffc107;
 		outline-offset: 2px;
+	}
+	@media (max-width: 600px) {
+		.filter-bar {
+			padding: 0.5rem;
+		}
+		input[type='search'] {
+			font-size: 0.9rem;
+			min-height: 44px;
+		}
+		.filter-chips button {
+			font-size: 0.8rem;
+			padding: 0.3rem 0.6rem;
+			min-height: 44px;
+		}
 	}
 </style>

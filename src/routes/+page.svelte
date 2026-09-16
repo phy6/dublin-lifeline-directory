@@ -5,21 +5,13 @@
 	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 
-	let services = $state<ServiceLocation[]>([]);
-	let filtered = $state<ServiceLocation[]>([]);
-	let categories = $state<string[]>([]);
+	const { data } = $props();
+	const dataServices = data.services as ServiceLocation[];
+	let services = $state(dataServices);
+	let filtered = $state(dataServices);
+	let categories = $state(data.categories);
 	let selectedCategory = $state<string>('All');
 	let selectedDay = $state<string>('all');
-	let loading = $state(true);
-
-	onMount(async () => {
-		const res = await fetch('/services.json');
-		const data = await res.json();
-		services = data.services;
-		filtered = services;
-		categories = [...new Set(services.map((s) => s.category))].sort();
-		loading = false;
-	});
 
 	function handleFilter(category: string) {
 		selectedCategory = category;
@@ -82,27 +74,23 @@
 		other hardships.
 	</p>
 
-	{#if !loading}
-		<FilterBar
-			{categories}
-			selectedCategory={selectedCategory}
-			selectedDay={selectedDay}
-			onFilter={handleFilter}
-			onSearch={handleSearch}
-			onDayFilter={handleDayFilter}
-		/>
-		<div class="stats">
-			{filtered.length} services found
-			{#if selectedDay !== 'all'}
-				open on {selectedDay.toUpperCase()}
-			{:else}
-				across {categories.length} categories
-			{/if}
-		</div>
-		<ServiceList services={filtered} />
-	{:else}
-		<div class="loading">Loading services...</div>
-	{/if}
+	<FilterBar
+		{categories}
+		selectedCategory={selectedCategory}
+		selectedDay={selectedDay}
+		onFilter={handleFilter}
+		onSearch={handleSearch}
+		onDayFilter={handleDayFilter}
+	/>
+	<div class="stats">
+		{filtered.length} services found
+		{#if selectedDay !== 'all'}
+			open on {selectedDay.toUpperCase()}
+		{:else}
+			across {categories.length} categories
+		{/if}
+	</div>
+	<ServiceList services={filtered} />
 
 	<nav>
 		<a href="/map">View on Map</a>
@@ -114,10 +102,16 @@
 		max-width: 800px;
 		margin: 0 auto;
 		padding: 1rem;
+		box-sizing: border-box;
 	}
 	h1 {
 		color: #1a73e8;
 		margin-bottom: 0.5rem;
+		font-size: 1.5rem;
+	}
+	p {
+		font-size: 1rem;
+		color: #555;
 	}
 	.stats {
 		color: #666;
@@ -141,5 +135,16 @@
 	}
 	nav a:hover {
 		text-decoration: underline;
+	}
+	@media (max-width: 600px) {
+		main {
+			padding: 0.5rem;
+		}
+		h1 {
+			font-size: 1.25rem;
+		}
+		p {
+			font-size: 0.9rem;
+		}
 	}
 </style>

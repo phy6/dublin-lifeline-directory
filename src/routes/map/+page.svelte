@@ -3,7 +3,9 @@
 	import type { ServiceLocation } from '$lib/types';
 	import 'leaflet/dist/leaflet.css';
 
-	let services = $state<ServiceLocation[]>([]);
+	const { data } = $props();
+	const dataServices = data.services as ServiceLocation[];
+	let services = $state(dataServices);
 	let mapEl: HTMLDivElement | null = null;
 	let map: L.Map | null = null;
 
@@ -17,10 +19,6 @@
 			iconAnchor: [12, 41],
 			popupAnchor: [1, -34]
 		});
-
-		const res = await fetch('/services.json');
-		const data = await res.json();
-		services = data.services;
 
 		if (mapEl) {
 			map = L.map(mapEl, { preferCanvas: true }).setView([53.3496, -6.2687], 12);
@@ -44,13 +42,15 @@
 <main id="main-content">
 	<h1>Map View</h1>
 	<p>All Dublin City support services at a glance.</p>
-	<div bind:this={mapEl} id="map" style="width: 100%; height: 600px;"></div>
+	<div bind:this={mapEl} id="map" style="width: 100%;"></div>
 </main>
 
 <style>
 	#map {
 		width: 100%;
-		min-height: 400px;
+		height: 50vh;
+		min-height: 300px;
+		max-height: 600px;
 	}
 	main {
 		max-width: 100%;
@@ -59,5 +59,14 @@
 	}
 	h1 {
 		color: #1a73e8;
+	}
+	@media (max-width: 600px) {
+		#map {
+			height: 40vh;
+			min-height: 250px;
+		}
+		main {
+			padding: 0.5rem;
+		}
 	}
 </style>

@@ -5,7 +5,7 @@ export interface ServiceLocation {
 	phone: string;
 	email: string;
 	website: string;
-	hours: Record<string, string>;
+	hours: Record<string, string | undefined>;
 	tags: string[];
 	services: string[];
 	category: string;
@@ -17,7 +17,7 @@ export interface ServiceLocation {
 	activityMatchCount: number;
 	dataSource: string;
 	lastScraped: string;
-	scrapeSuccess: boolean;
+	scrapeSuccess?: boolean;
 }
 
 export interface ServicesData {

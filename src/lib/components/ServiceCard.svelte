@@ -42,6 +42,8 @@
 		transition:
 			transform 0.2s,
 			box-shadow 0.2s;
+		max-width: 100%;
+		box-sizing: border-box;
 	}
 	.card:hover {
 		transform: translateY(-2px);
@@ -52,6 +54,8 @@
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 0.5rem;
+		flex-wrap: wrap;
+		gap: 4px;
 	}
 	.category {
 		background: #1a73e8;
@@ -82,11 +86,13 @@
 	h3 {
 		margin: 0.25rem 0;
 		font-size: 1.1rem;
+		word-wrap: break-word;
 	}
 	.address {
 		color: #666;
 		margin: 0.25rem 0;
 		font-size: 0.9rem;
+		word-wrap: break-word;
 	}
 	.phone {
 		color: #1a73e8;
@@ -114,5 +120,16 @@
 	}
 	.hours {
 		margin-top: 0.5rem;
+	}
+	@media (max-width: 600px) {
+		.card {
+			padding: 0.75rem;
+		}
+		h3 {
+			font-size: 1rem;
+		}
+		.address, .phone, .day, .tag {
+			font-size: 0.8rem;
+		}
 	}
 </style>
