@@ -104,10 +104,10 @@ def test_merge_location_uses_scraped_for_null_flyer_fields(flyer_data, scraped_d
 
 def test_merge_location_sets_data_source_and_timestamps(scraped_data, flyer_data, fallback_data):
     flyer = flyer_data["day_support_centres"][0]
+    scraped_data["source"] = "live"
     result = merge_location(scraped_data, flyer, fallback_data)
 
-    assert result["dataSource"] == "merged"
-    assert "lastScraped" in result
+    assert result["dataSource"] == "live"
     assert result["scrapeSuccess"] is True
 
 

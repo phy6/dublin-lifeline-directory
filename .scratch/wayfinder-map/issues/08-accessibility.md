@@ -6,6 +6,7 @@
 **Resolution date:** 2026-09-14
 
 **Resolution:** ✅ Full implementation complete. All 5 acceptance criteria met:
+
 - Offline mode: Service Worker (CacheFirst/StaleWhileRevalidate/NetworkFirst) + accessible offline fallback page with emergency contacts
 - Large text mode: `TextScaleToggle.svelte` (100%–200%, localStorage persistence, `clamp()` typography)
 - Low-data mode: `LowDataToggle.svelte` (auto-detect via Network Information API, manual toggle, signals SW via `postMessage`, compact JSON)

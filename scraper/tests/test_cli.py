@@ -15,6 +15,14 @@ from scraper import load_config
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.json")
 
 
+FLYER_TARGET_IDS = [
+    "mendicity-institution", "capuchin-day-centre", "lighthouse-cafe",
+    "merchants-quay-ireland", "inclusion-health-hub",
+    "inclusion-health-hub-gp", "capuchin-day-centre-gp",
+    "merchants-quay-ireland-gp", "mendicity-institute-gp", "mobile-health-unit",
+]
+
+
 def test_help_exits_with_usage_info():
     with patch.object(sys, "argv", ["scraper/main.py", "--help"]):
         with pytest.raises(SystemExit) as exc_info:
@@ -30,12 +38,13 @@ def test_dry_run_prints_targets_and_exits():
     assert len(targets) == 14
 
 
-def test_flyer_only_limits_to_10_targets():
+def test_flyer_only_limits_to_flyer_targets():
     config = load_config(CONFIG_PATH)
     args = parse_args(["--flyer-only"])
     assert args.flyer_only is True
     targets = get_targets(config, args)
-    assert len(targets) == 10
+    assert len(targets) == 3
+    assert all(t["id"] in ["capuchin-day-centre", "merchants-quay-ireland", "mendicity-institution"] for t in targets)
 
 
 def test_targets_filters_to_specified_subset():

@@ -1,6 +1,9 @@
 import json
+import logging
 import os
 from datetime import datetime, timezone
+
+logger = logging.getLogger(__name__)
 
 
 DISPLAY_TO_SLUG = {
@@ -81,9 +84,17 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict) -> dict:
     if "longitude" not in merged or merged.get("longitude") is None:
         merged["longitude"] = scraped.get("longitude", fallback.get("longitude", 0))
 
-    merged["dataSource"] = "merged"
+    source = scraped.get("source", "unknown") if scraped else "unknown"
+    if source == "live":
+        merged["dataSource"] = "live"
+        merged["scrapeSuccess"] = True
+    elif source == "archive":
+        merged["dataSource"] = "local-archive"
+        merged["scrapeSuccess"] = True
+    else:
+        merged["dataSource"] = "fallback"
+        merged["scrapeSuccess"] = False
     merged["lastScraped"] = datetime.now(timezone.utc).isoformat()
-    merged["scrapeSuccess"] = True
     merged["tags"] = merged.get("tags", [])
     merged["description"] = merged.get("description", f"{merged.get('name', '')} service location")
     merged["lastVerified"] = merged.get("lastVerified", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
@@ -178,21 +189,6 @@ def run_pipeline(scraped_path: str, flyer_path: str, output_dir: str) -> dict:
         merged = merge_location(scraped, flyer, fallback)
         new_services.append(merged)
 
-    for flyer_centre in flyer_data.get("day_support_centres", []):
-        if flyer_centre["id"] not in [s["id"] for s in new_services]:
-            fallback = {
-                "name": flyer_centre["name"],
-                "address": flyer_centre.get("address", ""),
-                "latitude": flyer_centre.get("coordinates", {}).get("latitude", 0),
-                "longitude": flyer_centre.get("coordinates", {}).get("longitude", 0),
-                "services": normalize_services(flyer_centre.get("services", [])),
-                "tags": [],
-                "category": flyer_centre.get("services_categories", ["Community"])[0] if flyer_centre.get("services_categories") else "Community",
-                "description": flyer_centre.get("special_notes", ""),
-            }
-            merged = merge_location({}, flyer_centre, fallback)
-            new_services.append(merged)
-
     new_data = {
         "version": old_data["version"],
         "lastUpdated": datetime.now(timezone.utc).isoformat(),
@@ -243,4 +239,4 @@ if __name__ == "__main__":
     output_dir = args.output_dir or os.path.join(project_root, "src", "lib", "data")
 
     result = run_pipeline(scraped_path, flyer_path, output_dir)
-    print(json.dumps(result, indent=2))
+    logger.info(json.dumps(result, indent=2))

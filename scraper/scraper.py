@@ -1,13 +1,15 @@
 import asyncio
 import json
+import logging
 import os
 import random
 import time
-from pathlib import Path
-from typing import Optional, Tuple, List, Dict, Any
+from typing import Optional, Tuple, List
 
 import httpx
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger(__name__)
 
 
 def load_config(config_path: str) -> dict:
@@ -35,13 +37,13 @@ async def _retry_fetch(
     client: httpx.AsyncClient, url: str, timeout: float = 5.0,
     max_attempts: int = 3, base_delay: float = 2.0
 ) -> str:
-    delays = [2.0, 3.0, 4.5]
     for attempt in range(max_attempts):
         try:
             return await fetch_url(client, url, timeout=timeout)
         except (httpx.RequestError, httpx.HTTPStatusError):
             if attempt < max_attempts - 1:
-                await asyncio.sleep(delays[attempt])
+                delay = base_delay * (2 ** attempt)
+                await asyncio.sleep(delay)
             else:
                 raise
     raise RuntimeError(f"Failed to fetch {url} after {max_attempts} attempts")
@@ -87,12 +89,17 @@ async def fetch_with_fallback(target: dict, docs_dir: str, client: Optional[http
     return None, "none"
 
 
+def _get_project_root() -> str:
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 class DublinLifelineScraper:
     def __init__(self, config_path: str):
         self.config = load_config(config_path)
         self.targets = self.config["targets"]
-        self.docs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(config_path))), "scraper", "docs")
-        self.output_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(config_path))), "scraper", "output")
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(config_path))))
+        self.docs_dir = os.path.join(project_root, "scraper", "docs")
+        self.output_dir = os.path.join(project_root, "scraper", "output")
         self.rate_limiter = _RateLimiter(interval=6.0, jitter=0.5)
 
     async def fetch_target(self, target: dict) -> dict:
@@ -123,24 +130,3 @@ class DublinLifelineScraper:
         with open(output_path, "w") as f:
             json.dump(results, f, indent=2)
         return results
-
-
-async def main():
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--flyer-only", action="store_true")
-    args = parser.parse_args()
-
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "sources.json")
-    scraper = DublinLifelineScraper(config_path)
-    if args.dry_run:
-        print(f"Config loaded with {len(scraper.targets)} targets")
-        if args.flyer_only:
-            print("Dry run mode -- flyer-only requested")
-        return
-    await scraper.run()
-
-
-if __name__ == "__main__":
-    asyncio.run(main())

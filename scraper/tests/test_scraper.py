@@ -7,7 +7,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from scraper import load_config, extract_field, fetch_with_fallback, DublinLifelineScraper, _RateLimiter
+from scraper.scraper import load_config, extract_field, fetch_with_fallback, DublinLifelineScraper, _RateLimiter, _retry_fetch
 
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.json")
@@ -57,7 +57,7 @@ async def test_retry_logic_works_with_mocked_failure():
 
     client = httpx.AsyncClient()
     with patch.object(client, "get", side_effect=mock_get):
-        from scraper import _retry_fetch
+        from scraper.scraper import _retry_fetch
         result = await _retry_fetch(client, "http://example.com", max_attempts=3, base_delay=0.01)
         assert result == "<html>success</html>"
     await client.aclose()
