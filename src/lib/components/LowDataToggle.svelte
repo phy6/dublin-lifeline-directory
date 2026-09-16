@@ -32,31 +32,39 @@
 	onMount(load);
 </script>
 
-<button onclick={toggle} aria-pressed={enabled} aria-label="{enabled ? 'Disable' : 'Enable'} low data mode" class:active={enabled}>
-	{enabled ? '📶 Low Data ON' : '📶 Low Data'}
+<button
+	onclick={toggle}
+	aria-pressed={enabled}
+	aria-label={enabled ? 'Disable low data mode' : 'Enable low data mode'}
+	class:active={enabled}
+>
+	{enabled ? 'Low Data ON' : 'Low Data'}
 </button>
 
 <style>
 	button {
-		position: fixed;
-		bottom: 1rem;
-		left: 1rem;
-		color: white;
+		color: var(--color-text-on-accent);
 		border: none;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
 		cursor: pointer;
-		font-size: 0.9rem;
-		font-weight: bold;
-		z-index: 1000;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-		background: #333;
+		font-size: var(--text-sm);
+		font-weight: 600;
+		box-shadow: var(--shadow-md);
+		background: var(--color-text-primary);
+		min-height: 44px;
+		min-width: 44px;
+		font-family: var(--font-sans);
 	}
 	button.active {
-		background: #ff9800;
+		background: var(--color-warning);
+		color: var(--color-warning-on-container);
+	}
+	button:hover:not(.active) {
+		background: var(--color-text-secondary);
 	}
 	button:focus-visible {
-		outline: 3px solid #1a73e8;
+		outline: 3px solid var(--color-focus-ring);
 		outline-offset: 2px;
 	}
 </style>

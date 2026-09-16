@@ -15,7 +15,10 @@ export function normalizeDayKey(day: string): DayKey | null {
 	return null;
 }
 
-export function getHoursForDay(hours: Record<string, string | undefined>, day: DayKey): string | null {
+export function getHoursForDay(
+	hours: Record<string, string | undefined>,
+	day: DayKey
+): string | null {
 	for (const [key, value] of Object.entries(hours)) {
 		const normalized = normalizeDayKey(key);
 		if (normalized === day && value && value.toLowerCase() !== 'closed') {
@@ -45,7 +48,9 @@ export function isOpenNow(hours: Record<string, string | undefined>): boolean {
 	return isOpenOnDay(hours, today);
 }
 
-export function getOpenNowStatus(hours: Record<string, string | undefined>): 'open' | 'closed' | 'unknown' {
+export function getOpenNowStatus(
+	hours: Record<string, string | undefined>
+): 'open' | 'closed' | 'unknown' {
 	const now = new Date();
 	const dayIndex = now.getDay();
 	const dayMap: DayKey[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];

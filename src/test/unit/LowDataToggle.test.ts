@@ -20,8 +20,9 @@ describe('LowDataToggle', () => {
 
 		const button = container.querySelector('button') as HTMLButtonElement;
 		expect(button).toBeInTheDocument();
-		expect(button).toHaveTextContent('📶 Low Data');
+		expect(button).toHaveTextContent('Low Data');
 		expect(button).not.toHaveClass('active');
+		expect(button).toHaveAttribute('aria-label', 'Enable low data mode');
 	});
 
 	it('toggles low data mode on click', async () => {
@@ -31,9 +32,10 @@ describe('LowDataToggle', () => {
 		await button.click();
 
 		expect(button).toHaveAttribute('aria-pressed', 'true');
-		expect(button).toHaveTextContent('📶 Low Data ON');
+		expect(button).toHaveTextContent('Low Data ON');
 		expect(button).toHaveClass('active');
 		expect(localStorage.setItem).toHaveBeenCalledWith('dcs-low-data', 'true');
+		expect(button).toHaveAttribute('aria-label', 'Disable low data mode');
 	});
 
 	it('sends message to service worker when toggled', async () => {

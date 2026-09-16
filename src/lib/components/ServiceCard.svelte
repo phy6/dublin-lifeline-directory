@@ -6,7 +6,7 @@
 	const openStatus = $derived(getOpenNowStatus(service.hours));
 </script>
 
-<a href="/service/{service.id}" class="card">
+<article class="card">
 	<div class="card-header">
 		<div class="category">{service.category}</div>
 		{#if openStatus === 'open'}
@@ -28,15 +28,17 @@
 			<span class="day">{day}: {hours}</span>
 		{/each}
 	</div>
-</a>
+	<a href="/service/{service.id}" class="card-link">View details</a>
+</article>
 
 <style>
 	.card {
-		display: block;
-		background: #fff;
-		border-radius: 12px;
-		padding: 1rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		display: flex;
+		flex-direction: column;
+		background: var(--color-surface);
+		border-radius: var(--radius-lg);
+		padding: var(--space-3);
+		box-shadow: var(--shadow-md);
 		text-decoration: none;
 		color: inherit;
 		transition:
@@ -44,92 +46,127 @@
 			box-shadow 0.2s;
 		max-width: 100%;
 		box-sizing: border-box;
+		border: 1px solid var(--color-border);
 	}
-	.card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+	@media (prefers-reduced-motion: no-preference) {
+		.card:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-lg);
+		}
+		.card:active {
+			transform: scale(0.98);
+		}
 	}
 	.card-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 0.5rem;
+		margin-bottom: var(--space-2);
 		flex-wrap: wrap;
-		gap: 4px;
+		gap: var(--space-1);
 	}
 	.category {
-		background: #1a73e8;
-		color: #fff;
+		background: var(--color-accent);
+		color: var(--color-text-on-accent);
 		padding: 2px 8px;
-		border-radius: 4px;
-		font-size: 0.75rem;
+		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 		display: inline-block;
 	}
 	.open-badge {
-		background: #4caf50;
-		color: #fff;
+		background: var(--color-success);
+		color: var(--color-text-on-accent);
 		padding: 2px 8px;
-		border-radius: 4px;
-		font-size: 0.7rem;
+		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 		font-weight: bold;
 		display: inline-block;
 	}
 	.closed-badge {
-		background: #f44336;
-		color: #fff;
+		background: var(--color-danger);
+		color: var(--color-text-on-accent);
 		padding: 2px 8px;
-		border-radius: 4px;
-		font-size: 0.7rem;
+		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 		font-weight: bold;
 		display: inline-block;
 	}
 	h3 {
-		margin: 0.25rem 0;
-		font-size: 1.1rem;
+		margin: var(--space-1) 0;
+		font-size: var(--text-lg);
 		word-wrap: break-word;
 	}
 	.address {
-		color: #666;
-		margin: 0.25rem 0;
-		font-size: 0.9rem;
+		color: var(--color-text-secondary);
+		margin: var(--space-1) 0;
+		font-size: var(--text-sm);
 		word-wrap: break-word;
 	}
 	.phone {
-		color: #1a73e8;
-		margin: 0.25rem 0;
-		font-size: 0.85rem;
+		color: var(--color-accent);
+		margin: var(--space-1) 0;
+		font-size: var(--text-sm);
 	}
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 4px;
-		margin: 0.5rem 0;
+		gap: var(--space-1);
+		margin: var(--space-2) 0;
 	}
 	.tag {
-		background: #e8f0fe;
-		color: #1a73e8;
+		background: var(--color-accent-container);
+		color: var(--color-accent-on-container);
 		padding: 2px 6px;
-		border-radius: 4px;
-		font-size: 0.75rem;
+		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 	}
 	.day {
 		display: block;
-		font-size: 0.8rem;
-		color: #555;
+		font-size: var(--text-xs);
+		color: var(--color-text-muted);
 		margin: 1px 0;
+		line-height: var(--leading-relaxed);
+		text-wrap: pretty;
 	}
 	.hours {
-		margin-top: 0.5rem;
+		margin-top: var(--space-2);
+	}
+	.card-link {
+		margin-top: auto;
+		padding: var(--space-2) var(--space-3);
+		background: var(--color-accent);
+		color: var(--color-text-on-accent);
+		border-radius: var(--radius-md);
+		text-decoration: none;
+		font-weight: 600;
+		font-size: var(--text-sm);
+		text-align: center;
+		transition: background-color 0.15s;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.card-link:hover {
+			background: var(--color-accent-hover);
+		}
+		.card-link:active {
+			transform: scale(0.98);
+		}
+	}
+	.card-link:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
 	}
 	@media (max-width: 600px) {
 		.card {
-			padding: 0.75rem;
+			padding: var(--space-2);
 		}
 		h3 {
-			font-size: 1rem;
+			font-size: var(--text-base);
 		}
-		.address, .phone, .day, .tag {
-			font-size: 0.8rem;
+		.address,
+		.phone,
+		.day,
+		.tag {
+			font-size: var(--text-xs);
 		}
 	}
 </style>

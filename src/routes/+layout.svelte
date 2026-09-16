@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
 	import TextScaleToggle from '$lib/components/TextScaleToggle.svelte';
 	import LowDataToggle from '$lib/components/LowDataToggle.svelte';
+	import '$lib/styles/tokens.css';
 	let { children } = $props();
 	let lang = $state('en');
-
-	function toggleLang() {
-		lang = lang === 'en' ? 'ga' : 'en';
-		document.documentElement.lang = lang;
-		localStorage.setItem('dcs-language', lang);
-	}
 
 	function loadLang() {
 		if (typeof window !== 'undefined') {
@@ -30,17 +26,26 @@
 </svelte:head>
 
 <nav class="top-nav" aria-label="Main navigation">
-	<a href="/">Home</a>
-	<a href="/map">Map</a>
-	<a href="/search">Search</a>
+	<a href="/" aria-current={page.url.pathname === '/' ? 'page' : undefined}>Directory</a>
+	<a href="/map" aria-current={page.url.pathname === '/map' ? 'page' : undefined}>Map</a>
+	<a href="/search" aria-current={page.url.pathname === '/search' ? 'page' : undefined}>Search</a>
 </nav>
 
 <div id="emergency-fab" role="complementary" aria-label="Emergency contacts">
-	<a href="tel:112" aria-label="Call emergency services">112</a>
+	<a href="tel:112" aria-label="Call emergency services 112">112</a>
 </div>
 
 <div id="lang-fab">
-	<select onchange={(e) => { lang = (e.target as HTMLSelectElement).value; document.documentElement.lang = lang; localStorage.setItem('dcs-language', lang); }} aria-label="Select language">
+	<label for="lang-select" class="sr-only">Select language</label>
+	<select
+		id="lang-select"
+		onchange={(e) => {
+			lang = (e.target as HTMLSelectElement).value;
+			document.documentElement.lang = lang;
+			localStorage.setItem('dcs-language', lang);
+		}}
+		aria-label="Select language"
+	>
 		<option value="en" selected={lang === 'en'}>English</option>
 		<option value="ga" selected={lang === 'ga'}>Gaeilge</option>
 	</select>
@@ -56,92 +61,127 @@
 <style>
 	.top-nav {
 		display: flex;
-		gap: 1rem;
-		padding: 0.75rem 1rem;
-		background: #1a73e8;
-		border-radius: 0 0 12px 12px;
+		gap: var(--space-3);
+		padding: var(--space-2) var(--space-3);
+		background: var(--color-accent);
+		border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 		flex-wrap: wrap;
+		box-shadow: var(--shadow-md);
 	}
 	.top-nav a {
-		color: #fff;
+		color: var(--color-text-on-accent);
 		text-decoration: none;
-		font-weight: bold;
-		font-size: 1rem;
+		font-weight: 600;
+		font-size: var(--text-sm);
+		letter-spacing: 0.02em;
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		transition: background-color 0.15s;
 	}
-	.top-nav a:hover {
-		text-decoration: underline;
+	@media (prefers-reduced-motion: no-preference) {
+		.top-nav a:hover {
+			background: rgba(255, 255, 255, 0.15);
+			text-decoration: none;
+		}
+	}
+	.top-nav a[aria-current='page'] {
+		background: rgba(255, 255, 255, 0.25);
 	}
 	#emergency-fab {
 		position: fixed;
-		top: 0.5rem;
-		right: 9rem;
+		top: max(var(--space-2), env(safe-area-inset-top));
+		right: calc(var(--space-3) + 44px + var(--space-2));
 		z-index: 9999;
 	}
 	#emergency-fab a {
-		background: #167f3d;
-		color: white;
-		padding: 0.5rem 1rem;
-		border-radius: 8px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 44px;
+		min-height: 44px;
+		background: var(--color-success);
+		color: var(--color-text-on-accent);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-md);
 		text-decoration: none;
-		font-weight: bold;
-		font-size: 1.1rem;
-		border: 2px solid #ffc900;
-		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		font-weight: 700;
+		font-size: var(--text-lg);
+		border: 2px solid var(--color-warning);
+		box-shadow: var(--shadow-lg);
 	}
-	#emergency-fab a:hover {
-		background: #126b32;
+	@media (prefers-reduced-motion: no-preference) {
+		#emergency-fab a:hover {
+			background: var(--color-success-container);
+			color: var(--color-success-on-container);
+		}
+		#emergency-fab a:active {
+			transform: scale(0.96);
+		}
+	}
+	#emergency-fab a:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
 	}
 	#lang-fab select {
 		position: fixed;
-		top: 0.5rem;
-		right: 0.5rem;
+		top: max(var(--space-2), env(safe-area-inset-top));
+		right: max(var(--space-2), env(safe-area-inset-right));
 		z-index: 9998;
-		padding: 0.4rem 0.6rem;
-		border-radius: 8px;
-		border: 2px solid #ffc900;
-		background: white;
-		color: #333;
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-md);
+		border: 2px solid var(--color-border-strong);
+		background: var(--color-surface);
+		color: var(--color-text-primary);
 		cursor: pointer;
-		font-size: 0.85rem;
-		font-weight: bold;
+		font-size: var(--text-sm);
+		font-weight: 600;
 		min-width: 100px;
+		font-family: var(--font-sans);
+	}
+	#lang-fab select:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
+		border-color: var(--color-accent);
 	}
 	.a11y-fab {
 		position: fixed;
-		bottom: 0.5rem;
-		right: 0.5rem;
+		bottom: max(var(--space-2), env(safe-area-inset-bottom));
+		right: max(var(--space-2), env(safe-area-inset-right));
 		z-index: 1000;
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: var(--space-2);
 	}
 	@media (max-width: 600px) {
 		.top-nav {
-			gap: 0.5rem;
-			padding: 0.5rem;
-			font-size: 0.9rem;
+			gap: var(--space-2);
+			padding: var(--space-2);
 		}
 		.top-nav a {
-			font-size: 0.85rem;
-			padding: 0.25rem 0.5rem;
+			font-size: var(--text-xs);
+			padding: var(--space-1);
 		}
 		#emergency-fab {
-			top: 0.25rem;
-			right: 7rem;
+			top: max(var(--space-1), env(safe-area-inset-top));
+			right: calc(var(--space-2) + 44px + var(--space-1));
 		}
 		#emergency-fab a {
-			font-size: 0.9rem;
-			padding: 0.3rem 0.6rem;
+			font-size: var(--text-base);
+			padding: var(--space-1) var(--space-2);
+			min-width: 44px;
+			min-height: 44px;
 		}
 		#lang-fab select {
-			top: 0.25rem;
-			right: 0.25rem;
-			font-size: 0.8rem;
+			top: max(var(--space-1), env(safe-area-inset-top));
+			right: max(var(--space-1), env(safe-area-inset-right));
+			font-size: var(--text-xs);
 			min-width: 80px;
+			padding: var(--space-1) var(--space-2);
 		}
 		.a11y-fab {
-			bottom: 0.25rem;
-			right: 0.25rem;
+			bottom: max(var(--space-1), env(safe-area-inset-bottom));
+			right: max(var(--space-1), env(safe-area-inset-right));
+			gap: var(--space-2);
 		}
 	}
 </style>

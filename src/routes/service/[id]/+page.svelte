@@ -1,15 +1,13 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { ServiceLocation } from '$lib/types';
 
 	const { data } = $props();
-	const dataService = data.service as ServiceLocation | null;
-	let service = $state<ServiceLocation | null>(dataService);
+	let service = $state((data.service as ServiceLocation | null) ?? null);
 </script>
 
 {#if service}
 	<main id="main-content">
-		<a href="/">← Back</a>
+		<a href="/" class="back-link">← Back to directory</a>
 		<div class="service-detail">
 			<div class="category">{service.category}</div>
 			<h1>{service.name}</h1>
@@ -18,24 +16,40 @@
 			<section>
 				<h2>Location</h2>
 				<p>{service.address}</p>
-				<p>Phone: <a href="tel:{service.phone}">{service.phone}</a></p>
-				<p>Email: <a href="mailto:{service.email}">{service.email}</a></p>
+				<p>
+					<a href="tel:{service.phone}" aria-label="Call {service.name} at {service.phone}"
+						>{service.phone}</a
+					>
+				</p>
+				<p>
+					<a href="mailto:{service.email}" aria-label="Email {service.name}">{service.email}</a>
+				</p>
 				{#if service.website && service.website !== ''}
-					<p><a href={service.website} target="_blank" rel="noopener">{service.website}</a></p>
+					<p>
+						<a
+							href={service.website}
+							target="_blank"
+							rel="noopener"
+							aria-label="Visit {service.name} website">{service.website}</a
+						>
+					</p>
 				{/if}
 			</section>
 
 			<section>
-				<h2>Hours</h2>
-				{#each Object.entries(service.hours) as [day, hours] (day)}
-					<div class="hours-row">
-						<span class="day">{day}</span><span class="hours">{hours}</span>
-					</div>
-				{/each}
+				<h2>Opening Hours</h2>
+				<dl class="hours-list">
+					{#each Object.entries(service.hours) as [day, hours] (day)}
+						<div class="hours-row">
+							<dt class="day">{day}</dt>
+							<dd class="hours">{hours}</dd>
+						</div>
+					{/each}
+				</dl>
 			</section>
 
 			<section>
-				<h2>Services</h2>
+				<h2>Services Offered</h2>
 				<div class="tags">
 					{#each service.services as srv (srv)}
 						<span class="tag">{srv}</span>
@@ -44,7 +58,7 @@
 			</section>
 
 			<section>
-				<h2>Tags</h2>
+				<h2>Categories</h2>
 				<div class="tags">
 					{#each service.tags as tag (tag)}
 						<span class="tag">{tag}</span>
@@ -53,75 +67,177 @@
 			</section>
 
 			<footer>
-				<small>Last verified: {service.lastVerified} · Data: {service.dataSource}</small>
+				<small>Last verified: {service.lastVerified} · Source: {service.dataSource}</small>
 			</footer>
 		</div>
 	</main>
 {:else}
-	<p>Service not found.</p>
+	<div class="not-found">
+		<h2>Service not found</h2>
+		<p>The service you're looking for doesn't exist or has been removed.</p>
+		<nav>
+			<a href="/search">Search for another service</a>
+			<span aria-hidden="true"> or </span>
+			<a href="/">return to directory</a>
+		</nav>
+	</div>
 {/if}
 
 <style>
 	main {
 		max-width: 700px;
 		margin: 0 auto;
-		padding: 1rem;
+		padding: var(--space-4);
 	}
-	a {
-		color: #1a73e8;
+	.back-link {
+		display: inline-block;
+		margin-bottom: var(--space-3);
+		color: var(--color-accent);
 		text-decoration: none;
+		font-weight: 500;
+		font-size: var(--text-sm);
+	}
+	.back-link:hover {
+		text-decoration: underline;
+	}
+	.back-link:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
 	}
 	.category {
-		background: #1a73e8;
-		color: #fff;
-		padding: 4px 12px;
-		border-radius: 4px;
+		background: var(--color-accent-container);
+		color: var(--color-accent-on-container);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
 		display: inline-block;
-		font-size: 0.85rem;
-		margin-bottom: 0.5rem;
+		font-size: var(--text-sm);
+		font-weight: 600;
+		margin-bottom: var(--space-2);
 	}
 	h1 {
-		color: #222;
+		color: var(--color-text-primary);
+		font-size: var(--text-3xl);
+		line-height: var(--leading-tight);
+		margin-bottom: var(--space-2);
+		text-wrap: balance;
 	}
 	.description {
-		color: #444;
-		line-height: 1.5;
+		color: var(--color-text-secondary);
+		line-height: var(--leading-relaxed);
+		font-size: var(--text-base);
+		margin-bottom: var(--space-4);
 	}
 	section {
-		margin: 1.5rem 0;
+		margin: var(--space-5) 0;
 	}
 	h2 {
-		color: #1a73e8;
-		font-size: 1.1rem;
-		border-bottom: 1px solid #eee;
-		padding-bottom: 0.5rem;
+		color: var(--color-accent);
+		font-size: var(--text-xl);
+		font-weight: 600;
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: var(--space-2);
+		margin-bottom: var(--space-3);
+	}
+	.hours-list {
+		margin: 0;
 	}
 	.hours-row {
 		display: flex;
 		justify-content: space-between;
-		padding: 4px 0;
-		border-bottom: 1px solid #f5f5f5;
+		padding: var(--space-1) 0;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.hours-row:last-child {
+		border-bottom: none;
 	}
 	.day {
-		font-weight: bold;
+		font-weight: 600;
+		color: var(--color-text-primary);
+		font-size: var(--text-sm);
 	}
 	.hours {
-		color: #555;
+		color: var(--color-text-secondary);
+		font-size: var(--text-sm);
+		margin: 0;
 	}
 	.tags {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 4px;
+		gap: var(--space-1);
 	}
 	.tag {
-		background: #e8f0fe;
-		color: #1a73e8;
-		padding: 2px 8px;
-		border-radius: 4px;
-		font-size: 0.8rem;
+		background: var(--color-accent-container);
+		color: var(--color-accent-on-container);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 	}
 	footer {
-		margin-top: 2rem;
-		color: #999;
+		margin-top: var(--space-6);
+		padding-top: var(--space-4);
+		border-top: 1px solid var(--color-border);
+	}
+	footer small {
+		color: var(--color-text-muted);
+		font-size: var(--text-xs);
+	}
+	.not-found {
+		max-width: 700px;
+		margin: 0 auto;
+		padding: var(--space-6) var(--space-4);
+		text-align: center;
+	}
+	.not-found h2 {
+		font-size: var(--text-2xl);
+		color: var(--color-text-primary);
+		margin-bottom: var(--space-2);
+	}
+	.not-found p {
+		color: var(--color-text-secondary);
+		margin-bottom: var(--space-4);
+		font-size: var(--text-base);
+		line-height: var(--leading-relaxed);
+	}
+	.not-found nav {
+		display: flex;
+		justify-content: center;
+		gap: var(--space-2);
+		flex-wrap: wrap;
+	}
+	.not-found a {
+		color: var(--color-accent);
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.not-found a:hover {
+		text-decoration: underline;
+	}
+	a {
+		color: var(--color-accent);
+		text-decoration: none;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	a:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+	@media (max-width: 600px) {
+		main {
+			padding: var(--space-3);
+		}
+		h1 {
+			font-size: var(--text-2xl);
+		}
+		h2 {
+			font-size: var(--text-lg);
+		}
+		.day,
+		.hours {
+			font-size: var(--text-xs);
+		}
 	}
 </style>

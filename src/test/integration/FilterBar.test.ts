@@ -17,7 +17,8 @@ describe('FilterBar', () => {
 	it('renders search input and category chips', () => {
 		const { container } = render(FilterBar, { categories, onFilter, onSearch, onDayFilter });
 
-		expect(container.querySelector('input[placeholder="Search services..."]')).toBeInTheDocument();
+		expect(container.querySelector('input[id="search-input"]')).toBeInTheDocument();
+		expect(container.querySelector('label[for="search-input"]')).toBeInTheDocument();
 		expect(container.querySelectorAll('.filter-chips').length).toBe(2);
 	});
 
@@ -32,7 +33,6 @@ describe('FilterBar', () => {
 	it('shows all provided categories as chips', () => {
 		const { container } = render(FilterBar, { categories, onFilter, onSearch, onDayFilter });
 
-		// First filter-chips has category chips (All + 4 categories = 5)
 		const categoryChips = container.querySelectorAll('.filter-chips')[0].querySelectorAll('button');
 		expect(categoryChips.length).toBe(5);
 		expect(categoryChips[0]).toHaveTextContent('All Categories');
@@ -60,9 +60,7 @@ describe('FilterBar', () => {
 	it('calls onSearch when typing in search input', () => {
 		const { container } = render(FilterBar, { categories, onFilter, onSearch, onDayFilter });
 
-		const input = container.querySelector(
-			'input[placeholder="Search services..."]'
-		) as HTMLInputElement;
+		const input = container.querySelector('input[id="search-input"]') as HTMLInputElement;
 		fireEvent.input(input, { target: { value: 'doctor' } });
 
 		expect(onSearch).toHaveBeenCalledWith('doctor');
@@ -97,9 +95,7 @@ describe('FilterBar', () => {
 	it('handles rapid search input changes', () => {
 		const { container } = render(FilterBar, { categories, onFilter, onSearch, onDayFilter });
 
-		const input = container.querySelector(
-			'input[placeholder="Search services..."]'
-		) as HTMLInputElement;
+		const input = container.querySelector('input[id="search-input"]') as HTMLInputElement;
 		fireEvent.input(input, { target: { value: 'h' } });
 		fireEvent.input(input, { target: { value: 'he' } });
 		fireEvent.input(input, { target: { value: 'hea' } });

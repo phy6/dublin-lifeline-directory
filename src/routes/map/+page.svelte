@@ -32,6 +32,20 @@
 					marker.bindPopup(
 						`<b>${s.name}</b><br>${s.address}<br><a href="/service/${s.id}">View details</a>`
 					);
+
+					const markerEl = marker.getElement();
+					if (markerEl) {
+						markerEl.setAttribute('tabindex', '0');
+						markerEl.setAttribute('role', 'button');
+						markerEl.setAttribute('aria-label', `View ${s.name} at ${s.address}`);
+						markerEl.addEventListener('keydown', (e: KeyboardEvent) => {
+							if (e.key === 'Enter' || e.key === ' ') {
+								e.preventDefault();
+								marker.openPopup();
+								markerEl.focus();
+							}
+						});
+					}
 				}
 			});
 			map.invalidateSize();
@@ -40,8 +54,11 @@
 </script>
 
 <main id="main-content">
-	<h1>Map View</h1>
-	<p>All Dublin City support services at a glance.</p>
+	<h1>Service Map</h1>
+	<p>Find support services across Dublin City on the interactive map below.</p>
+	<p class="map-instructions">
+		Use arrow keys to navigate, press Enter or Space on a marker to view details.
+	</p>
 	<div bind:this={mapEl} id="map" style="width: 100%;"></div>
 </main>
 
@@ -55,10 +72,26 @@
 	main {
 		max-width: 100%;
 		margin: 0 auto;
-		padding: 1rem;
+		padding: var(--space-3);
 	}
 	h1 {
-		color: #1a73e8;
+		color: var(--color-accent);
+		font-size: var(--text-2xl);
+		line-height: var(--leading-tight);
+		margin-bottom: var(--space-2);
+		text-wrap: balance;
+	}
+	p {
+		color: var(--color-text-secondary);
+		font-size: var(--text-base);
+		line-height: var(--leading-relaxed);
+		margin-bottom: var(--space-2);
+	}
+	.map-instructions {
+		font-size: var(--text-sm);
+		color: var(--color-text-muted);
+		font-style: italic;
+		margin-bottom: var(--space-3);
 	}
 	@media (max-width: 600px) {
 		#map {
@@ -66,7 +99,13 @@
 			min-height: 250px;
 		}
 		main {
-			padding: 0.5rem;
+			padding: var(--space-2);
+		}
+		h1 {
+			font-size: var(--text-xl);
+		}
+		p {
+			font-size: var(--text-sm);
 		}
 	}
 </style>

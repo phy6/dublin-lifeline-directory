@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import ServiceList from '$lib/components/ServiceList.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import type { ServiceLocation } from '$lib/types';
@@ -59,18 +58,31 @@
 			filtered = base.filter((s) => isOpenOnDay(s.hours, day as DayKey));
 		}
 	}
+
+	let announceText = $state('');
+	$effect(() => {
+		if (selectedDay !== 'all') {
+			announceText = `${filtered.length} services found open on ${selectedDay.toUpperCase()}`;
+		} else {
+			announceText = `${filtered.length} services found across ${categories.length} categories`;
+		}
+	});
 </script>
 
 <main id="main-content">
 	<h1>Search Services</h1>
 	<FilterBar
 		{categories}
-		selectedCategory={selectedCategory}
-		selectedDay={selectedDay}
+		{selectedCategory}
+		{selectedDay}
 		onFilter={handleFilter}
 		onSearch={handleSearch}
 		onDayFilter={handleDayFilter}
+		resultsId="service-list"
 	/>
+	<div role="status" aria-live="polite" class="sr-only" aria-atomic="true">
+		{announceText}
+	</div>
 	<div class="stats">
 		{filtered.length} services found
 		{#if selectedDay !== 'all'}
@@ -79,31 +91,33 @@
 			across {categories.length} categories
 		{/if}
 	</div>
-	<ServiceList services={filtered} />
+	<ServiceList services={filtered} id="service-list" />
 </main>
 
 <style>
 	main {
 		max-width: 800px;
 		margin: 0 auto;
-		padding: 1rem;
+		padding: var(--space-3);
 		box-sizing: border-box;
 	}
 	h1 {
-		color: #1a73e8;
-		font-size: 1.5rem;
+		color: var(--color-accent);
+		font-size: var(--text-2xl);
+		line-height: var(--leading-tight);
+		text-wrap: balance;
 	}
 	.stats {
-		color: #666;
-		font-size: 0.9rem;
-		margin: 0.5rem 0;
+		color: var(--color-text-muted);
+		font-size: var(--text-sm);
+		margin: var(--space-2) 0;
 	}
 	@media (max-width: 600px) {
 		main {
-			padding: 0.5rem;
+			padding: var(--space-2);
 		}
 		h1 {
-			font-size: 1.25rem;
+			font-size: var(--text-xl);
 		}
 	}
 </style>

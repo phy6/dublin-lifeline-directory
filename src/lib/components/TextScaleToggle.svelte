@@ -18,7 +18,7 @@
 	onMount(loadScale);
 </script>
 
-<div class="text-scale-panel" role="group" aria-label="Text size controls">
+<div class="text-scale-panel" role="group" aria-labelledby="scale-label">
 	<span id="scale-label">Text size:</span>
 	<div class="scale-buttons">
 		{#each sizes as s, i (s)}
@@ -36,39 +36,42 @@
 
 <style>
 	.text-scale-panel {
-		position: fixed;
-		bottom: 1rem;
-		right: 1rem;
-		background: white;
-		border: 2px solid #1a73e8;
-		border-radius: 8px;
-		padding: 0.5rem 1rem;
-		z-index: 1000;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-md);
+		padding: var(--space-2) var(--space-3);
 		display: flex;
 		align-items: center;
-		gap: 0.5rem;
-		font-size: 0.9rem;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+		gap: var(--space-2);
+		font-size: var(--text-sm);
+		box-shadow: var(--shadow-md);
 	}
 	.scale-buttons {
 		display: flex;
-		gap: 0.25rem;
+		gap: var(--space-1);
 	}
 	button {
-		padding: 0.25rem 0.5rem;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-		background: white;
+		padding: var(--space-1) var(--space-2);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background: var(--color-surface);
+		color: var(--color-text-primary);
 		cursor: pointer;
-		font-size: 0.85rem;
+		font-size: var(--text-xs);
+		font-family: var(--font-sans);
+		min-height: 36px;
+		min-width: 36px;
 	}
 	button.active {
-		background: #1a73e8;
-		color: white;
-		border-color: #1a73e8;
+		background: var(--color-accent);
+		color: var(--color-text-on-accent);
+		border-color: var(--color-accent);
+	}
+	button:hover:not(.active) {
+		background: var(--color-surface-hover);
 	}
 	button:focus-visible {
-		outline: 3px solid #ffc107;
+		outline: 3px solid var(--color-focus-ring);
 		outline-offset: 2px;
 	}
 </style>
