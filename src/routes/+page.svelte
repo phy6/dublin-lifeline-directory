@@ -3,10 +3,12 @@
 	import ServiceList from '$lib/components/ServiceList.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import type { ServiceLocation } from '$lib/types';
+	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 
 	let services = $state<ServiceLocation[]>([]);
 	let filtered = $state<ServiceLocation[]>([]);
 	let categories = $state<string[]>([]);
+	let selectedDay = $state<string>('all');
 	let loading = $state(true);
 
 	onMount(async () => {
@@ -20,25 +22,46 @@
 
 	function handleFilter(category: string) {
 		if (category === 'All') {
-			filtered = services;
+			filtered = applyDayFilter(services, selectedDay);
 		} else {
-			filtered = services.filter((s) => s.category === category);
+			filtered = applyDayFilter(
+				services.filter((s) => s.category === category),
+				selectedDay
+			);
 		}
 	}
 
 	function handleSearch(query: string) {
 		const q = query.toLowerCase();
+		let base = services;
+		if (selectedDay !== 'all') {
+			base = services.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
+		}
 		if (!q) {
-			filtered = services;
+			filtered = base;
 			return;
 		}
-		filtered = services.filter(
+		filtered = base.filter(
 			(s) =>
 				s.name.toLowerCase().includes(q) ||
 				s.address.toLowerCase().includes(q) ||
 				s.services.some((srv) => srv.toLowerCase().includes(q)) ||
 				s.tags.some((t) => t.toLowerCase().includes(q))
 		);
+	}
+
+	function handleDayFilter(day: string) {
+		selectedDay = day;
+		if (day === 'all') {
+			filtered = services;
+		} else {
+			filtered = services.filter((s) => isOpenOnDay(s.hours, day as DayKey));
+		}
+	}
+
+	function applyDayFilter(list: ServiceLocation[], day: string): ServiceLocation[] {
+		if (day === 'all') return list;
+		return list.filter((s) => isOpenOnDay(s.hours, day as DayKey));
 	}
 </script>
 
@@ -48,7 +71,7 @@
 	<link rel="manifest" href="/manifest.webmanifest" />
 </svelte:head>
 
-<main>
+<main id="main-content">
 	<h1>Dublin City Support</h1>
 	<p>
 		Find nearby support services for people experiencing homelessness, drug-related issues, and
@@ -56,8 +79,20 @@
 	</p>
 
 	{#if !loading}
-		<FilterBar {categories} onFilter={handleFilter} onSearch={handleSearch} />
-		<div class="stats">{filtered.length} services found across {categories.length} categories</div>
+		<FilterBar
+			{categories}
+			onFilter={handleFilter}
+			onSearch={handleSearch}
+			onDayFilter={handleDayFilter}
+		/>
+		<div class="stats">
+			{filtered.length} services found
+			{#if selectedDay !== 'all'}
+				open on {selectedDay.toUpperCase()}
+			{:else}
+				across {categories.length} categories
+			{/if}
+		</div>
 		<ServiceList services={filtered} />
 	{:else}
 		<div class="loading">Loading services...</div>
