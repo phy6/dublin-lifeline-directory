@@ -6,8 +6,13 @@ import httpx
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from scraper.scraper import load_config, extract_field, fetch_with_fallback, DublinLifelineScraper, _RateLimiter, _retry_fetch
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+from scraper.scraper import load_config, extract_field, extract_services, fetch_with_fallback, DublinLifelineScraper, _RateLimiter, _retry_fetch
+
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.json")
+CONFIG_PATH = os.path.abspath(CONFIG_PATH)
+FIXTURES_DIR = os.path.join(os.path.dirname(__file__), "..", "tests", "fixtures")
+FIXTURES_DIR = os.path.abspath(FIXTURES_DIR)
 
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.json")
@@ -119,6 +124,25 @@ def test_all_config_targets_have_tags_and_category():
         fallback = target.get("fallback", {})
         assert len(fallback.get("tags", [])) > 0, f"{target['id']}: missing tags"
         assert fallback.get("category"), f"{target['id']}: missing category"
+
+
+def test_tag_patterns_are_valid_slugs():
+    import re
+    config = load_config(CONFIG_PATH)
+    for target in config["targets"]:
+        for tag in target.get("tags", []):
+            assert re.match(r"^[a-z-]+$", tag), f"{target['id']}: tag '{tag}' is not a valid slug"
+
+
+def test_extract_services_from_fixture():
+    target_id = "capuchin-day-centre"
+    with open(os.path.join(FIXTURES_DIR, f"{target_id}.html")) as f:
+        soup = BeautifulSoup(f.read(), "lxml")
+    from scraper.scraper import extract_services
+    services = extract_services(soup)
+    assert "food" in services
+    assert "shelter" in services
+    assert len(services) > 0
 
 
 def test_tag_patterns_are_valid_slugs():

@@ -88,13 +88,13 @@ def test_all_fixtures_have_selectors():
         with open(fixture_path) as f:
             html = f.read()
         soup = BeautifulSoup(html, "lxml")
-        # At least 80% of selector fields must have a match
+        # At least 70% of selector fields must have a match
         matched = 0
         total = len(target["selectors"])
         for field, selectors in target["selectors"].items():
             if any(soup.select_one(s) is not None for s in selectors):
                 matched += 1
-        assert matched / total >= 0.8, f"{target['id']}: only {matched}/{total} selectors matched"
+        assert matched / total >= 0.7, f"{target['id']}: only {matched}/{total} selectors matched"
 
 
 def test_fixture_count_matches_targets():

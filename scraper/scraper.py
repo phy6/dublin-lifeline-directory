@@ -3,6 +3,7 @@ import json
 import logging
 import os
 import random
+import re
 import time
 from typing import Optional, Tuple, List
 
@@ -10,6 +11,25 @@ import httpx
 from bs4 import BeautifulSoup
 
 logger = logging.getLogger(__name__)
+
+
+def extract_services(soup: BeautifulSoup) -> List[str]:
+    for script in soup.find_all("script"):
+        if script.string and "var servicesData" in script.string:
+            start = script.string.find("[")
+            end = script.string.rfind("]") + 1
+            if start != -1 and end != 0:
+                try:
+                    return json.loads(script.string[start:end])
+                except (json.JSONDecodeError, ValueError):
+                    pass
+    desc_div = soup.select_one(".services-description")
+    if desc_div and desc_div.string:
+        text = desc_div.string
+        match = re.search(r"Services:\s*(.+)", text)
+        if match:
+            return [s.strip() for s in match.group(1).split(",")]
+    return []
 
 
 def load_config(config_path: str) -> dict:
@@ -115,6 +135,7 @@ class DublinLifelineScraper:
             soup = BeautifulSoup(html, "lxml")
             for field, selectors in target["selectors"].items():
                 result[field] = extract_field(soup, selectors)
+            result["services"] = extract_services(soup)
         else:
             result["fallback"] = target.get("fallback", {})
         return result
