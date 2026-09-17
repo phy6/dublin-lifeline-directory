@@ -35,7 +35,7 @@ def test_dry_run_prints_targets_and_exits():
     args = parse_args(["--dry-run"])
     assert args.dry_run is True
     targets = get_targets(config, args)
-    assert len(targets) == 14
+    assert len(targets) == 13
 
 
 def test_flyer_only_limits_to_flyer_targets():

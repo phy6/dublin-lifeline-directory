@@ -634,50 +634,6 @@
 			}
 		},
 		{
-			"id": "inner-city-helping-homeless",
-			"name": "Inner City Helping Homeless",
-			"url": "https://www.ichh.ie/",
-			"selectors": {
-				"phone": ["a[href^=\"tel\"]", ".phone", ".contact-number", ".footer-phone"],
-				"address": [
-					".address",
-					".location-address",
-					"[itemprop=\"streetAddress\"]",
-					".footer-address",
-					"address"
-				],
-				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
-				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
-				"description": [
-					".services-description",
-					".about-text",
-					".mission-statement",
-					".intro-text",
-					".page-content p"
-				]
-			},
-			"fallback": {
-				"name": "Inner City Helping Homeless",
-				"address": "30/31 Francis Street, Dublin 8",
-				"phone": "+353-1-453-6161",
-				"hours": {
-					"mon-sun": "09:00-17:00"
-				},
-				"email": "info@ichh.ie",
-				"website": "https://www.ichh.ie",
-				"services": ["homelessness", "emergency", "outreach", "food", "clothing", "support"],
-				"tags": ["homeless", "emergency", "outreach", "food", "clothing"],
-				"category": "Emergency Shelter",
-				"latitude": 53.3405,
-				"longitude": -6.2758,
-				"description": "ICHH provides outreach, emergency support and advocacy for people experiencing homelessness in Dublin."
-			}
-		},
-		{
 			"id": "safetynet-primary-care",
 			"name": "Safetynet Primary Care",
 			"url": "https://www.primarycaresafetynet.ie/",

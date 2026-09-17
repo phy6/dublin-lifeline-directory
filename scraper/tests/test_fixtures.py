@@ -15,7 +15,7 @@ CONFIG_PATH = os.path.abspath(CONFIG_PATH)
 
 def test_fixture_files_exist():
     files = [f for f in os.listdir(FIXTURES_DIR) if f.endswith(".html")]
-    assert len(files) >= 14, f"Expected at least 14 fixtures, got {len(files)}"
+    assert len(files) >= 13, f"Expected at least 13 fixtures, got {len(files)}"
 
 
 def test_extract_field_from_fixture():
@@ -110,7 +110,7 @@ def test_fixture_count_matches_targets():
 
 def test_scraper_loads_config_with_fixtures():
     config = load_config(CONFIG_PATH)
-    assert len(config["targets"]) == 14
+    assert len(config["targets"]) == 13
     for target in config["targets"]:
         assert "id" in target
         assert "url" in target

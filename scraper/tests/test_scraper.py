@@ -33,10 +33,10 @@ def test_extract_field_returns_none_when_no_match():
     assert result is None
 
 
-def test_load_config_returns_dict_with_14_targets():
+def test_load_config_returns_dict_with_13_targets():
     config = load_config(CONFIG_PATH)
     assert isinstance(config, dict)
-    assert len(config["targets"]) == 14
+    assert len(config["targets"]) == 13
 
 
 def test_confirmed_targets_carry_registered_rcn():
