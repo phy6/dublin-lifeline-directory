@@ -5,7 +5,9 @@ export default {
 		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
 	},
 	kit: {
-		adapter: adapter({ strict: false, fallback: 'index.html' }),
+		// 404.html (not index.html): Pages serves it for unknown paths, giving
+		// SPA behavior on deep links without clobbering the prerendered index.
+		adapter: adapter({ strict: false, fallback: '404.html' }),
 		// Project Pages serves from /dublin-lifeline-directory, so the
 		// deploy workflow builds with BASE_PATH=/dublin-lifeline-directory.
 		// Empty locally keeps dev/preview at root.
