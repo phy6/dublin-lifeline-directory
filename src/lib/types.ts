@@ -38,3 +38,21 @@ export interface ServicesData {
 		deletions: number;
 	};
 }
+
+import type { DayKey } from '$lib/utils/hours';
+
+export type MealType = 'breakfast' | 'lunch' | 'dinner';
+
+export interface MealEntry {
+	id: string;
+	orgId: string;
+	mealType: MealType;
+	days: DayKey[];
+	start: string;
+	end: string;
+	address: string;
+	notes: string;
+	verifiedDate: string;
+}
+
+export const MEALS_VERSION = 1;
