@@ -19,6 +19,8 @@
 		servicesData.services as unknown as Record<string, unknown>[]
 	);
 	let open = $state(false);
+	let fabRef: HTMLButtonElement | undefined = $state(undefined);
+	let modalRef: HTMLDivElement | undefined = $state(undefined);
 	const lang = $derived(langStore.current);
 	let nodeKey = $state('start');
 	let log = $state<{ who: 'bot' | 'user'; text: string }[]>([]);
@@ -51,9 +53,48 @@
 		renderNode('start');
 	}
 
+	function focusables(): HTMLElement[] {
+		if (!modalRef) return [];
+		return [...modalRef.querySelectorAll('button, a[href]')].filter(
+			(el) => el instanceof HTMLElement && !el.hasAttribute('disabled')
+		) as HTMLElement[];
+	}
+
+	function focusFirst() {
+		// Wait a tick so the {#if open} block has rendered.
+		requestAnimationFrame(() => focusables()[0]?.focus());
+	}
+
+	function trapTab(e: KeyboardEvent) {
+		if (e.key !== 'Tab') return;
+		const items = focusables();
+		if (items.length === 0) return;
+		const first = items[0];
+		const last = items[items.length - 1];
+		if (e.shiftKey && document.activeElement === first) {
+			e.preventDefault();
+			last.focus();
+		} else if (!e.shiftKey && document.activeElement === last) {
+			e.preventDefault();
+			first.focus();
+		}
+	}
+
 	function openModal() {
 		open = true;
 		if (log.length === 0) startOver();
+		focusFirst();
+	}
+
+	function closeModal() {
+		open = false;
+		fabRef?.focus();
+	}
+
+	function onKeyDown(e: KeyboardEvent) {
+		if (!open) return;
+		if (e.key === 'Escape') closeModal();
+		else trapTab(e);
 	}
 
 	function actionHref(action: NonNullable<typeof node>['action']): string {
@@ -65,6 +106,7 @@
 
 <button
 	class="chatbot-fab"
+	bind:this={fabRef}
 	aria-haspopup="dialog"
 	aria-expanded={open}
 	aria-controls="chatbot-modal"
@@ -81,6 +123,9 @@
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="chatbot-title"
+		tabindex="-1"
+		bind:this={modalRef}
+		onkeydown={onKeyDown}
 	>
 		<div class="modal-box">
 			<span class="grabber" aria-hidden="true"></span>
@@ -144,7 +189,7 @@
 			<button class="restart" onclick={startOver}
 				>↺ {lang === 'ga' ? 'Tosaigh arís' : 'Start over'}</button
 			>
-			<button class="close" onclick={() => (open = false)} aria-label="Close chat">✕</button>
+			<button class="close" onclick={closeModal} aria-label="Close chat">✕</button>
 		</div>
 	</div>
 {/if}
