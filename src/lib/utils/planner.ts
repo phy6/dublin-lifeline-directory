@@ -2,12 +2,7 @@ import { DAY_KEYS, type DayKey } from '$lib/utils/hours';
 
 // Week math lives in the deep week module; re-exported here so existing
 // importers keep working through one seam.
-export {
-	weekDates,
-	expandWeek,
-	toISODate,
-	type ExpandedAppointment
-} from '$lib/utils/week';
+export { weekDates, expandWeek, toISODate, type ExpandedAppointment } from '$lib/utils/week';
 
 export interface PlannerAppointment {
 	id: string;

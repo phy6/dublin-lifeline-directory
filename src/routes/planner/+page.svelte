@@ -379,7 +379,11 @@
 	{/if}
 </dialog>
 
-<AppointmentForm bind:this={formApi} services={services as ServiceLocation[]} onSave={saveFromForm} />
+<AppointmentForm
+	bind:this={formApi}
+	services={services as ServiceLocation[]}
+	onSave={saveFromForm}
+/>
 
 <style>
 	h1 {

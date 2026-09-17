@@ -20,10 +20,13 @@
 <li class="appt-card">
 	<div class="appt-main">
 		<strong>{appt.title}</strong>
-		<span class="appt-when">{appt.start}–{appt.end}{appt.location ? ` · ${appt.location}` : ''}</span>
+		<span class="appt-when"
+			>{appt.start}–{appt.end}{appt.location ? ` · ${appt.location}` : ''}</span
+		>
 	</div>
 	<details class="card-menu">
-		<summary aria-label={t('planner-actions')}><svg
+		<summary aria-label={t('planner-actions')}
+			><svg
 				class="menu-chevron"
 				viewBox="0 0 24 24"
 				fill="none"
@@ -32,7 +35,8 @@
 				stroke-linecap="round"
 				stroke-linejoin="round"
 				aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg
-			></summary>
+			></summary
+		>
 		<div class="menu-items">
 			<button type="button" onclick={() => onEdit(appt)}>{t('planner-edit')}</button>
 			<button type="button" onclick={() => onDownload(appt, date)}>{t('planner-download')}</button>

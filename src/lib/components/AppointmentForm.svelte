@@ -51,7 +51,8 @@
 		sheet?.showModal();
 	}
 
-	export function openEdit(appt: PlannerAppointment): void {		editingId = appt.id;
+	export function openEdit(appt: PlannerAppointment): void {
+		editingId = appt.id;
 		form = {
 			title: appt.title,
 			day: appt.day,
@@ -107,7 +108,8 @@
 		<label>{t('planner-end')}<input type="time" bind:value={form.end} required /></label>
 		<label>{t('planner-location')}<input bind:value={form.location} maxlength="200" /></label>
 		<label
-			>{t('planner-notes')}<textarea bind:value={form.notes} rows="2" maxlength="500"></textarea></label
+			>{t('planner-notes')}<textarea bind:value={form.notes} rows="2" maxlength="500"
+			></textarea></label
 		>
 		<label
 			>{t('planner-org')}

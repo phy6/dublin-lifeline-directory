@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-	validateAppt,
-	parseBackup,
-	serializeBackup,
-	backupFilename
-} from '$lib/utils/planner-io';
+import { validateAppt, parseBackup, serializeBackup, backupFilename } from '$lib/utils/planner-io';
 import type { PlannerAppointment } from '$lib/utils/planner';
 
 const good: PlannerAppointment = {

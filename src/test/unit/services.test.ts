@@ -69,9 +69,7 @@ describe('applyFilters', () => {
 			)
 		).toEqual(['c']);
 		expect(
-			applyFilters(services, { category: 'Food', day: 'mon', query: 'capuchin' }).map(
-				(s) => s.id
-			)
+			applyFilters(services, { category: 'Food', day: 'mon', query: 'capuchin' }).map((s) => s.id)
 		).toEqual(['a']);
 	});
 });
