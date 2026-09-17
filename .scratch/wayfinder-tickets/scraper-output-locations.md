@@ -3,7 +3,7 @@
 **Blocked by:** scraper-hybrid-data-source (closed)
 **Blocks:** scraper-version-bumping, scraper-github-actions
 **Assigned to:** agent (claimed)
-**Status:** Closed — 2026-09-17 (implementation verified, bugs found)
+**Status:** Closed — 2026-09-17 (resolved: v3.5.0 regen writes both files identically via prettier-stable `write_services()`; verified byte-identical with `diff -q`)
 
 ## Question
 

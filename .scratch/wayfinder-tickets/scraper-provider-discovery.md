@@ -2,7 +2,7 @@
 
 **Blocked by:** scraper-python-implementation
 **Blocks:** None
-**Status:** Implemented — code + tests done, live sources need refresh
+**Status:** Closed — 2026-09-17 (live sources refreshed via full 14-target scrape feeding v3.5.0)
 
 > **Reopened per user request to "rethink scraping":** ported discovery from old `scraper.js` to Python. `discovery` section added to `scraper/config/sources.json` (7 URLs + selectors from old config), `DublinLifelineScraper.discover_providers()` in `scraper/scraper.py`, `--discover` CLI in `scraper/main.py`, 4 tests in `scraper/tests/test_discovery.py` (69 total passing).
 

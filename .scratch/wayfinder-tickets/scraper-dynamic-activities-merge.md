@@ -3,7 +3,7 @@
 **Blocked by:** scraper-hybrid-data-source (closed)
 **Blocks:** scraper-data-validation
 **Assigned to:** agent (claimed)
-**Status:** Closed — 2026-09-17 (partially resolved)
+**Status:** Closed — 2026-09-17 (resolved: fallback tag/service backfill + NEEDS-15 in `merge_location()`; v3.5.0 has non-empty services/tags on all 14 orgs, `dynamicActivities`/`activityMatchCount` present; validates clean)
 
 ## Question
 

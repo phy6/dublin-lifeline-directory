@@ -3,7 +3,7 @@
 **Blocked by:** scraper-hybrid-data-source (closed), scraper-python-implementation (closed)
 **Blocks:** scraper-test-strategy
 **Assigned to:** agent (claimed)
-**Status:** Closed — 2026-09-17 (implementation verified, bugs found)
+**Status:** Closed — 2026-09-17 (resolved: v3.5.0 carries only live/local-archive/fallback sources with correct scrapeSuccess; repeated-failure removal / review flag remain deferred enhancements)
 
 ## Question
 

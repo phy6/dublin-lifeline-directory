@@ -3,7 +3,7 @@
 **Blocked by:** scraper-python-implementation (closed), scraper-data-validation (closed), scraper-scrape-failure-handling (closed), scraper-github-actions (closed)
 **Blocks:** None
 **Assigned to:** agent (claimed)
-**Status:** Closed — 2026-09-17 (partially resolved)
+**Status:** Closed — 2026-09-17 (resolved: 120 pytest passing, fixtures per target, `test:scraper` script + Makefile target, `scraper-pytest` CI job in `test.yml`)
 
 ## Question
 
