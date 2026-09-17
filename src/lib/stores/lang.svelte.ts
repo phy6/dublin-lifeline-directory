@@ -58,7 +58,12 @@ const STRINGS = {
 		'not-found': 'Service not found',
 		'not-found-body': "The service you're looking for doesn't exist or has been removed.",
 		'search-another': 'Search for another service',
-		back: 'Back'
+		back: 'Back',
+		'no-matching-services': 'No services match these filters.',
+		'clear-filters': 'Clear filters',
+		'install-app': 'Install app',
+		'install-app-blurb': 'Add Dublin City Support to your home screen for offline access.',
+		'not-now': 'Not now'
 	},
 	ga: {
 		directory: 'Eolaire',
@@ -97,7 +102,12 @@ const STRINGS = {
 		'not-found': 'Níor aimsíodh an tseirbhís',
 		'not-found-body': 'Níl an tseirbhís atá uait ann nó tá sí bainte.',
 		'search-another': 'Cuardaigh seirbhís eile',
-		back: 'Ar ais'
+		back: 'Ar ais',
+		'no-matching-services': 'Ní oireann aon seirbhís do na scagairí seo.',
+		'clear-filters': 'Glan na scagairí',
+		'install-app': 'Suiteáil an aip',
+		'install-app-blurb': 'Cuir Tacaíocht Bhaile Átha Cliath le do scáileán baile le rochtain as líne.',
+		'not-now': 'Níos déanaí'
 	}
 } as const;
 

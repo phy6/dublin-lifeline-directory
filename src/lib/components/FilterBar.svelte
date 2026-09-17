@@ -6,6 +6,7 @@
 		categories,
 		selectedCategory = 'All',
 		selectedDay = 'all',
+		query = $bindable(''),
 		onFilter,
 		onSearch,
 		onDayFilter,
@@ -14,12 +15,12 @@
 		categories: string[];
 		selectedCategory?: string;
 		selectedDay?: string;
+		query?: string;
 		onFilter: (cat: string) => void;
 		onSearch: (q: string) => void;
 		onDayFilter: (day: string) => void;
 		resultsId?: string;
 	} = $props();
-	let query = $state('');
 </script>
 
 <div class="filter-bar">

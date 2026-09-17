@@ -6,6 +6,7 @@
 	import OfflineBanner from '$lib/components/OfflineBanner.svelte';
 	import Chatbot from '$lib/components/Chatbot.svelte';
 	import SettingsSheet from '$lib/components/SettingsSheet.svelte';
+	import InstallPrompt from '$lib/components/InstallPrompt.svelte';
 	import '$lib/styles/tokens.css';
 	let { children } = $props();
 
@@ -71,6 +72,7 @@
 
 <OfflineBanner />
 <Chatbot />
+<InstallPrompt />
 
 <style>
 	.top-nav {

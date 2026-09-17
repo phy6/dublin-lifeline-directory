@@ -11,6 +11,14 @@
 	let categories = $state(data.categories);
 	let selectedCategory = $state<string>('All');
 	let selectedDay = $state<string>('all');
+	let searchQuery = $state('');
+
+	function resetAll() {
+		searchQuery = '';
+		selectedCategory = 'All';
+		selectedDay = 'all';
+		filtered = services;
+	}
 
 	function handleFilter(category: string) {
 		selectedCategory = category;
@@ -75,6 +83,7 @@
 		{categories}
 		{selectedCategory}
 		{selectedDay}
+		bind:query={searchQuery}
 		onFilter={handleFilter}
 		onSearch={handleSearch}
 		onDayFilter={handleDayFilter}
@@ -92,7 +101,7 @@
 			across {categories.length} categories
 		{/if}
 	</div>
-	<ServiceList services={filtered} id="service-list" />
+	<ServiceList services={filtered} id="service-list" onReset={resetAll} />
 </main>
 
 <style>
