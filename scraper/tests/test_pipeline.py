@@ -352,3 +352,31 @@ def test_run_pipeline_returns_result():
     finally:
         pipeline.write_services = original_write
         pipeline._get_project_root = original_get_root
+
+
+def test_dumps_prettier_matches_prettier_conventions():
+    import json
+    from scraper.pipeline import dumps_prettier
+
+    long_value = "x" * 120
+    data = {
+        "short": [1, 2, 3],
+        "empty_obj": {},
+        "empty_list": [],
+        "hours": {"mon-fri": "09:00-17:00"},
+        "nested": {"tags": ["a", "b"], "note": long_value},
+        "long_list": ["addiction", "harm reduction", "needle exchange", "counselling", "support", "outreach"],
+    }
+    text = dumps_prettier(data)
+    # Round-trips byte-identically through real JSON.
+    assert json.loads(text) == data
+    # Tabs, trailing newline, no trailing whitespace, padded short objects.
+    assert text.endswith("}\n") and not text.endswith("\n\n")
+    assert '\t"short": [1, 2, 3],' in text
+    assert '"empty_obj": {},' in text
+    assert '"hours": { "mon-fri": "09:00-17:00" },' in text
+    # Over-width lines break one-item-per-line; long scalars stay long.
+    assert f'"note": "{long_value}"' in text
+    assert '"long_list": [\n\t\t"addiction",' in text
+    for line in text.splitlines():
+        assert line == line.rstrip()

@@ -289,6 +289,62 @@ def bump_version(old_version: str, diffs: dict) -> str:
         return f"{major}.{minor}.{patch + 1}"
 
 
+# Prettier settings mirrored here (prettier.config.js): tabs, width 100.
+# write_services() renders byte-identical-to-prettier JSON so a pipeline
+# regen never dirties `npm run lint`. NOTE: scraper/output/*.json is
+# gitignored AND prettier-skipped, so only the services.json writer matters.
+_PRETTIER_WIDTH = 100
+
+
+def _flat(node) -> str:
+    """Single-line rendering of a JSON node (scalars via json.dumps)."""
+    if isinstance(node, dict):
+        if not node:
+            return "{}"
+        # Prettier bracketSpacing pads collapsed objects: { "a": 1 }.
+        return "{ " + ", ".join(f"{json.dumps(k)}: {_flat(v)}" for k, v in node.items()) + " }"
+    if isinstance(node, list):
+        return "[" + ", ".join(_flat(v) for v in node) + "]"
+    return json.dumps(node)
+
+
+def _render(node, level: int, first: str | None = None) -> list[str]:
+    """Prettier-style lines: collapse the node if it fits, else one item per line.
+
+    `first` is the literal prefix already emitted on the opening line
+    (e.g. `"key": `) — fit is measured against it, not the plain indent.
+    """
+    pad = "\t" * level
+    head = first if first is not None else pad
+    if isinstance(node, (dict, list)) and node:
+        one_line = _flat(node)
+        if len(head) + len(one_line) <= _PRETTIER_WIDTH:
+            return [head + one_line]
+        open_c, close_c = ("{", "}") if isinstance(node, dict) else ("[", "]")
+        # Render each direct child as a block; comma goes on the block's last line.
+        blocks: list[list[str]] = []
+        if isinstance(node, dict):
+            for k, v in node.items():
+                prefix = "\t" * (level + 1) + f"{json.dumps(k)}: "
+                blocks.append(_render(v, level + 1, first=prefix))
+        else:
+            for v in node:
+                blocks.append(_render(v, level + 1))
+        out = [head + open_c]
+        for i, block in enumerate(blocks):
+            comma = "," if i < len(blocks) - 1 else ""
+            out.extend(block[:-1])
+            out.append(block[-1] + comma)
+        out.append(pad + close_c)
+        return out
+    return [head + _flat(node)]
+
+
+def dumps_prettier(data: dict) -> str:
+    """Render JSON the way `prettier --write` would (tabs, width 100)."""
+    return "\n".join(_render(data, 0)) + "\n"
+
+
 def write_services(data: dict) -> None:
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data_path = os.path.join(project_root, "src", "lib", "data", "services.json")
@@ -297,10 +353,11 @@ def write_services(data: dict) -> None:
     os.makedirs(os.path.dirname(data_path), exist_ok=True)
     os.makedirs(os.path.dirname(static_path), exist_ok=True)
 
+    text = dumps_prettier(data)
     with open(data_path, "w") as f:
-        json.dump(data, f, indent=2)
+        f.write(text)
     with open(static_path, "w") as f:
-        json.dump(data, f, indent=2)
+        f.write(text)
 
 
 def _get_project_root() -> str:

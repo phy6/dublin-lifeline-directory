@@ -12,11 +12,7 @@
 				"name": "Capuchin Day Centre",
 				"address": "29 Bow St, Dublin 7",
 				"phone": "+353-1-878-0404",
-				"hours": {
-					"mon-fri": "08:30-15:30",
-					"sat": "09:00-13:00",
-					"sun": "closed"
-				},
+				"hours": { "mon-fri": "08:30-15:30", "sat": "09:00-13:00", "sun": "closed" },
 				"email": "info@capuchindaycentre.ie",
 				"website": "https://capuchindaycentre.ie",
 				"services": [
@@ -82,9 +78,7 @@
 				"name": "Merchants Quay Ireland",
 				"address": "8 Merchants Quay, Dublin 8",
 				"phone": "+353-1-874-3805",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@mqi.ie",
 				"website": "https://mqi.ie",
 				"services": [
@@ -148,10 +142,7 @@
 				"name": "Focus Ireland",
 				"address": "218-222 Phibsborough Road, Dublin 7",
 				"phone": "+353-1-885-5900",
-				"hours": {
-					"mon-fri": "09:00-17:30",
-					"default": "09:00-17:30"
-				},
+				"hours": { "mon-fri": "09:00-17:30", "default": "09:00-17:30" },
 				"email": "info@focusireland.ie",
 				"website": "https://www.focusireland.ie",
 				"services": ["homelessness", "housing", "support"],
@@ -176,10 +167,7 @@
 			"tags": ["homelessness", "housing", "support"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:30",
-				"default": "09:00-17:30"
-			},
+			"hours": { "mon-fri": "09:00-17:30", "default": "09:00-17:30" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -191,9 +179,7 @@
 				"name": "Dublin Simon Community",
 				"address": "85 Capel Street, Dublin 1",
 				"phone": "+353-1-674-5656",
-				"hours": {
-					"mon-fri": "09:00-17:30"
-				},
+				"hours": { "mon-fri": "09:00-17:30" },
 				"email": "info@dubsimon.ie",
 				"website": "https://www.dubsimon.ie",
 				"services": ["homelessness", "emergency", "accommodation"],
@@ -217,9 +203,7 @@
 			"tags": ["homelessness", "emergency", "accommodation"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:30"
-			},
+			"hours": { "mon-fri": "09:00-17:30" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -231,9 +215,7 @@
 				"name": "Samaritans Ireland",
 				"address": "191 Great Denmark Street, Dublin 1",
 				"phone": "+353-1-677-3333",
-				"hours": {
-					"mon-sun": "09:00-21:00"
-				},
+				"hours": { "mon-sun": "09:00-21:00" },
 				"email": "dublin@samaritans.ie",
 				"website": "https://www.samaritans.org/ireland/samaritans-ireland/",
 				"services": ["mental-health", "crisis-support", "suicide-prevention"],
@@ -257,9 +239,7 @@
 			"tags": ["crisis", "mental-health", "helpline"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-sun": "09:00-21:00"
-			},
+			"hours": { "mon-sun": "09:00-21:00" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -271,9 +251,7 @@
 				"name": "Crosscare",
 				"address": "127 Parnell Square West, Dublin 1",
 				"phone": "+353-1-874-1919",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@crosscare.ie",
 				"website": "https://crosscare.ie",
 				"services": ["elderly", "community", "support"],
@@ -298,9 +276,7 @@
 			"tags": ["elderly", "community", "support"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -312,9 +288,7 @@
 				"name": "Mendicity Institution",
 				"address": "115 Usher's Island, Dublin 8",
 				"phone": "+353-1-677-3939",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@mendicity.org",
 				"website": "https://www.mendicity.org",
 				"services": ["elderly", "community", "social"],
@@ -339,9 +313,7 @@
 			"tags": ["elderly", "community", "social"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -353,9 +325,7 @@
 				"name": "Peter McVerry Trust",
 				"address": "10 South Cumberland Street, Dublin 1",
 				"phone": "+353-1-878-0404",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@petermcverrytrust.org",
 				"website": "https://www.petermcverrytrust.org",
 				"services": ["homelessness", "housing", "support", "addiction"],
@@ -367,9 +337,7 @@
 			},
 			"phone": "+353-1-878-0123",
 			"address": "8 North Richmond Street, Dublin 1",
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"email": "info@petermcverrytrust.org",
 			"website": "https://www.petermcverrytrust.org/",
 			"description": null,
@@ -394,9 +362,7 @@
 				"name": "COPE Ireland",
 				"address": "22 North Cumberland Street, Dublin 1",
 				"phone": "+353-1-874-1141",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@copeireland.ie",
 				"website": "https://www.copeireland.ie",
 				"services": ["elderly", "community", "support", "health"],
@@ -408,9 +374,7 @@
 			},
 			"phone": "+353-1-822-3555",
 			"address": "68-72 Amiens Street, Dublin 1",
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"email": "info@copeireland.ie",
 			"website": "https://www.copeireland.ie/",
 			"description": null,
@@ -435,9 +399,7 @@
 				"name": "Simon Community Employment",
 				"address": "115 Capel Street, Dublin 1",
 				"phone": "+353-1-674-5656",
-				"hours": {
-					"mon-fri": "09:00-17:30"
-				},
+				"hours": { "mon-fri": "09:00-17:30" },
 				"email": "info@simoncommunity.ie",
 				"website": "https://www.simoncommunity.ie",
 				"services": ["employment", "training", "support", "homelessness"],
@@ -449,9 +411,7 @@
 			},
 			"phone": "+353-1-878-0404",
 			"address": "Various locations, Dublin",
-			"hours": {
-				"mon-fri": "09:00-17:30"
-			},
+			"hours": { "mon-fri": "09:00-17:30" },
 			"email": "info@simoncommunity.ie",
 			"website": "https://www.simoncommunity.ie/employment/",
 			"description": null,
@@ -476,9 +436,7 @@
 				"name": "ALONE",
 				"address": "Olympic House, Pleasants Street, Dublin 8",
 				"phone": "+353-1-679-1032",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "hello@alone.ie",
 				"website": "https://alone.ie",
 				"services": ["elderly", "befriending", "support", "community", "isolation", "health"],
@@ -503,9 +461,7 @@
 			"tags": ["elderly", "community", "support", "befriending", "isolation"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -517,9 +473,7 @@
 				"name": "Inner City Helping Homeless",
 				"address": "30/31 Francis Street, Dublin 8",
 				"phone": "+353-1-453-6161",
-				"hours": {
-					"mon-sun": "09:00-17:00"
-				},
+				"hours": { "mon-sun": "09:00-17:00" },
 				"email": "info@ichh.ie",
 				"website": "https://www.ichh.ie",
 				"services": ["homelessness", "emergency", "outreach", "food", "clothing", "support"],
@@ -540,9 +494,7 @@
 			"tags": ["homeless", "emergency", "outreach", "food", "clothing"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-sun": "09:00-17:00"
-			},
+			"hours": { "mon-sun": "09:00-17:00" },
 			"description": "Inner City Helping Homeless service location",
 			"lastVerified": "2026-09-17"
 		},
@@ -555,9 +507,7 @@
 				"name": "Safetynet Primary Care",
 				"address": "27-29 Merchant's Quay, Dublin 8",
 				"phone": "+353-1-868-0166",
-				"hours": {
-					"mon-fri": "09:30-16:30"
-				},
+				"hours": { "mon-fri": "09:30-16:30" },
 				"email": "info@primarycaresafetynet.ie",
 				"website": "https://www.primarycaresafetynet.ie",
 				"services": ["medical", "GP clinic", "health", "homelessness", "primary care", "nursing"],
@@ -582,9 +532,7 @@
 			"tags": ["medical", "health", "homeless", "GP"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:30-16:30"
-			},
+			"hours": { "mon-fri": "09:30-16:30" },
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -596,9 +544,7 @@
 				"name": "Ana Liffey Drug Project",
 				"address": "48 Middle Abbey Street, Dublin 1",
 				"phone": "+353-1-878-6111",
-				"hours": {
-					"mon-fri": "09:00-17:00"
-				},
+				"hours": { "mon-fri": "09:00-17:00" },
 				"email": "info@aldp.ie",
 				"website": "https://www.aldp.ie",
 				"services": [
@@ -626,9 +572,7 @@
 			"tags": ["addiction", "harm-reduction", "needle exchange", "counselling", "outreach"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
-			"hours": {
-				"mon-fri": "09:00-17:00"
-			},
+			"hours": { "mon-fri": "09:00-17:00" },
 			"description": "Ana Liffey Drug Project service location",
 			"lastVerified": "2026-09-17"
 		}
