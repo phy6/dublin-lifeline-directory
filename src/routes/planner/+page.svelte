@@ -228,12 +228,32 @@
 	}
 
 	function removeAppt(id: string) {
-		if (!confirm(t('planner-delete'))) return;
-		persist(plan.filter((p) => p.id !== id));
-		if (editingId === id) {
-			editingId = null;
-			closeSheet();
+		const appt = plan.find((p) => p.id === id);
+		if (!appt) return;
+		pendingDelete = { id, title: appt.title };
+		deleteTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+		confirmDialog?.showModal();
+		confirmBtn?.focus();
+	}
+
+	function confirmDelete() {
+		const target = pendingDelete;
+		if (target) {
+			persist(plan.filter((p) => p.id !== target.id));
+			if (editingId === target.id) {
+				editingId = null;
+				closeSheet();
+			}
+			pendingDelete = null;
 		}
+		confirmDialog?.close();
+		deleteTrigger?.focus();
+	}
+
+	function cancelDelete() {
+		pendingDelete = null;
+		confirmDialog?.close();
+		deleteTrigger?.focus();
 	}
 
 	function download(filename: string, text: string) {
@@ -257,6 +277,10 @@
 	}
 
 	let backupMessage = $state('');
+	let confirmDialog: HTMLDialogElement | undefined = $state();
+	let confirmBtn: HTMLButtonElement | undefined = $state();
+	let pendingDelete = $state<{ id: string; title: string } | null>(null);
+	let deleteTrigger: HTMLElement | null = null;
 
 	function downloadBackup() {
 		const now = new Date();
@@ -312,135 +336,161 @@
 	let visibleDates = $derived(view === 'day' ? [anchor] : dates);
 </script>
 
-<h1>{t('planner-title')}</h1>
-<p class="device-warning" role="note">{t('planner-device-warning')}</p>
+<main id="main-content">
+	<h1>{t('planner-title')}</h1>
+	<p class="device-warning">{t('planner-device-warning')}</p>
 
-<div class="view-switch" role="group" aria-label={t('planner-view')}>
-	<button type="button" aria-pressed={view === 'day'} onclick={() => (view = 'day')}
-		>{t('planner-view-day')}</button
-	>
-	<button type="button" aria-pressed={view === 'week'} onclick={() => (view = 'week')}
-		>{t('planner-view-week')}</button
-	>
-	<button type="button" aria-pressed={view === 'month'} onclick={() => (view = 'month')}
-		>{t('planner-view-month')}</button
-	>
-</div>
-
-<div class="week-controls" role="group" aria-label={t('planner-title')}>
-	{#if view === 'day'}
-		<button type="button" onclick={() => shift(-1)}>← {t('planner-prev-day')}</button>
-		<button type="button" onclick={goToday}>{t('planner-today')}</button>
-		<button type="button" onclick={() => shift(1)}>{t('planner-next-day')} →</button>
-	{:else if view === 'week'}
-		<button type="button" onclick={() => shift(-7)}>← {t('planner-prev')}</button>
-		<button type="button" onclick={goToday}>{t('planner-today')}</button>
-		<button type="button" onclick={() => shift(7)}>{t('planner-next')} →</button>
-		<button type="button" onclick={downloadWeek}>{t('planner-download-week')}</button>
-	{:else}
-		<button type="button" onclick={() => shiftMonth(-1)}>← {t('planner-prev-month')}</button>
-		<button type="button" onclick={goToday}>{t('planner-today')}</button>
-		<button type="button" onclick={() => shiftMonth(1)}>{t('planner-next-month')} →</button>
-	{/if}
-	<button type="button" onclick={downloadBackup}>{t('planner-backup')}</button>
-	<label
-		>{t('planner-restore')}<input
-			type="file"
-			accept="application/json"
-			onchange={restoreBackup}
-		/></label
-	>
-</div>
-{#if backupMessage}<p role="status">{backupMessage}</p>{/if}
-
-{#if view === 'month'}
-	<h2 class="month-title">{MONTH_LABELS[anchor.getMonth()]} {anchor.getFullYear()}</h2>
-	<div
-		class="month-grid"
-		role="grid"
-		aria-label={`${MONTH_LABELS[anchor.getMonth()]} ${anchor.getFullYear()}`}
-	>
-		{#each DAY_LABELS as label (label)}
-			<span class="month-dow" aria-hidden="true">{label}</span>
-		{/each}
-		{#each monthRows.flat() as cell (cell ? toISODate(cell) : `pad-${cell}`)}
-			{#if cell}
-				{@const dots = dotsFor(cell)}
-				<button
-					type="button"
-					class="month-cell"
-					class:today={isToday(cell)}
-					onclick={() => openMonthDay(cell)}
-					aria-label={`${toISODate(cell)}: ${dots.appts} appointments, ${dots.meals} meals`}
-				>
-					<span class="month-num">{cell.getDate()}</span>
-					<span class="dots" aria-hidden="true">
-						{#if dots.meals > 0}<i class="dot meal"></i>{/if}
-						{#if dots.appts > 0}<i class="dot appt"></i>{/if}
-					</span>
-				</button>
-			{:else}
-				<span class="month-cell pad" aria-hidden="true"></span>
-			{/if}
-		{/each}
+	<div class="view-switch" role="group" aria-label={t('planner-view')}>
+		<button type="button" aria-pressed={view === 'day'} onclick={() => (view = 'day')}
+			>{t('planner-view-day')}</button
+		>
+		<button type="button" aria-pressed={view === 'week'} onclick={() => (view = 'week')}
+			>{t('planner-view-week')}</button
+		>
+		<button type="button" aria-pressed={view === 'month'} onclick={() => (view = 'month')}
+			>{t('planner-view-month')}</button
+		>
 	</div>
-{:else}
-	<div class="week-grid" class:single={view === 'day'}>
-		{#each visibleDays as day, i (day)}
-			{@const date = visibleDates[i]}
-			<section
-				class="day-col"
-				class:today={isToday(date)}
-				aria-label={`${DAY_LABELS[DAY_KEYS.indexOf(day)]} ${toISODate(date)}`}
-			>
-				<h2>{DAY_LABELS[DAY_KEYS.indexOf(day)]} <span class="day-date">{toISODate(date)}</span></h2>
-				{#if mealsForDay(day).length > 0}
-					<h3>{t('planner-meals')}</h3>
-					<ul>
-						{#each mealsForDay(day) as meal (meal.id)}
-							<li class="meal-row">
-								<span>{meal.mealType} · {meal.start}–{meal.end} · {orgName(meal.orgId)}</span>
-								<button type="button" onclick={() => addFromMeal(meal, day)}
-									>{t('planner-add')}</button
-								>
-							</li>
-						{/each}
-					</ul>
+
+	<div class="week-controls" role="group" aria-label={t('planner-title')}>
+		{#if view === 'day'}
+			<button type="button" onclick={() => shift(-1)}>← {t('planner-prev-day')}</button>
+			<button type="button" onclick={goToday}>{t('planner-today')}</button>
+			<button type="button" onclick={() => shift(1)}>{t('planner-next-day')} →</button>
+		{:else if view === 'week'}
+			<button type="button" onclick={() => shift(-7)}>← {t('planner-prev')}</button>
+			<button type="button" onclick={goToday}>{t('planner-today')}</button>
+			<button type="button" onclick={() => shift(7)}>{t('planner-next')} →</button>
+			<button type="button" onclick={downloadWeek}>{t('planner-download-week')}</button>
+		{:else}
+			<button type="button" onclick={() => shiftMonth(-1)}>← {t('planner-prev-month')}</button>
+			<button type="button" onclick={goToday}>{t('planner-today')}</button>
+			<button type="button" onclick={() => shiftMonth(1)}>{t('planner-next-month')} →</button>
+		{/if}
+		<button type="button" onclick={downloadBackup}>{t('planner-backup')}</button>
+		<label
+			>{t('planner-restore')}<input
+				type="file"
+				accept="application/json"
+				onchange={restoreBackup}
+			/></label
+		>
+	</div>
+	{#if backupMessage}<p role="status">{backupMessage}</p>{/if}
+
+	{#if view === 'month'}
+		<h2 class="month-title">{MONTH_LABELS[anchor.getMonth()]} {anchor.getFullYear()}</h2>
+		<div
+			class="month-grid"
+			role="group"
+			aria-label={`${MONTH_LABELS[anchor.getMonth()]} ${anchor.getFullYear()}`}
+		>
+			{#each DAY_LABELS as label (label)}
+				<span class="month-dow">{label}</span>
+			{/each}
+			{#each monthRows.flat() as cell (cell ? toISODate(cell) : `pad-${cell}`)}
+				{#if cell}
+					{@const dots = dotsFor(cell)}
+					<button
+						type="button"
+						class="month-cell"
+						class:today={isToday(cell)}
+						onclick={() => openMonthDay(cell)}
+						aria-label={`${toISODate(cell)}: ${dots.appts} appointments, ${dots.meals} meals`}
+					>
+						<span class="month-num">{cell.getDate()}</span>
+						<span class="dots" aria-hidden="true">
+							{#if dots.meals > 0}<i class="dot meal"></i>{/if}
+							{#if dots.appts > 0}<i class="dot appt"></i>{/if}
+						</span>
+					</button>
+				{:else}
+					<span class="month-cell pad" aria-hidden="true"></span>
 				{/if}
-				<h3>{t('planner-appointments')}</h3>
-				<ul>
-					{#each apptsForDay(day) as { appt, date: apptDate } (appt.id)}
-						<li class="appt-card">
-							<div class="appt-main">
-								<strong>{appt.title}</strong>
-								<span class="appt-when"
-									>{appt.start}–{appt.end}{appt.location ? ` · ${appt.location}` : ''}</span
-								>
-							</div>
-							<details class="card-menu">
-								<summary aria-label={t('planner-actions')}>…</summary>
-								<div class="menu-items">
-									<button type="button" onclick={() => startEdit(appt)}>{t('planner-edit')}</button>
-									<button type="button" onclick={() => downloadOne(appt, apptDate)}
-										>{t('planner-download')}</button
+			{/each}
+		</div>
+	{:else}
+		<div class="week-grid" class:single={view === 'day'}>
+			{#each visibleDays as day, i (day)}
+				{@const date = visibleDates[i]}
+				<section
+					class="day-col"
+					class:today={isToday(date)}
+					aria-label={`${DAY_LABELS[DAY_KEYS.indexOf(day)]} ${toISODate(date)}`}
+				>
+					<h2>
+						{DAY_LABELS[DAY_KEYS.indexOf(day)]} <span class="day-date">{toISODate(date)}</span>
+					</h2>
+					{#if mealsForDay(day).length > 0}
+						<h3>{t('planner-meals')}</h3>
+						<ul>
+							{#each mealsForDay(day) as meal (meal.id)}
+								<li class="meal-row">
+									<span>{meal.mealType} · {meal.start}–{meal.end} · {orgName(meal.orgId)}</span>
+									<button type="button" onclick={() => addFromMeal(meal, day)}
+										>{t('planner-add')}</button
 									>
-									<button type="button" onclick={() => removeAppt(appt.id)}
-										>{t('planner-delete')}</button
+								</li>
+							{/each}
+						</ul>
+					{/if}
+					<h3>{t('planner-appointments')}</h3>
+					<ul>
+						{#each apptsForDay(day) as { appt, date: apptDate } (appt.id)}
+							<li class="appt-card">
+								<div class="appt-main">
+									<strong>{appt.title}</strong>
+									<span class="appt-when"
+										>{appt.start}–{appt.end}{appt.location ? ` · ${appt.location}` : ''}</span
 									>
 								</div>
-							</details>
-						</li>
-					{:else}
-						<li class="empty">{t('planner-empty')}</li>
-					{/each}
-				</ul>
-				<button type="button" class="inline-add" onclick={() => openAdd(day)}
-					>+ {t('planner-add-appt')}</button
-				>
-			</section>
-		{/each}
-	</div>
-{/if}
+								<details class="card-menu">
+									<summary aria-label={t('planner-actions')}>…</summary>
+									<div class="menu-items">
+										<button type="button" onclick={() => startEdit(appt)}
+											>{t('planner-edit')}</button
+										>
+										<button type="button" onclick={() => downloadOne(appt, apptDate)}
+											>{t('planner-download')}</button
+										>
+										<button type="button" onclick={() => removeAppt(appt.id)}
+											>{t('planner-delete')}</button
+										>
+									</div>
+								</details>
+							</li>
+						{:else}
+							<li class="empty">{t('planner-empty')}</li>
+						{/each}
+					</ul>
+					<button type="button" class="inline-add" onclick={() => openAdd(day)}
+						>+ {t('planner-add-appt')}</button
+					>
+				</section>
+			{/each}
+		</div>
+	{/if}
+</main>
+
+<dialog
+	bind:this={confirmDialog}
+	class="confirm"
+	aria-label={t('planner-delete')}
+	onclick={(e) => {
+		if (e.target === confirmDialog) cancelDelete();
+	}}
+>
+	{#if pendingDelete}
+		<h2>{t('planner-delete')}</h2>
+		<p>{t('planner-confirm-delete').replace('{title}', pendingDelete.title)}</p>
+		<div class="form-actions">
+			<button type="button" bind:this={confirmBtn} onclick={confirmDelete}>
+				{t('planner-delete')}
+			</button>
+			<button type="button" onclick={cancelDelete}>{t('planner-cancel')}</button>
+		</div>
+	{/if}
+</dialog>
 
 <dialog bind:this={sheet} class="sheet" onclick={sheetBackdrop} aria-label={t('planner-add-title')}>
 	<form class="appt-form" method="dialog" onsubmit={submitForm}>
@@ -707,6 +757,21 @@
 	}
 	dialog.sheet::backdrop {
 		background: rgb(0 0 0 / 0.4);
+	}
+	dialog.confirm {
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		padding: var(--space-3);
+		max-width: min(24rem, 90vw);
+		background: var(--color-surface);
+		color: inherit;
+	}
+	dialog.confirm::backdrop {
+		background: rgb(0 0 0 / 0.4);
+	}
+	dialog.confirm h2 {
+		margin: 0 0 var(--space-2);
+		font-size: var(--text-lg);
 	}
 	.appt-form {
 		display: grid;

@@ -30,6 +30,7 @@ const STRINGS = {
 		map: 'Map',
 		search: 'Search',
 		planner: 'Planner',
+		'skip-link': 'Skip to main content',
 		'planner-title': 'Weekly Planner',
 		'planner-device-warning':
 			'Your plan is stored only on this device. Download a backup to keep it safe.',
@@ -73,6 +74,7 @@ const STRINGS = {
 		'planner-next-month': 'Next month',
 		'planner-add-appt': 'Add appointment',
 		'planner-actions': 'Appointment actions',
+		'planner-confirm-delete': 'Delete "{title}"? This cannot be undone.',
 		'app-title': 'Dublin City Support',
 		'app-intro': 'Find day centres, GP clinics, and mobile health units across Dublin City.',
 		'search-title': 'Search Services',
@@ -116,6 +118,7 @@ const STRINGS = {
 		map: 'Léarscáil',
 		search: 'Cuardaigh',
 		planner: 'Pleanálaí',
+		'skip-link': 'Léim go dtí an príomhábhar',
 		'planner-title': 'Pleanálaí Seachtainiúil',
 		'planner-device-warning':
 			'Stóráiltear do phlean ar an ngléas seo amháin. Íoslódáil cúltaca chun é a choinneáil sábháilte.',
@@ -159,6 +162,7 @@ const STRINGS = {
 		'planner-next-month': 'An chéad mhí eile',
 		'planner-add-appt': 'Cuir coinne leis',
 		'planner-actions': 'Gníomhartha coinne',
+		'planner-confirm-delete': 'Scrios "{title}"? Ní féidir é seo a chealú.',
 		'app-title': 'Tacaíocht Chathair Bhaile Átha Cliath',
 		'app-intro':
 			'Aimsigh ionaid lae, clinicí DG agus aonaid sláinte soghluaiste ar fud Bhaile Átha Cliath.',

@@ -19,6 +19,7 @@
 	{/if}
 </svelte:head>
 
+<a class="skip-link" href="#main-content">{t('skip-link')}</a>
 <nav class="top-nav" aria-label="Primary">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}
 		>{t('directory')}</a
