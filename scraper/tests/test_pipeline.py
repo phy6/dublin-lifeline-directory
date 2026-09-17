@@ -152,6 +152,22 @@ def test_bump_version_major_for_deletions():
     assert result == "4.0.0"
 
 
+def test_compute_diff_ignores_lastScraped_churn():
+    old = {"services": [{"id": "a", "phone": "01 872 0185", "lastScraped": "2026-09-01T00:00:00"}]}
+    new = {"services": [{"id": "a", "phone": "01 872 0185", "lastScraped": "2026-09-17T00:00:00"}]}
+    diffs = compute_diff(old, new)
+    assert diffs == {"additions": [], "updates": [], "deletions": []}
+    assert bump_version("3.1.0", diffs) == "3.1.1"
+
+
+def test_compute_diff_still_reports_content_change():
+    old = {"services": [{"id": "a", "phone": "01 872 0185", "lastScraped": "2026-09-01T00:00:00"}]}
+    new = {"services": [{"id": "a", "phone": "01 872 0186", "lastScraped": "2026-09-17T00:00:00"}]}
+    diffs = compute_diff(old, new)
+    assert [s["id"] for s in diffs["updates"]] == ["a"]
+    assert bump_version("3.1.0", diffs) == "3.2.0"
+
+
 def test_merge_location_backfills_category_and_rcn_from_fallback():
     from scraper.pipeline import merge_location
     scraped = {"id": "x", "name": "X", "source": "live", "category": None, "rcn": "20166120"}
@@ -217,15 +233,15 @@ def test_merge_location_sanitizes_hours_null_days_and_string_hours():
     assert m2["hours"] == fb_hours
 
 
-def test_timestamp_only_churn_still_mints_minor_bump():
-    # Documents current behavior (see scraper-version-bump-semantics):
-    # refreshed timestamps alone count as updates -> minor, not patch.
+def test_timestamp_only_churn_mints_patch():
+    # VOLATILE_KEYS are excluded from compute_diff: refreshed timestamps
+    # alone are not updates -> patch, not minor.
     from scraper.pipeline import compute_diff
     old = {"services": [{"id": "a", "lastScraped": "2026-09-17T00:00:00+00:00"}]}
     new = {"services": [{"id": "a", "lastScraped": "2026-09-17T01:00:00+00:00"}]}
     diffs = compute_diff(old, new)
-    assert len(diffs["updates"]) == 1
-    assert bump_version("3.2.0", diffs) == "3.3.0"
+    assert diffs["updates"] == []
+    assert bump_version("3.2.0", diffs) == "3.2.1"
 
 
 def test_compute_diff_detects_additions():

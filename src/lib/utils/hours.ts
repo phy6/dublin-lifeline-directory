@@ -42,20 +42,21 @@ export function isOpenOnDay(hours: HoursInput, day: DayKey): boolean {
 	return lower !== 'closed' && lower !== '' && lower !== 'null';
 }
 
-export function isOpenNow(hours: HoursInput): boolean {
-	const now = new Date();
-	const dayIndex = now.getDay();
+/** Injectable `now` keeps the interface the test surface (no clock-mocking). */
+export function todayKey(now: Date = new Date()): DayKey {
 	const dayMap: DayKey[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-	const today = dayMap[dayIndex];
-	return isOpenOnDay(hours, today);
+	return dayMap[now.getDay()];
 }
 
-export function getOpenNowStatus(hours: HoursInput): 'open' | 'closed' | 'unknown' {
-	const now = new Date();
-	const dayIndex = now.getDay();
-	const dayMap: DayKey[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-	const today = dayMap[dayIndex];
-	const dayHours = getHoursForDay(hours, today);
+export function isOpenNow(hours: HoursInput, now: Date = new Date()): boolean {
+	return isOpenOnDay(hours, todayKey(now));
+}
+
+export function getOpenNowStatus(
+	hours: HoursInput,
+	now: Date = new Date()
+): 'open' | 'closed' | 'unknown' {
+	const dayHours = getHoursForDay(hours, todayKey(now));
 	if (!dayHours) return 'unknown';
 	const lower = dayHours.toLowerCase();
 	if (lower === 'closed' || lower === '' || lower === 'null') return 'closed';

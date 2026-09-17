@@ -4,6 +4,8 @@ import os
 import re
 from datetime import datetime, timezone
 
+from scraper.phone import sanitize_phone
+
 logger = logging.getLogger(__name__)
 
 
@@ -148,12 +150,11 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
             del merged[field]
 
     # Phone sanitize: scraped text often carries a label prefix
-    # ("Freephone: 1800 ...", "Tel: 01 ..."). Strip it so the directory
-    # shows a dialable number and tel: links work.
+    # ("Freephone: 1800 ...", "Tel: 01 ..."). The shared phone module owns
+    # the strip so the directory shows a dialable number and tel: links work.
     phone = merged.get("phone")
     if isinstance(phone, str):
-        cleaned = re.sub(r"^(freephone|freecall|tel|telephone|phone|fax|lo-?call)\s*:\s*", "", phone, flags=re.IGNORECASE)
-        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        cleaned = sanitize_phone(phone)
         if cleaned:
             merged["phone"] = cleaned
 
@@ -246,6 +247,16 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
     return merged
 
 
+# Per-run volatile keys: refreshed by merge_location() on every run with
+# zero content change. Excluded from compute_diff() so timestamp-only runs
+# mint a patch, not a minor.
+VOLATILE_KEYS = frozenset({"lastScraped"})
+
+
+def _without_volatile(service: dict) -> dict:
+    return {k: v for k, v in service.items() if k not in VOLATILE_KEYS}
+
+
 def compute_diff(old: dict, new: dict) -> dict:
     old_services = {s["id"]: s for s in old.get("services", [])}
     new_services = {s["id"]: s for s in new.get("services", [])}
@@ -256,7 +267,7 @@ def compute_diff(old: dict, new: dict) -> dict:
     for sid, s in new_services.items():
         if sid in old_services:
             old_s = old_services[sid]
-            if s != old_s:
+            if _without_volatile(s) != _without_volatile(old_s):
                 updates.append(s)
 
     return {
@@ -274,12 +285,9 @@ def bump_version(old_version: str, diffs: dict) -> str:
     - additions OR updates (any field-level change) -> minor
     - empty diff -> patch
 
-    Known consequence: merge_location() refreshes lastScraped/lastUpdated
-    timestamps on every run, so compute_diff() reports updates for every
-    location and a re-run with zero content change still mints a minor bump
-    (e.g. 3.2.0 -> 3.3.0 on tag churn + timestamps). Timestamp-only runs are
-    therefore indistinguishable from content runs by version alone; check the
-    metadata additions/updates/deletions counts for the real signal.
+    Volatile keys (VOLATILE_KEYS, e.g. lastScraped) are excluded from the
+    comparison, so a re-run with zero content change mints a patch, not a
+    minor. Check the metadata additions/updates/deletions counts for signal.
     """
     parts = old_version.split(".")
     major = int(parts[0])

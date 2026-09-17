@@ -1,4 +1,5 @@
 import type { ServiceLocation } from '$lib/types';
+import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 
 type RawService = Record<string, unknown>;
 
@@ -57,6 +58,39 @@ export function normalizeServices(raw: RawService[]): ServiceLocation[] {
 
 export function distinctCategories(services: ServiceLocation[]): string[] {
 	return [...new Set(services.map((s) => s.category))].sort();
+}
+
+export interface DirectoryFilters {
+	category: string;
+	day: DayKey | 'all';
+	query: string;
+}
+
+/**
+ * Deep directory predicate: the single seam every directory filter
+ * crosses. Category, open-day, and free-text query combine — a query is
+ * never silently dropped by a category/day change.
+ */
+export function applyFilters(
+	services: ServiceLocation[],
+	{ category, day, query }: DirectoryFilters
+): ServiceLocation[] {
+	let base = services;
+	if (category !== 'All') {
+		base = base.filter((s) => s.category === category);
+	}
+	if (day !== 'all') {
+		base = base.filter((s) => isOpenOnDay(s.hours, day));
+	}
+	const queryLower = query.toLowerCase();
+	if (!queryLower) return base;
+	return base.filter(
+		(service) =>
+			service.name.toLowerCase().includes(queryLower) ||
+			(service.address ?? '').toLowerCase().includes(queryLower) ||
+			(service.services ?? []).some((srv) => srv.toLowerCase().includes(queryLower)) ||
+			(service.tags ?? []).some((tag) => tag.toLowerCase().includes(queryLower))
+	);
 }
 
 /**

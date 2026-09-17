@@ -11,6 +11,7 @@ from urllib.parse import urljoin, urlparse
 import httpx
 from bs4 import BeautifulSoup
 from scraper.pipeline import _lookup_slug
+from scraper.phone import extract_phone, looks_like_phone
 from scraper.validate import URL_RE, EMAIL_RE
 
 logger = logging.getLogger(__name__)
@@ -72,14 +73,11 @@ def extract_field(soup: BeautifulSoup, selectors: List[str], field: str = "") ->
             text = element.get_text(strip=True)
             if text:
                 return text
-    # Phone regex fallback: some sites (e.g. crosscare.ie) render the number
-    # as plain text with no tel: link or phone class. Scan page text for an
-    # Irish landline pattern before giving up.
+    # Phone regex fallback: some sites render the number as plain text
+    # with no tel: link or phone class. The shared phone module owns the
+    # pattern (landlines, mobiles, freephone).
     if field == "phone":
-        page_text = soup.get_text(" ", strip=True)
-        m = re.search(r"\(?01\)?[\s\-]?\d{3,4}[\s\-]?\d{4}", page_text)
-        if m:
-            return m.group(0).strip()
+        return extract_phone(soup)
     return None
 
 
@@ -225,6 +223,10 @@ def quarantine_junk(result: dict) -> List[str]:
     if email is not None and (not isinstance(email, str) or not EMAIL_RE.match(email)):
         reasons.append(f"email malformed: {email!r}")
         result["email"] = None
+    phone = result.get("phone")
+    if phone is not None and not looks_like_phone(phone):
+        reasons.append(f"phone not dialable: {phone!r}")
+        result["phone"] = None
     # Empty-record gate: a live fetch that yields no address, description,
     # phone, email, website, or services extracted nothing usable (even if
     # nothing was technically "junk"). Quarantine so merge falls back.

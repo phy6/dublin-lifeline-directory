@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ServiceList from '$lib/components/ServiceList.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
-	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
+	import { applyFilters } from '$lib/utils/services';
+	import type { DayKey } from '$lib/utils/hours';
 	import { assets } from '$app/paths';
 	import { t } from '$lib/stores/lang.svelte';
 
@@ -21,51 +22,27 @@
 		filtered = services;
 	}
 
+	function refreshFiltered() {
+		filtered = applyFilters(services, {
+			category: selectedCategory,
+			day: selectedDay as DayKey | 'all',
+			query: searchQuery
+		});
+	}
+
 	function handleFilter(category: string) {
 		selectedCategory = category;
-		let base = services;
-		if (category !== 'All') {
-			base = base.filter((s) => s.category === category);
-		}
-		if (selectedDay !== 'all') {
-			base = base.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
-		}
-		filtered = base;
+		refreshFiltered();
 	}
 
 	function handleSearch(query: string) {
-		const q = query.toLowerCase();
-		let base = services;
-		if (selectedCategory !== 'All') {
-			base = base.filter((s) => s.category === selectedCategory);
-		}
-		if (selectedDay !== 'all') {
-			base = base.filter((s) => isOpenOnDay(s.hours, selectedDay as DayKey));
-		}
-		if (!q) {
-			filtered = base;
-			return;
-		}
-		filtered = base.filter(
-			(s) =>
-				s.name.toLowerCase().includes(q) ||
-				(s.address ?? '').toLowerCase().includes(q) ||
-				(s.services ?? []).some((srv) => srv.toLowerCase().includes(q)) ||
-				(s.tags ?? []).some((t) => t.toLowerCase().includes(q))
-		);
+		searchQuery = query;
+		refreshFiltered();
 	}
 
 	function handleDayFilter(day: string) {
 		selectedDay = day;
-		let base = services;
-		if (selectedCategory !== 'All') {
-			base = base.filter((s) => s.category === selectedCategory);
-		}
-		if (day === 'all') {
-			filtered = base;
-		} else {
-			filtered = base.filter((s) => isOpenOnDay(s.hours, day as DayKey));
-		}
+		refreshFiltered();
 	}
 
 	let announceText = $state('');
