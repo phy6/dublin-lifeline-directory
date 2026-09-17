@@ -2,9 +2,9 @@
 
 **Blocked by:** scraper-provider-discovery (closed)
 **Blocks:** None
-**Assigned to:** unassigned
-**Status:** Open
-**Label:** needs-triage
+**Assigned to:** agent
+**Status:** Closed — 2026-09-17 (proposal-list generator implemented; promotion via separate bot-comms project)
+**Label:** ready-for-agent
 
 ## Question
 
@@ -22,7 +22,15 @@ Also consider: 998 candidates is a review pool, not pipeline input — blindly s
 
 ## Acceptance criteria
 
-- [ ] Chosen option implemented and documented (in this ticket's Resolution section)
-- [ ] Samaritans / Crosscare mismatch cases handled by the chosen approach (alias list, RCN anchoring, or documented wontfix)
-- [ ] No pipeline behavior change unless a human explicitly promotes a candidate
-- [ ] Tests for the new logic; full suite green (`python3 -m pytest scraper/tests/ -q`)
+- [x] Chosen option implemented and documented (in this ticket's Resolution section)
+- [x] Samaritans / Crosscare mismatch cases handled by the chosen approach (alias list, RCN anchoring, or documented wontfix)
+- [x] No pipeline behavior change unless a human explicitly promotes a candidate
+- [x] Tests for the new logic; full suite green (`python3 -m pytest scraper/tests/ -q`)
+
+## Resolution
+
+✅ Proposal-list option implemented. `scraper/register_proposals.py` (`--candidates` or `--xlsx`) diffs register candidates against `sources.json` targets and emits `register_proposals.json` with four sections: `matched` (exact, incl. AKA + RCN), `near_matches` (token-containment or difflib ≥ 0.8, shaped as yes/no confirm questions), `new_orgs`, `unmatched_targets`. Matching normalizes case/punctuation/legal-form words (Limited, CLG, Trust, ...).
+
+Live run on the 998 candidates: **9 matched, 4 to confirm, 985 new, 3 targets missing**. Notably it surfaced Crosscare's real registered name — 'St. Laurence O'Toole Catholic Social Care CLG' — as a confirm item, resolving that open question pending a yes. Samaritans is confirmed out of the cut (non-Dublin registered address); `simon-community-employment` and `inner-city-helping-homeless` are also missing from the cut (likely trade names without separate registration). Near-matches deliberately over-trigger ('Cps Trust Ireland' vs COPE, 'Doras Buí...' vs ALONE) — they're questions, not merges.
+
+Promotion stays manual per the plan: `summarize()` prints a sub-1000-char chat-ready summary (counts + numbered yes/no questions) for confirmation via the separate bot-comms project. Nothing in the pipeline changes until a human adds a target to `sources.json`. 5 tests in `test_proposals.py`; 95 passing overall.

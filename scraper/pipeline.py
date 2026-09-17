@@ -144,6 +144,20 @@ def compute_diff(old: dict, new: dict) -> dict:
 
 
 def bump_version(old_version: str, diffs: dict) -> str:
+    """Bump semver from a compute_diff() result.
+
+    Rules (documented, see scraper-version-bump-semantics ticket):
+    - deletions OR schema-keyword changes -> major
+    - additions OR updates (any field-level change) -> minor
+    - empty diff -> patch
+
+    Known consequence: merge_location() refreshes lastScraped/lastUpdated
+    timestamps on every run, so compute_diff() reports updates for every
+    location and a re-run with zero content change still mints a minor bump
+    (e.g. 3.2.0 -> 3.3.0 on tag churn + timestamps). Timestamp-only runs are
+    therefore indistinguishable from content runs by version alone; check the
+    metadata additions/updates/deletions counts for the real signal.
+    """
     parts = old_version.split(".")
     major = int(parts[0])
     minor = int(parts[1])

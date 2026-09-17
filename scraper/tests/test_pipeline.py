@@ -152,6 +152,17 @@ def test_bump_version_major_for_deletions():
     assert result == "4.0.0"
 
 
+def test_timestamp_only_churn_still_mints_minor_bump():
+    # Documents current behavior (see scraper-version-bump-semantics):
+    # refreshed timestamps alone count as updates -> minor, not patch.
+    from scraper.pipeline import compute_diff
+    old = {"services": [{"id": "a", "lastScraped": "2026-09-17T00:00:00+00:00"}]}
+    new = {"services": [{"id": "a", "lastScraped": "2026-09-17T01:00:00+00:00"}]}
+    diffs = compute_diff(old, new)
+    assert len(diffs["updates"]) == 1
+    assert bump_version("3.2.0", diffs) == "3.3.0"
+
+
 def test_compute_diff_detects_additions():
     old = {"services": [{"id": "a", "name": "Place A"}]}
     new = {"services": [{"id": "a", "name": "Place A"}, {"id": "b", "name": "Place B"}]}

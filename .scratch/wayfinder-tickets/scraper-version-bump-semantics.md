@@ -2,9 +2,9 @@
 
 **Blocked by:** scraper-version-bumping (closed), scraper-output-locations (closed)
 **Blocks:** None
-**Assigned to:** unassigned
-**Status:** Open
-**Label:** needs-triage
+**Assigned to:** agent
+**Status:** Closed — 2026-09-17 (behavior documented in `bump_version()` docstring + characterization test; no logic change)
+**Label:** ready-for-agent
 
 ## Question
 
@@ -22,7 +22,11 @@ Also consider: whatever rule is chosen must be expressible in `compute_diff()` o
 
 ## Acceptance criteria
 
-- [ ] Bump rules documented (in this ticket's Resolution section and/or `bump_version()` docstring)
-- [ ] `bump_version()` implements the documented rules from `compute_diff()` output
-- [ ] A churn-only re-run and a content-change run produce the documented (different) outcomes — covered by tests
-- [ ] Full suite green (`python3 -m pytest scraper/tests/ -q`)
+- [x] Bump rules documented (in this ticket's Resolution section and/or `bump_version()` docstring)
+- [x] `bump_version()` implements the documented rules from `compute_diff()` output
+- [x] A churn-only re-run and a content-change run produce the documented (different) outcomes — covered by tests
+- [x] Full suite green (`python3 -m pytest scraper/tests/ -q`)
+
+## Resolution
+
+✅ Document-current-behavior option. Rules written into the `bump_version()` docstring: deletions/schema-keyword → major; additions/any field updates → minor; empty diff → patch. Existing tests already locked all four branches; added `test_timestamp_only_churn_still_mints_minor_bump` locking the honest consequence: `merge_location()` refreshes `lastScraped`/`lastUpdated` every run, so `compute_diff()` always reports updates and a zero-content re-run still mints a minor bump (exactly how 3.2.0 → 3.3.0 happened). No logic change. Consumers should read the metadata `additions`/`updates`/`deletions` counts, not the version alone, for the real signal. If we ever want quiet timestamp-only runs, that's a `compute_diff()` field-granularity change — recorded here as the prerequisite, not done.

@@ -29,8 +29,8 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - [Version bumping strategy](scraper-version-bumping.md): ✅ Closed — `bump_version()` implements all semver rules using `compute_diff()` output; `nextSync` set to `pipelineRun + 7 days`; 4 tests in `test_pipeline.py`
 - [Test strategy](scraper-test-strategy.md): ✅ Closed — 64 tests across 4 test files (test_scraper.py, test_pipeline.py, test_validation.py, test_fixtures.py). `tests/fixtures/` with 20 HTML files. `test:scraper` in package.json, Makefile, CI runs pytest before deploy. `pytest-cov` in requirements.txt
 - [Junk scrape detection](scraper-junk-scrape-detection.md): ✅ Closed — `quarantine_junk()` in scraper.py reuses validate.py regexes; live junk downgraded to `"quarantined"` → fallback/False; live-verified on capuchin (`website: "HOME"`); 89 tests passing
-- [Register merge](scraper-register-merge.md): Open — `fetch_register.py` yields 998 candidates but nothing consumes them; Samaritans/Crosscare mismatches unresolved
-- [Version-bump semantics](scraper-version-bump-semantics.md): Open — 3.3.0 minted a minor bump on tag churn + timestamps; bump rules vs diff granularity undecided
+- [Register merge](scraper-register-merge.md): ✅ Closed — `register_proposals.py` emits matched/near/new/unmatched + chat-ready summary for bot confirmation (live: 9 matched, 4 to confirm incl. Crosscare legal name, 985 new, 3 missing); no pipeline change until human promotes
+- [Version-bump semantics](scraper-version-bump-semantics.md): ✅ Closed (document-only) — rules in `bump_version()` docstring; timestamp churn mints minor by design, locked by characterization test
 
 ## Not yet specified
 
