@@ -26,10 +26,42 @@ DISPLAY_TO_SLUG = {
     "Family Support Services": "family",
     "Family Support": "family",
     "Support Services": "support",
+    # Fallback-vocabulary mappings (sources.json curated truth, 2026-09-17).
+    # Coarse needs map into NEEDS; fine-grained detail survives in tags.
+    "homelessness": "shelter",
+    "emergency": "shelter",
+    "housing": "housing",
+    "accommodation": "housing",
+    "addiction": "addiction-support",
+    "recovery": "addiction-support",
+    "harm reduction": "addiction-support",
+    "needle exchange": "addiction-support",
+    "support": "support",
+    "advice": "support",
+    "community": "community",
+    "social": "community",
+    "volunteering": "community",
+    "befriending": "community",
+    "elderly": "elderly",
+    "isolation": "elderly",
+    "clothing": "clothing",
+    "counselling": "counselling",
+    "health": "medical",
+    "gp clinic": "medical",
+    "primary care": "medical",
+    "nursing": "medical",
+    "training": "employment",
+    "crisis": "mental-health",
+    "crisis-support": "mental-health",
+    "suicide-prevention": "mental-health",
+    "helpline": "mental-health",
+    "outreach": "outreach",
 }
 
 # Curated needs taxonomy (03). Flat multi-select; expand by adding one
 # slug here — normalize + validate + chips pick it up with no other change.
+# Extended 2026-09-17 to cover the sources.json fallback vocabulary so the
+# no-flyer merge branch backfills every org to a non-empty services list.
 NEEDS = frozenset(
     {
         "food",
@@ -40,6 +72,13 @@ NEEDS = frozenset(
         "shelter",
         "employment",
         "connectivity",
+        "housing",
+        "support",
+        "community",
+        "elderly",
+        "clothing",
+        "counselling",
+        "outreach",
     }
 )
 
@@ -82,7 +121,10 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
     merged = dict(scraped) if scraped else {}
     merged["id"] = scraped.get("id", fallback.get("id", ""))
     merged["name"] = scraped.get("name", fallback.get("name", ""))
-    merged["address"] = scraped.get("address", fallback.get("address", ""))
+    # sources.json fallback blocks are the curated source of truth: a scrape
+    # that found nothing (None) must not clobber them.
+    if not merged.get("address"):
+        merged["address"] = fallback.get("address", "")
 
     if flyer:
         for field in ("phone", "email", "website", "hours"):
@@ -143,7 +185,13 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
             merged["dynamicActivities"] = []
             merged["activityMatchCount"] = 0
     else:
-        merged["tags"] = merged.get("tags", [])
+        # No flyer data: backfill from the curated fallback truth (fail-closed
+        # via normalize_services for services; tags carry the raw vocabulary).
+        merged["services"] = normalize_services(
+            fallback.get("services", [])
+        ) or normalize_services(scraped.get("services", []))
+        if not merged.get("tags"):
+            merged["tags"] = list(fallback.get("tags", []))
         merged["dynamicActivities"] = []
         merged["activityMatchCount"] = 0
 
@@ -256,7 +304,16 @@ def run_pipeline(scraped_path: str, flyer_path: str, output_dir: str) -> dict:
             name_key = scraped.get("name", "").lower()
             flyer = flyer_by_name.get(name_key)
         fallback = scraped.get("fallback", {})
-        merged = merge_location(scraped, flyer, fallback)
+        editorial = None
+        try:
+            from scraper.overlay import load_overlay, overlay_path_for
+
+            overlay_path = overlay_path_for(project_root, sid)
+            if sid and os.path.exists(overlay_path):
+                editorial = load_overlay(overlay_path)
+        except (OSError, ValueError):
+            editorial = None
+        merged = merge_location(scraped, flyer, fallback, editorial)
         new_services.append(merged)
 
     new_data = {

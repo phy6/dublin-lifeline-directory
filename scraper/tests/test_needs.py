@@ -6,13 +6,44 @@ from pipeline import NEEDS, normalize_services
 from validate import validate_location
 
 
-def test_needs_has_8_curated_slugs():
-    assert len(NEEDS) == 8
+def test_needs_has_15_curated_slugs():
+    assert len(NEEDS) == 15
     assert "food" in NEEDS and "mental-health" in NEEDS
+    assert "housing" in NEEDS and "support" in NEEDS and "elderly" in NEEDS
 
 
 def test_normalize_drops_unknown_fail_closed():
     assert normalize_services(["Hot Meals", "Dragon Riding"]) == ["food"]
+
+
+def test_normalize_maps_fallback_vocabulary():
+    result = normalize_services(
+        ["homelessness", "housing", "addiction", "elderly", "counselling", "outreach", "clothing"]
+    )
+    assert result == [
+        "addiction-support",
+        "clothing",
+        "counselling",
+        "elderly",
+        "housing",
+        "outreach",
+        "shelter",
+    ]
+
+
+def test_normalize_maps_clinical_synonyms_to_medical():
+    result = normalize_services(["GP clinic", "primary care", "nursing", "health"])
+    assert result == ["medical"]
+
+
+def test_every_config_fallback_backfills_nonempty_services():
+    import json
+
+    with open("scraper/config/sources.json") as f:
+        targets = json.load(f)["targets"]
+    for t in targets:
+        result = normalize_services(t["fallback"].get("services", []))
+        assert result, f"{t['id']}: fallback backfills to empty services"
 
 
 def test_normalize_keeps_multiword_slugs():

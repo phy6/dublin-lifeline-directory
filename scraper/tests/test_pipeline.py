@@ -169,6 +169,22 @@ def test_merge_location_keeps_scraped_category_when_present():
     assert merged["category"] == "Food"
 
 
+def test_merge_location_backfills_services_and_tags_from_fallback():
+    from scraper.pipeline import merge_location
+    scraped = {"id": "x", "name": "X", "source": "quarantined", "address": None, "tags": []}
+    fallback = {
+        "id": "x",
+        "name": "X",
+        "address": "29 Bow St, Dublin 7",
+        "services": ["homelessness", "housing", "support"],
+        "tags": ["homelessness", "housing", "support"],
+    }
+    merged = merge_location(scraped, None, fallback)
+    assert merged["services"] == ["housing", "shelter", "support"]
+    assert merged["tags"] == ["homelessness", "housing", "support"]
+    assert merged["address"] == "29 Bow St, Dublin 7"
+
+
 def test_timestamp_only_churn_still_mints_minor_bump():
     # Documents current behavior (see scraper-version-bump-semantics):
     # refreshed timestamps alone count as updates -> minor, not patch.
