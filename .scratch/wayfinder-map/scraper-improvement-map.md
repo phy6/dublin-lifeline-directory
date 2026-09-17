@@ -28,6 +28,9 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - [Data validation schema](scraper-data-validation.md): ✅ Closed — `scraper/validate.py` with custom validators (no pydantic): location errors/warnings, hours format/ordering, service slug validation, clinic location_id check. `scraper/tests/test_validation.py` with 14 tests. CLI: `python3 scraper/validate.py src/lib/data/services.json`
 - [Version bumping strategy](scraper-version-bumping.md): ✅ Closed — `bump_version()` implements all semver rules using `compute_diff()` output; `nextSync` set to `pipelineRun + 7 days`; 4 tests in `test_pipeline.py`
 - [Test strategy](scraper-test-strategy.md): ✅ Closed — 64 tests across 4 test files (test_scraper.py, test_pipeline.py, test_validation.py, test_fixtures.py). `tests/fixtures/` with 20 HTML files. `test:scraper` in package.json, Makefile, CI runs pytest before deploy. `pytest-cov` in requirements.txt
+- [Junk scrape detection](scraper-junk-scrape-detection.md): Open — live fetch + chrome-text extraction still recorded as `live`/`scrapeSuccess: true`; needs a field-sanity gate aligned with validate.py
+- [Register merge](scraper-register-merge.md): Open — `fetch_register.py` yields 998 candidates but nothing consumes them; Samaritans/Crosscare mismatches unresolved
+- [Version-bump semantics](scraper-version-bump-semantics.md): Open — 3.3.0 minted a minor bump on tag churn + timestamps; bump rules vs diff granularity undecided
 
 ## Not yet specified
 
