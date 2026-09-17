@@ -29,6 +29,10 @@
 	<a href="{base}/search" aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
 		>{t('search')}</a
 	>
+	<a
+		href="{base}/planner"
+		aria-current={page.url.pathname === `${base}/planner` ? 'page' : undefined}>{t('planner')}</a
+	>
 </nav>
 
 <div class="lang-pill" role="group" aria-label="Language">
