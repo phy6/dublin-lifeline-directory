@@ -5,11 +5,26 @@
 	import { lang, setLang as onLang } from '$lib/stores/lang.svelte';
 
 	let open = $state(false);
+	let fabRef: HTMLButtonElement | undefined = $state(undefined);
 	const langCode = $derived(lang.current);
+
+	function closeSheet() {
+		open = false;
+		fabRef?.focus();
+	}
+
+	function onOverlayClick(e: MouseEvent) {
+		if (e.target === e.currentTarget) closeSheet();
+	}
+
+	function onKeyDown(e: KeyboardEvent) {
+		if (open && e.key === 'Escape') closeSheet();
+	}
 </script>
 
 <button
 	class="settings-fab"
+	bind:this={fabRef}
 	aria-haspopup="dialog"
 	aria-expanded={open}
 	aria-controls="settings-sheet"
@@ -26,12 +41,15 @@
 		role="dialog"
 		aria-modal="true"
 		aria-labelledby="settings-title"
+		tabindex="-1"
+		onclick={onOverlayClick}
+		onkeydown={onKeyDown}
 	>
 		<div class="sheet">
 			<span class="grabber" aria-hidden="true"></span>
 			<div class="sheet-header">
 				<h3 id="settings-title">{langCode === 'ga' ? 'Socruithe' : 'Settings'}</h3>
-				<button class="close" onclick={() => (open = false)} aria-label="Close settings">✕</button>
+				<button class="close" onclick={closeSheet} aria-label="Close settings">✕</button>
 			</div>
 			<div class="rows">
 				<section class="row" aria-label={langCode === 'ga' ? 'Méid téacs' : 'Text size'}>
