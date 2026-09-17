@@ -4,6 +4,7 @@
 	import { base } from '$app/paths';
 	import TextScaleToggle from '$lib/components/TextScaleToggle.svelte';
 	import LowDataToggle from '$lib/components/LowDataToggle.svelte';
+	import Chatbot from '$lib/components/Chatbot.svelte';
 	import '$lib/styles/tokens.css';
 	let { children } = $props();
 	let lang = $state('en');
@@ -58,6 +59,8 @@
 	<TextScaleToggle />
 	<LowDataToggle />
 </div>
+
+<Chatbot />
 
 <style>
 	.top-nav {
