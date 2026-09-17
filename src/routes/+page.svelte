@@ -3,9 +3,10 @@
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
+	import { assets } from '$app/paths';
 
 	const { data } = $props();
-	const dataServices = data.services as ServiceLocation[];
+	const dataServices = data.services;
 	let services = $state(dataServices);
 	let filtered = $state(dataServices);
 	let categories = $state(data.categories);
@@ -40,9 +41,9 @@
 		filtered = base.filter(
 			(s) =>
 				s.name.toLowerCase().includes(q) ||
-				s.address.toLowerCase().includes(q) ||
-				s.services.some((srv) => srv.toLowerCase().includes(q)) ||
-				s.tags.some((t) => t.toLowerCase().includes(q))
+				(s.address ?? '').toLowerCase().includes(q) ||
+				(s.services ?? []).some((srv) => srv.toLowerCase().includes(q)) ||
+				(s.tags ?? []).some((t) => t.toLowerCase().includes(q))
 		);
 	}
 
@@ -72,7 +73,7 @@
 <svelte:head>
 	<title>Dublin City Support</title>
 	<meta name="description" content="Find nearby support services in Dublin City" />
-	<link rel="manifest" href="/manifest.webmanifest" />
+	<link rel="manifest" href="{assets}/manifest.webmanifest" />
 </svelte:head>
 
 <main id="main-content">
@@ -102,7 +103,7 @@
 	<ServiceList services={filtered} id="service-list" />
 
 	<nav>
-		<a href="/map">View on Map</a>
+		<a href="{assets}/map">View on Map</a>
 	</nav>
 </main>
 

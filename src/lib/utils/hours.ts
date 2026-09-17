@@ -15,10 +15,12 @@ export function normalizeDayKey(day: string): DayKey | null {
 	return null;
 }
 
-export function getHoursForDay(
-	hours: Record<string, string | undefined>,
-	day: DayKey
-): string | null {
+export type HoursInput = Record<string, string | undefined> | string | null | undefined;
+
+export function getHoursForDay(hours: HoursInput, day: DayKey): string | null {
+	// Scraper data is ragged: hours can be null or a free-text string.
+	// Only dict-shaped hours are day-resolvable; anything else is unknown.
+	if (!hours || typeof hours !== 'object') return null;
 	for (const [key, value] of Object.entries(hours)) {
 		const normalized = normalizeDayKey(key);
 		if (normalized === day && value && value.toLowerCase() !== 'closed') {
@@ -33,14 +35,14 @@ export function getHoursForDay(
 	return null;
 }
 
-export function isOpenOnDay(hours: Record<string, string | undefined>, day: DayKey): boolean {
+export function isOpenOnDay(hours: HoursInput, day: DayKey): boolean {
 	const dayHours = getHoursForDay(hours, day);
 	if (!dayHours) return false;
 	const lower = dayHours.toLowerCase();
 	return lower !== 'closed' && lower !== '' && lower !== 'null';
 }
 
-export function isOpenNow(hours: Record<string, string | undefined>): boolean {
+export function isOpenNow(hours: HoursInput): boolean {
 	const now = new Date();
 	const dayIndex = now.getDay();
 	const dayMap: DayKey[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
@@ -48,9 +50,7 @@ export function isOpenNow(hours: Record<string, string | undefined>): boolean {
 	return isOpenOnDay(hours, today);
 }
 
-export function getOpenNowStatus(
-	hours: Record<string, string | undefined>
-): 'open' | 'closed' | 'unknown' {
+export function getOpenNowStatus(hours: HoursInput): 'open' | 'closed' | 'unknown' {
 	const now = new Date();
 	const dayIndex = now.getDay();
 	const dayMap: DayKey[] = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];

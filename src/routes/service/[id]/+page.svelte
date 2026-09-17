@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
 
 	const { data } = $props();
-	let service = $state((data.service as ServiceLocation | null) ?? null);
+	let service = $state(data.service ?? null);
 </script>
 
 {#if service}
 	<main id="main-content">
-		<a href="/" class="back-link">← Back to directory</a>
+		<a href="{base}/" class="back-link">← Back to directory</a>
 		<div class="service-detail">
 			<div class="category">{service.category}</div>
 			<h1>{service.name}</h1>
@@ -38,20 +39,26 @@
 
 			<section>
 				<h2>Opening Hours</h2>
-				<dl class="hours-list">
-					{#each Object.entries(service.hours) as [day, hours] (day)}
-						<div class="hours-row">
-							<dt class="day">{day}</dt>
-							<dd class="hours">{hours}</dd>
-						</div>
-					{/each}
-				</dl>
+				{#if typeof service.hours === 'string'}
+					<p>{service.hours}</p>
+				{:else if service.hours && typeof service.hours === 'object'}
+					<dl class="hours-list">
+						{#each Object.entries(service.hours) as [day, hours] (day)}
+							<div class="hours-row">
+								<dt class="day">{day}</dt>
+								<dd class="hours">{hours}</dd>
+							</div>
+						{/each}
+					</dl>
+				{:else}
+					<p>Opening hours not available.</p>
+				{/if}
 			</section>
 
 			<section>
 				<h2>Services Offered</h2>
 				<div class="tags">
-					{#each service.services as srv (srv)}
+					{#each service.services ?? [] as srv (srv)}
 						<span class="tag">{srv}</span>
 					{/each}
 				</div>
@@ -60,7 +67,7 @@
 			<section>
 				<h2>Categories</h2>
 				<div class="tags">
-					{#each service.tags as tag (tag)}
+					{#each service.tags ?? [] as tag (tag)}
 						<span class="tag">{tag}</span>
 					{/each}
 				</div>
@@ -76,9 +83,9 @@
 		<h2>Service not found</h2>
 		<p>The service you're looking for doesn't exist or has been removed.</p>
 		<nav>
-			<a href="/search">Search for another service</a>
+			<a href="{base}/search">Search for another service</a>
 			<span aria-hidden="true"> or </span>
-			<a href="/">return to directory</a>
+			<a href="{base}/">return to directory</a>
 		</nav>
 	</div>
 {/if}

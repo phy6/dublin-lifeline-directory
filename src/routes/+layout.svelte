@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { base } from '$app/paths';
 	import TextScaleToggle from '$lib/components/TextScaleToggle.svelte';
 	import LowDataToggle from '$lib/components/LowDataToggle.svelte';
 	import '$lib/styles/tokens.css';
@@ -26,9 +27,9 @@
 </svelte:head>
 
 <nav class="top-nav" aria-label="Main navigation">
-	<a href="/" aria-current={page.url.pathname === '/' ? 'page' : undefined}>Directory</a>
-	<a href="/map" aria-current={page.url.pathname === '/map' ? 'page' : undefined}>Map</a>
-	<a href="/search" aria-current={page.url.pathname === '/search' ? 'page' : undefined}>Search</a>
+	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>Directory</a>
+	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>Map</a>
+	<a href="{base}/search" aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}>Search</a>
 </nav>
 
 <div id="emergency-fab" role="complementary" aria-label="Emergency contacts">

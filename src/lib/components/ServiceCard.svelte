@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
 	import { getOpenNowStatus } from '$lib/utils/hours';
 
 	let { service }: { service: ServiceLocation } = $props();
 	const openStatus = $derived(getOpenNowStatus(service.hours));
+	const hourEntries = $derived(
+		service.hours && typeof service.hours === 'object' ? Object.entries(service.hours) : []
+	);
 </script>
 
 <article class="card">
@@ -19,16 +23,20 @@
 	<p class="address">{service.address}</p>
 	<p class="phone">{service.phone}</p>
 	<div class="tags">
-		{#each service.tags.slice(0, 4) as tag (tag)}
+		{#each (service.tags ?? []).slice(0, 4) as tag (tag)}
 			<span class="tag">{tag}</span>
 		{/each}
 	</div>
 	<div class="hours">
-		{#each Object.entries(service.hours) as [day, hours] (day)}
-			<span class="day">{day}: {hours}</span>
-		{/each}
+		{#if typeof service.hours === 'string'}
+			<span class="day">{service.hours}</span>
+		{:else}
+			{#each hourEntries as [day, hours] (day)}
+				<span class="day">{day}: {hours}</span>
+			{/each}
+		{/if}
 	</div>
-	<a href="/service/{service.id}" class="card-link">View details</a>
+	<a href="{base}/service/{service.id}" class="card-link">View details</a>
 </article>
 
 <style>

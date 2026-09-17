@@ -1,13 +1,13 @@
 export interface ServiceLocation {
 	id: string;
 	name: string;
-	address: string;
-	phone: string;
-	email: string;
-	website: string;
-	hours: Record<string, string | undefined>;
-	tags: string[];
-	services: string[];
+	address: string | null;
+	phone: string | null;
+	email: string | null;
+	website: string | null;
+	hours: Record<string, string | undefined> | string | null;
+	tags: string[] | null;
+	services: string[] | null;
 	category: string;
 	latitude: number;
 	longitude: number;

@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
 	import 'leaflet/dist/leaflet.css';
 
 	const { data } = $props();
-	const dataServices = data.services as ServiceLocation[];
+	const dataServices = data.services;
 	let services = $state(dataServices);
 	let mapEl: HTMLDivElement | null = null;
 	let map: L.Map | null = null;
@@ -30,7 +31,7 @@
 				if (s.latitude && s.longitude && map) {
 					const marker = L.marker([s.latitude, s.longitude], { icon }).addTo(map);
 					marker.bindPopup(
-						`<b>${s.name}</b><br>${s.address}<br><a href="/service/${s.id}">View details</a>`
+						`<b>${s.name}</b><br>${s.address}<br><a href="${base}/service/${s.id}">View details</a>`
 					);
 
 					const markerEl = marker.getElement();

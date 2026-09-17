@@ -5,7 +5,7 @@
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 
 	const { data } = $props();
-	const dataServices = data.services as ServiceLocation[];
+	const dataServices = data.services;
 	let services = $state(dataServices);
 	let filtered = $state(dataServices);
 	let categories = $state(data.categories);
@@ -40,9 +40,9 @@
 		filtered = base.filter(
 			(s) =>
 				s.name.toLowerCase().includes(q) ||
-				s.address.toLowerCase().includes(q) ||
-				s.services.some((srv) => srv.toLowerCase().includes(q)) ||
-				s.tags.some((t) => t.toLowerCase().includes(q))
+				(s.address ?? '').toLowerCase().includes(q) ||
+				(s.services ?? []).some((srv) => srv.toLowerCase().includes(q)) ||
+				(s.tags ?? []).some((t) => t.toLowerCase().includes(q))
 		);
 	}
 

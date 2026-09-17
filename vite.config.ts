@@ -19,48 +19,49 @@ export default defineConfig({
 				background_color: '#ffffff',
 				display: 'standalone',
 				orientation: 'portrait',
-				scope: '/',
-				start_url: '/',
+				// Match paths.base so install/scope work under the project subpath.
+				scope: `${process.env.BASE_PATH || ''}/`,
+				start_url: `${process.env.BASE_PATH || ''}/`,
 				categories: ['social'],
 				icons: [
 					{
-						src: '/icons/icon-72x72.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-72x72.png`,
 						sizes: '72x72',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-96x96.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-96x96.png`,
 						sizes: '96x96',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-144x144.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-144x144.png`,
 						sizes: '144x144',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-192x192.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-192x192.png`,
 						sizes: '192x192',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-256x256.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-256x256.png`,
 						sizes: '256x256',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-384x384.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-384x384.png`,
 						sizes: '384x384',
 						type: 'image/png',
 						purpose: 'any maskable'
 					},
 					{
-						src: '/icons/icon-512x512.png',
+						src: `${process.env.BASE_PATH || ''}/icons/icon-512x512.png`,
 						sizes: '512x512',
 						type: 'image/png',
 						purpose: 'any maskable'
@@ -72,7 +73,7 @@ export default defineConfig({
 				runtimeCaching: [
 					// App shell — precache all build + static assets
 					{
-						urlPattern: /^https:\/\/dublin-city-support\.github\.io\//,
+						urlPattern: /^https:\/\/phy6\.github\.io\//,
 						handler: 'CacheFirst',
 						options: {
 							cacheName: 'app-shell',
