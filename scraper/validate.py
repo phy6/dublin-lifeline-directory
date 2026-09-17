@@ -34,9 +34,13 @@ def validate_location(loc: dict) -> dict:
     if not isinstance(services, list) or len(services) == 0:
         errors.append(f"{loc.get('id', 'unknown')}: services must be a non-empty array")
     else:
+        from scraper.pipeline import NEEDS
+
         for svc in services:
             if not isinstance(svc, str) or not re.match(r"^[a-z-]+$", svc):
                 errors.append(f"{loc.get('id', 'unknown')}: invalid service slug '{svc}'")
+            elif svc not in NEEDS:
+                errors.append(f"{loc.get('id', 'unknown')}: unknown need '{svc}' (not in curated taxonomy)")
         if len(services) != len(set(services)):
             errors.append(f"{loc.get('id', 'unknown')}: duplicate services found")
 

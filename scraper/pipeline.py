@@ -28,6 +28,21 @@ DISPLAY_TO_SLUG = {
     "Support Services": "support",
 }
 
+# Curated needs taxonomy (03). Flat multi-select; expand by adding one
+# slug here — normalize + validate + chips pick it up with no other change.
+NEEDS = frozenset(
+    {
+        "food",
+        "hygiene",
+        "medical",
+        "mental-health",
+        "addiction-support",
+        "shelter",
+        "employment",
+        "connectivity",
+    }
+)
+
 
 def load_flyer_data(path: str) -> dict:
     with open(path, "r") as f:
@@ -48,17 +63,22 @@ def _lookup_slug(text: str) -> str | None:
 
 
 def normalize_services(services: list[str]) -> list[str]:
+    """Map display names to slugs, fail-closed to NEEDS (03).
+
+    Unknown slugs are dropped (and logged by the caller pipeline);
+    ingestion never invents taxonomy entries.
+    """
     result = []
     for svc in services:
         slug = _lookup_slug(svc)
         if slug is None:
             slug = _slugify(svc)
-        if slug and slug not in result:
+        if slug and slug not in result and slug in NEEDS:
             result.append(slug)
     return sorted(result)
 
 
-def merge_location(scraped: dict, flyer: dict, fallback: dict) -> dict:
+def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict | None = None) -> dict:
     merged = dict(scraped) if scraped else {}
     merged["id"] = scraped.get("id", fallback.get("id", ""))
     merged["name"] = scraped.get("name", fallback.get("name", ""))
@@ -129,6 +149,11 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict) -> dict:
 
     merged["description"] = merged.get("description", f"{merged.get('name', '')} service location")
     merged["lastVerified"] = merged.get("lastVerified", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+
+    if editorial:
+        from scraper.overlay import apply_overlay
+
+        merged = apply_overlay(merged, editorial)
 
     return merged
 

@@ -58,3 +58,31 @@ export function normalizeServices(raw: RawService[]): ServiceLocation[] {
 export function distinctCategories(services: ServiceLocation[]): string[] {
 	return [...new Set(services.map((s) => s.category))].sort();
 }
+
+/**
+ * Curated needs taxonomy (03) — mirrors scraper/pipeline.py NEEDS.
+ * Expand by adding a slug in both places. Chips use exact matching:
+ * a service matches a need iff its services array contains the slug.
+ */
+export const NEEDS = [
+	'food',
+	'hygiene',
+	'medical',
+	'mental-health',
+	'addiction-support',
+	'shelter',
+	'employment',
+	'connectivity'
+] as const;
+
+export type Need = (typeof NEEDS)[number];
+
+export function matchesNeed(service: ServiceLocation, need: string): boolean {
+	return service.services?.includes(need) ?? false;
+}
+
+export function distinctNeeds(services: ServiceLocation[]): string[] {
+	const seen = new Set<string>();
+	for (const s of services) for (const n of s.services ?? []) if ((NEEDS as readonly string[]).includes(n)) seen.add(n);
+	return [...seen].sort();
+}
