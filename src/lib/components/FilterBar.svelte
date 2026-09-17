@@ -121,7 +121,9 @@
 	}
 	@media (prefers-reduced-motion: no-preference) {
 		.filter-chips button {
-			transition: all 0.15s;
+			transition:
+				background-color 0.15s,
+				border-color 0.15s;
 		}
 	}
 	.filter-chips button:hover {

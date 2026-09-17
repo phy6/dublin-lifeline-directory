@@ -105,7 +105,16 @@
 	aria-controls="chatbot-modal"
 	onclick={openModal}
 >
-	<span aria-hidden="true">💬</span>
+	<span aria-hidden="true"><svg
+			class="fab-icon"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" /></svg
+		></span>
 	{lang === 'ga' ? 'Cabhair? Comhrá' : 'Need help? Chat'}
 </button>
 
@@ -177,10 +186,29 @@
 					{/if}
 				</div>
 			{/if}
-			<button class="restart" onclick={startOver}
-				>↺ {lang === 'ga' ? 'Tosaigh arís' : 'Start over'}</button
+		<button class="restart" onclick={startOver}
+			><svg
+				class="btn-icon"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"><polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" /></svg
 			>
-			<button class="close" onclick={closeModal} aria-label="Close chat">✕</button>
+			{lang === 'ga' ? 'Tosaigh arís' : 'Start over'}</button
+		>
+		<button class="close" onclick={closeModal} aria-label="Close chat"><svg
+				class="btn-icon"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg
+			></button>
 		</div>
 	</dialog>
 {/if}
@@ -194,7 +222,7 @@
 		background: var(--color-accent);
 		color: var(--color-text-on-accent);
 		border: 0;
-		border-radius: 999px;
+		border-radius: var(--radius-full);
 		padding: 12px 16px;
 		font-weight: 700;
 		cursor: pointer;
@@ -242,7 +270,7 @@
 		gap: 8px;
 	}
 	.bubble {
-		border-radius: 12px;
+		border-radius: var(--radius-lg);
 		padding: 9px 12px;
 		font-size: var(--text-sm);
 		max-width: 88%;
@@ -265,7 +293,7 @@
 		border: 2px solid var(--color-accent);
 		background: transparent;
 		color: var(--color-accent);
-		border-radius: 9px;
+		border-radius: var(--radius-md);
 		padding: 9px 12px;
 		text-align: left;
 		font-weight: 700;
@@ -284,7 +312,11 @@
 		font-size: var(--text-sm);
 		font-weight: 700;
 		text-align: center;
-		display: block;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		min-width: 44px;
 		padding: 8px;
 	}
 	.no-match {
@@ -295,6 +327,17 @@
 	.close {
 		margin-top: 10px;
 		min-height: 44px;
+		min-width: 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-1);
+	}
+	.fab-icon,
+	.btn-icon {
+		width: 1.1em;
+		height: 1.1em;
+		flex-shrink: 0;
 	}
 	.grabber {
 		display: none;
@@ -318,7 +361,7 @@
 			display: block;
 			width: 40px;
 			height: 4px;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background: var(--color-border-strong);
 			margin: 0 auto var(--space-2);
 		}

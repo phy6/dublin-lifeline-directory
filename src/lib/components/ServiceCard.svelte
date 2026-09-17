@@ -65,7 +65,7 @@
 			box-shadow: var(--shadow-lg);
 		}
 		.card:active {
-			transform: scale(0.98);
+			transform: scale(0.96);
 		}
 	}
 	.card-header {
@@ -144,6 +144,11 @@
 	}
 	.card-link {
 		margin-top: auto;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		min-width: 44px;
 		padding: var(--space-2) var(--space-3);
 		background: var(--color-accent);
 		color: var(--color-text-on-accent);
@@ -161,7 +166,7 @@
 			background: var(--color-accent-hover);
 		}
 		.card-link:active {
-			transform: scale(0.98);
+			transform: scale(0.96);
 		}
 	}
 	.card-link:focus-visible {

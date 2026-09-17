@@ -146,6 +146,10 @@
 		letter-spacing: 0.02em;
 		padding: var(--space-1) var(--space-2);
 		border-radius: var(--radius-sm);
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		min-width: 44px;
 	}
 	@media (prefers-reduced-motion: no-preference) {
 		.top-nav a {

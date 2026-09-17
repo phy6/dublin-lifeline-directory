@@ -23,7 +23,16 @@
 		<span class="appt-when">{appt.start}–{appt.end}{appt.location ? ` · ${appt.location}` : ''}</span>
 	</div>
 	<details class="card-menu">
-		<summary aria-label={t('planner-actions')}>…</summary>
+		<summary aria-label={t('planner-actions')}><svg
+				class="menu-chevron"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg
+			></summary>
 		<div class="menu-items">
 			<button type="button" onclick={() => onEdit(appt)}>{t('planner-edit')}</button>
 			<button type="button" onclick={() => onDownload(appt, date)}>{t('planner-download')}</button>
@@ -67,9 +76,19 @@
 		min-height: 44px;
 		display: grid;
 		place-items: center;
-		font-size: 1.25rem;
-		letter-spacing: 1px;
 		border-radius: var(--radius-sm);
+	}
+	.menu-chevron {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.menu-chevron {
+			transition: transform 0.15s;
+		}
+	}
+	.card-menu[open] .menu-chevron {
+		transform: rotate(180deg);
 	}
 	.card-menu summary::-webkit-details-marker {
 		display: none;
@@ -88,7 +107,7 @@
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
-		box-shadow: 0 4px 16px rgb(0 0 0 / 0.15);
+		box-shadow: var(--shadow-lg);
 		min-width: 12rem;
 	}
 	.menu-items button {

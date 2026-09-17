@@ -49,7 +49,16 @@
 			<span class="grabber" aria-hidden="true"></span>
 			<div class="sheet-header">
 				<h3 id="settings-title">{langCode === 'ga' ? 'Socruithe' : 'Settings'}</h3>
-				<button class="close" onclick={closeSheet} aria-label="Close settings">✕</button>
+				<button class="close" onclick={closeSheet} aria-label="Close settings"><svg
+					class="btn-icon"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg
+				></button>
 			</div>
 			<div class="rows">
 				<section class="row" aria-label={langCode === 'ga' ? 'Méid téacs' : 'Text size'}>
@@ -138,12 +147,20 @@
 	.close {
 		min-width: 44px;
 		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
 		border: 0;
 		background: transparent;
 		color: var(--color-text-primary);
 		font-size: var(--text-base);
 		cursor: pointer;
 		border-radius: var(--radius-md);
+	}
+	.btn-icon {
+		width: 1.1em;
+		height: 1.1em;
+		flex-shrink: 0;
 	}
 	.rows {
 		display: flex;
@@ -207,7 +224,7 @@
 			display: block;
 			width: 40px;
 			height: 4px;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background: var(--color-border-strong);
 			margin: 0 auto var(--space-2);
 		}
