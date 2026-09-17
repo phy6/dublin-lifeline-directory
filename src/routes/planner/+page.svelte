@@ -12,7 +12,7 @@
 		isToday,
 		countsForDate
 	} from '$lib/utils/week';
-	import { loadPlan, savePlan } from '$lib/utils/planner-store';
+	import { loadPlan, savePlan } from '$lib/utils/planner-io';
 	import {
 		parseBackup,
 		serializeBackup,

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { loadPlan, savePlan, STORAGE_KEY } from '$lib/utils/planner-store';
+import { loadPlan, savePlan, STORAGE_KEY } from '$lib/utils/planner-io';
 
 // src/test/setup.ts stubs localStorage with no-op vi.fn()s; replace with a
 // minimal in-memory implementation so round-trip behaviour is testable.
@@ -43,6 +43,14 @@ describe('planner store', () => {
 	it('returns [] on corrupt data instead of throwing', () => {
 		localStorage.setItem(STORAGE_KEY, '{broken');
 		expect(loadPlan()).toEqual([]);
+	});
+
+	it('loads legacy entries leniently instead of dropping them', () => {
+		localStorage.setItem(
+			STORAGE_KEY,
+			JSON.stringify([{ id: 'legacy', title: 'T', day: 'mon', start: '09:00' }])
+		);
+		expect(loadPlan()).toHaveLength(1);
 	});
 
 	it('backup payload restores exactly', () => {

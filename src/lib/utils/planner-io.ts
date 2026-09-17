@@ -48,10 +48,39 @@ export function parseBackup(text: string): PlannerAppointment[] | null {
 export function serializeBackup(plan: PlannerAppointment[]): string {
 	return JSON.stringify(plan);
 }
-
 export function backupFilename(now: Date = new Date()): string {
 	const stamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 	return `lifeline-planner-backup-${stamp}.json`;
+}
+
+export const STORAGE_KEY = 'lifeline.planner.v1';
+
+/**
+ * Lenient by design: localStorage may hold entries saved before the strict
+ * gate existed. Never destroy user data on read — the form rewrites entries
+ * cleanly on next save, so old data heals itself. Strictness lives on the
+ * restore/import path (parseBackup), not here.
+ */
+export function loadPlan(): PlannerAppointment[] {
+	if (typeof localStorage === 'undefined') return [];
+	try {
+		const raw = localStorage.getItem(STORAGE_KEY);
+		if (!raw) return [];
+		const parsed: unknown = JSON.parse(raw);
+		if (!Array.isArray(parsed)) return [];
+		return parsed as PlannerAppointment[];
+	} catch {
+		return [];
+	}
+}
+
+export function savePlan(appts: PlannerAppointment[]): void {
+	if (typeof localStorage === 'undefined') return;
+	try {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify(appts));
+	} catch {
+		// Storage full or unavailable — planner state stays in memory.
+	}
 }
 
 export function downloadFile(filename: string, text: string, mime: string): void {
