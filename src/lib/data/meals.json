@@ -1,0 +1,24 @@
+[
+	{
+		"id": "capuchin-breakfast",
+		"orgId": "capuchin-day-centre",
+		"mealType": "breakfast",
+		"days": ["mon", "tue", "wed", "thu", "fri", "sat"],
+		"start": "07:30",
+		"end": "11:30",
+		"address": "29 Bow St, Dublin 7",
+		"notes": "Morning serving window from scraper hours 07:30-11:30 Mon–Sat",
+		"verifiedDate": "2026-09-17"
+	},
+	{
+		"id": "capuchin-lunch",
+		"orgId": "capuchin-day-centre",
+		"mealType": "lunch",
+		"days": ["mon", "tue", "wed", "thu", "fri", "sat"],
+		"start": "12:30",
+		"end": "15:00",
+		"address": "29 Bow St, Dublin 7",
+		"notes": "Midday serving window from scraper hours 12:30-15:00 Mon–Sat",
+		"verifiedDate": "2026-09-17"
+	}
+]
