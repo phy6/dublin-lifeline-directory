@@ -1,11 +1,16 @@
 node_modules
-# Python
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
+# Generated artifacts
+playwright-report/
+test-results/
+.superpowers/
 scraped_output.json
 scraper/scraper/
+scraper/output/
+*.pyc
+*.pyo
+__pycache__/
+.pytest_cache/
+
 # Output
 .output
 .vercel
