@@ -1,6 +1,6 @@
 {
-  "version": "3.2.0",
-  "lastUpdated": "2026-09-17T00:34:46.687328+00:00",
+  "version": "3.3.0",
+  "lastUpdated": "2026-09-17T01:08:56.642170+00:00",
   "generatedBy": "Dublin Lifeline Pipeline",
   "services": [
     {
@@ -21,19 +21,35 @@
       },
       "website": "HOME",
       "description": null,
-      "latitude": 53.3493,
-      "longitude": -6.2759,
       "services": [
         "connectivity",
         "food",
         "hygiene",
         "medical"
       ],
+      "latitude": 53.3493,
+      "longitude": -6.2759,
       "category": "Food",
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.686762+00:00",
-      "tags": [],
+      "lastScraped": "2026-09-17T01:08:56.641771+00:00",
+      "tags": [
+        "chiropodist",
+        "connectivity",
+        "dentist",
+        "doctor",
+        "food",
+        "healthcare",
+        "hygiene",
+        "nurse",
+        "optician"
+      ],
+      "dynamicActivities": [
+        "family",
+        "food",
+        "medical"
+      ],
+      "activityMatchCount": 3,
       "lastVerified": "2026-09-17"
     },
     {
@@ -54,18 +70,28 @@
       },
       "email": "fundraising@mqi.ie",
       "description": null,
-      "latitude": 53.343,
-      "longitude": -6.269,
       "services": [
         "doctor-nurse-dentist",
         "food  phone charging",
         "shower"
       ],
+      "latitude": 53.343,
+      "longitude": -6.269,
       "category": "Food",
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.686895+00:00",
-      "tags": [],
+      "lastScraped": "2026-09-17T01:08:56.641863+00:00",
+      "tags": [
+        "connectivity",
+        "dentist",
+        "doctor",
+        "food",
+        "healthcare",
+        "hygiene",
+        "nurse"
+      ],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -78,12 +104,15 @@
       "email": "help@focusireland.ie",
       "website": "Campaigns",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.686927+00:00",
+      "lastScraped": "2026-09-17T01:08:56.641907+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -95,12 +124,15 @@
       "address": null,
       "email": "fundraising@dubsimon.ie",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.686955+00:00",
+      "lastScraped": "2026-09-17T01:08:56.641928+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -112,12 +144,15 @@
       "address": null,
       "website": "Donate now",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687060+00:00",
+      "lastScraped": "2026-09-17T01:08:56.641946+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -128,12 +163,15 @@
       "address": null,
       "email": "info@crosscare.ie",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687091+00:00",
+      "lastScraped": "2026-09-17T01:08:56.641964+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -146,12 +184,15 @@
       "email": "info@mendicity.org",
       "website": "Services",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687115+00:00",
+      "lastScraped": "2026-09-17T01:08:56.641982+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -165,12 +206,15 @@
       "email": "info@petermcverrytrust.org",
       "website": "https://www.petermcverrytrust.org/",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "local-archive",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687141+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642023+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -184,12 +228,15 @@
       "email": "info@copeireland.ie",
       "website": "https://www.copeireland.ie/",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "local-archive",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687165+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642059+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -203,12 +250,15 @@
       "email": "info@simoncommunity.ie",
       "website": "https://www.simoncommunity.ie/employment/",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "local-archive",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687190+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642080+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -219,12 +269,15 @@
       "phone": "0818 222 024",
       "address": null,
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687215+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642098+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -266,8 +319,10 @@
       "longitude": -6.2758,
       "dataSource": "fallback",
       "scrapeSuccess": false,
-      "lastScraped": "2026-09-17T00:34:46.687241+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642115+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "description": "Inner City Helping Homeless service location",
       "lastVerified": "2026-09-17"
     },
@@ -281,12 +336,15 @@
       "email": "info@primarycaresafetynet.ie",
       "website": "View Report >",
       "description": null,
+      "services": [],
       "latitude": 0,
       "longitude": 0,
       "dataSource": "live",
       "scrapeSuccess": true,
-      "lastScraped": "2026-09-17T00:34:46.687266+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642133+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "lastVerified": "2026-09-17"
     },
     {
@@ -328,8 +386,10 @@
       "longitude": -6.2602,
       "dataSource": "fallback",
       "scrapeSuccess": false,
-      "lastScraped": "2026-09-17T00:34:46.687306+00:00",
+      "lastScraped": "2026-09-17T01:08:56.642150+00:00",
       "tags": [],
+      "dynamicActivities": [],
+      "activityMatchCount": 0,
       "description": "Ana Liffey Drug Project service location",
       "lastVerified": "2026-09-17"
     }
@@ -341,8 +401,8 @@
       "Food"
     ],
     "coverage": "Dublin City Centre",
-    "nextSync": "2026-09-17T00:34:46.687363Z",
-    "pipelineRun": "2026-09-17T00:34:46.687377+00:00",
+    "nextSync": "2026-09-17T01:08:56.642183Z",
+    "pipelineRun": "2026-09-17T01:08:56.642192+00:00",
     "differencesDetected": 14,
     "additions": 0,
     "updates": 14,
