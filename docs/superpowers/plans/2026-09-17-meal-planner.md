@@ -25,28 +25,31 @@
 ### Task 1: Meal data + types
 
 **Files:**
+
 - Create: `src/lib/data/meals.json`
 - Modify: `src/lib/types.ts` (append `MealEntry` interface)
 - Test: `src/test/unit/meals.test.ts`
 
 **Interfaces:**
+
 - Consumes: `DayKey` from `$lib/utils/hours` (reuse `DAY_KEYS`, do not redefine day keys).
 - Produces: `MealEntry` type (`id: string`, `orgId: string`, `mealType: 'breakfast' | 'lunch' | 'dinner'`, `days: DayKey[]`, `start: string`, `end: string`, `address: string`, `notes: string`, `verifiedDate: string`); `MEALS_VERSION = 1` export from types or data module for later migration use.
 
 - [ ] **Step 1: Curate `meals.json` (data commit)**
 
   Research each org's site (Capuchin Day Centre, Merchants Quay Ireland, Mendicity Institution, Crosscare, Dublin Simon Community) and record real serving windows. Seed from scraper `hours` in `src/lib/data/services.json` where they visibly match (e.g. Capuchin's `07:30-11:30, 12:30-15:00` Mon–Sat). Only include meals you can verify; orgs without verifiable meal times get no records. Every record carries what/when/where + `verifiedDate: "2026-09-17"`. Example record shape:
+
   ```json
   {
-    "id": "capuchin-breakfast",
-    "orgId": "capuchin-day-centre",
-    "mealType": "breakfast",
-    "days": ["mon", "tue", "wed", "thu", "fri", "sat"],
-    "start": "07:30",
-    "end": "11:30",
-    "address": "29 Bow St, Dublin 7",
-    "notes": "",
-    "verifiedDate": "2026-09-17"
+  	"id": "capuchin-breakfast",
+  	"orgId": "capuchin-day-centre",
+  	"mealType": "breakfast",
+  	"days": ["mon", "tue", "wed", "thu", "fri", "sat"],
+  	"start": "07:30",
+  	"end": "11:30",
+  	"address": "29 Bow St, Dublin 7",
+  	"notes": "",
+  	"verifiedDate": "2026-09-17"
   }
   ```
 
@@ -58,25 +61,25 @@
   import { DAY_KEYS } from '$lib/utils/hours';
 
   describe('meals data', () => {
-    it('every meal has what/when/where and a verification date', () => {
-      expect(meals.length).toBeGreaterThan(0);
-      for (const m of meals) {
-        expect(['breakfast', 'lunch', 'dinner']).toContain(m.mealType);
-        expect(m.days.length).toBeGreaterThan(0);
-        for (const d of m.days) expect((DAY_KEYS as readonly string[])).toContain(d);
-        expect(/^([01]\d|2[0-3]):[0-5]\d$/.test(m.start)).toBe(true);
-        expect(/^([01]\d|2[0-3]):[0-5]\d$/.test(m.end)).toBe(true);
-        expect(m.orgId.length).toBeGreaterThan(0);
-        expect(m.address.length).toBeGreaterThan(0);
-        expect(m.verifiedDate.length).toBeGreaterThan(0);
-      }
-    });
+  	it('every meal has what/when/where and a verification date', () => {
+  		expect(meals.length).toBeGreaterThan(0);
+  		for (const m of meals) {
+  			expect(['breakfast', 'lunch', 'dinner']).toContain(m.mealType);
+  			expect(m.days.length).toBeGreaterThan(0);
+  			for (const d of m.days) expect(DAY_KEYS as readonly string[]).toContain(d);
+  			expect(/^([01]\d|2[0-3]):[0-5]\d$/.test(m.start)).toBe(true);
+  			expect(/^([01]\d|2[0-3]):[0-5]\d$/.test(m.end)).toBe(true);
+  			expect(m.orgId.length).toBeGreaterThan(0);
+  			expect(m.address.length).toBeGreaterThan(0);
+  			expect(m.verifiedDate.length).toBeGreaterThan(0);
+  		}
+  	});
 
-    it('every meal orgId exists in services.json', async () => {
-      const services = (await import('$lib/data/services.json')).default;
-      const ids = new Set(services.services.map((s: { id: string }) => s.id));
-      for (const m of meals) expect(ids.has(m.orgId)).toBe(true);
-    });
+  	it('every meal orgId exists in services.json', async () => {
+  		const services = (await import('$lib/data/services.json')).default;
+  		const ids = new Set(services.services.map((s: { id: string }) => s.id));
+  		for (const m of meals) expect(ids.has(m.orgId)).toBe(true);
+  	});
   });
   ```
 
@@ -93,15 +96,15 @@
   export type MealType = 'breakfast' | 'lunch' | 'dinner';
 
   export interface MealEntry {
-    id: string;
-    orgId: string;
-    mealType: MealType;
-    days: DayKey[];
-    start: string;
-    end: string;
-    address: string;
-    notes: string;
-    verifiedDate: string;
+  	id: string;
+  	orgId: string;
+  	mealType: MealType;
+  	days: DayKey[];
+  	start: string;
+  	end: string;
+  	address: string;
+  	notes: string;
+  	verifiedDate: string;
   }
   ```
 
@@ -120,12 +123,14 @@
 ### Task 2: Planner domain utils (recurrence, .ics, storage)
 
 **Files:**
+
 - Create: `src/lib/utils/planner.ts`
 - Create: `src/lib/utils/ics.ts`
 - Create: `src/lib/utils/planner-store.ts`
 - Test: `src/test/unit/planner.test.ts`, `src/test/unit/ics.test.ts`, `src/test/unit/planner-store.test.ts`
 
 **Interfaces:**
+
 - Consumes: `MealEntry`, `DayKey`/`DAY_KEYS` from `$lib/utils/hours`.
 - Produces:
   - `PlannerAppointment { id: string; title: string; day: DayKey; start: string; end: string; location: string; notes: string; orgId: string | null; recurrence: 'once' | 'weekly'; source: 'meal' | 'personal' }`
@@ -143,25 +148,49 @@
   const monday = new Date(2026, 8, 14); // a Monday
 
   describe('weekDates', () => {
-    it('returns 7 dates starting Monday without mutating input', () => {
-      const before = monday.getTime();
-      const days = weekDates(monday);
-      expect(days).toHaveLength(7);
-      expect(days[0].getDay()).toBe(1);
-      expect(days[6].getDay()).toBe(0);
-      expect(monday.getTime()).toBe(before);
-    });
+  	it('returns 7 dates starting Monday without mutating input', () => {
+  		const before = monday.getTime();
+  		const days = weekDates(monday);
+  		expect(days).toHaveLength(7);
+  		expect(days[0].getDay()).toBe(1);
+  		expect(days[6].getDay()).toBe(0);
+  		expect(monday.getTime()).toBe(before);
+  	});
   });
 
   describe('expandWeek', () => {
-    it('shows weekly entries every week and once entries only their week', () => {
-      const weekly: PlannerAppointment = { id: 'a', title: 'Breakfast', day: 'tue', start: '07:30', end: '11:30', location: 'Capuchin', notes: '', orgId: 'capuchin-day-centre', recurrence: 'weekly', source: 'meal', weekOf: '2026-09-14' };
-      const once: PlannerAppointment = { id: 'b', title: 'GP', day: 'wed', start: '10:00', end: '10:30', location: '', notes: '', orgId: null, recurrence: 'once', source: 'personal', weekOf: '2026-09-16' };
-      const thisWeek = expandWeek([weekly, once], new Date(2026, 8, 14));
-      expect(thisWeek.map((i) => i.appt.id).sort()).toEqual(['a', 'b']);
-      const nextWeek = expandWeek([weekly, once], new Date(2026, 8, 21));
-      expect(nextWeek.map((i) => i.appt.id)).toEqual(['a']);
-    });
+  	it('shows weekly entries every week and once entries only their week', () => {
+  		const weekly: PlannerAppointment = {
+  			id: 'a',
+  			title: 'Breakfast',
+  			day: 'tue',
+  			start: '07:30',
+  			end: '11:30',
+  			location: 'Capuchin',
+  			notes: '',
+  			orgId: 'capuchin-day-centre',
+  			recurrence: 'weekly',
+  			source: 'meal',
+  			weekOf: '2026-09-14'
+  		};
+  		const once: PlannerAppointment = {
+  			id: 'b',
+  			title: 'GP',
+  			day: 'wed',
+  			start: '10:00',
+  			end: '10:30',
+  			location: '',
+  			notes: '',
+  			orgId: null,
+  			recurrence: 'once',
+  			source: 'personal',
+  			weekOf: '2026-09-16'
+  		};
+  		const thisWeek = expandWeek([weekly, once], new Date(2026, 8, 14));
+  		expect(thisWeek.map((i) => i.appt.id).sort()).toEqual(['a', 'b']);
+  		const nextWeek = expandWeek([weekly, once], new Date(2026, 8, 21));
+  		expect(nextWeek.map((i) => i.appt.id)).toEqual(['a']);
+  	});
   });
   ```
 
@@ -181,21 +210,51 @@
   import { appointmentToICS } from '$lib/utils/ics';
 
   describe('appointmentToICS', () => {
-    it('emits VEVENT with RRULE for weekly entries', () => {
-      const ics = appointmentToICS({ id: 'a', title: 'Breakfast @ Capuchin', day: 'tue', start: '07:30', end: '11:30', location: '29 Bow St, Dublin 7', notes: '', orgId: 'capuchin-day-centre', recurrence: 'weekly', source: 'meal', weekOf: '2026-09-15' }, new Date(2026, 8, 15));
-      expect(ics).toContain('BEGIN:VEVENT');
-      expect(ics).toContain('SUMMARY:Breakfast @ Capuchin');
-      expect(ics).toContain('DTSTART:20260915T073000');
-      expect(ics).toContain('DTEND:20260915T113000');
-      expect(ics).toContain('RRULE:FREQ=WEEKLY');
-      expect(ics).toContain('LOCATION:29 Bow St\\, Dublin 7');
-    });
+  	it('emits VEVENT with RRULE for weekly entries', () => {
+  		const ics = appointmentToICS(
+  			{
+  				id: 'a',
+  				title: 'Breakfast @ Capuchin',
+  				day: 'tue',
+  				start: '07:30',
+  				end: '11:30',
+  				location: '29 Bow St, Dublin 7',
+  				notes: '',
+  				orgId: 'capuchin-day-centre',
+  				recurrence: 'weekly',
+  				source: 'meal',
+  				weekOf: '2026-09-15'
+  			},
+  			new Date(2026, 8, 15)
+  		);
+  		expect(ics).toContain('BEGIN:VEVENT');
+  		expect(ics).toContain('SUMMARY:Breakfast @ Capuchin');
+  		expect(ics).toContain('DTSTART:20260915T073000');
+  		expect(ics).toContain('DTEND:20260915T113000');
+  		expect(ics).toContain('RRULE:FREQ=WEEKLY');
+  		expect(ics).toContain('LOCATION:29 Bow St\\, Dublin 7');
+  	});
 
-    it('omits RRULE for once entries and escapes commas/semicolons', () => {
-      const ics = appointmentToICS({ id: 'b', title: 'GP; follow-up, urgent', day: 'wed', start: '10:00', end: '10:30', location: '', notes: 'Bring; papers', orgId: null, recurrence: 'once', source: 'personal', weekOf: '2026-09-16' }, new Date(2026, 8, 16));
-      expect(ics).not.toContain('RRULE');
-      expect(ics).toContain('SUMMARY:GP\\; follow-up\\, urgent');
-    });
+  	it('omits RRULE for once entries and escapes commas/semicolons', () => {
+  		const ics = appointmentToICS(
+  			{
+  				id: 'b',
+  				title: 'GP; follow-up, urgent',
+  				day: 'wed',
+  				start: '10:00',
+  				end: '10:30',
+  				location: '',
+  				notes: 'Bring; papers',
+  				orgId: null,
+  				recurrence: 'once',
+  				source: 'personal',
+  				weekOf: '2026-09-16'
+  			},
+  			new Date(2026, 8, 16)
+  		);
+  		expect(ics).not.toContain('RRULE');
+  		expect(ics).toContain('SUMMARY:GP\\; follow-up\\, urgent');
+  	});
   });
   ```
 
@@ -212,24 +271,40 @@
   beforeEach(() => localStorage.clear());
 
   describe('planner store', () => {
-    it('round-trips appointments', () => {
-      savePlan([{ id: 'a', title: 'T', day: 'mon', start: '09:00', end: '10:00', location: '', notes: '', orgId: null, recurrence: 'once', source: 'personal', weekOf: '2026-09-14' }]);
-      expect(loadPlan()).toHaveLength(1);
-      expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toHaveLength(1);
-    });
+  	it('round-trips appointments', () => {
+  		savePlan([
+  			{
+  				id: 'a',
+  				title: 'T',
+  				day: 'mon',
+  				start: '09:00',
+  				end: '10:00',
+  				location: '',
+  				notes: '',
+  				orgId: null,
+  				recurrence: 'once',
+  				source: 'personal',
+  				weekOf: '2026-09-14'
+  			}
+  		]);
+  		expect(loadPlan()).toHaveLength(1);
+  		expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toHaveLength(1);
+  	});
 
-    it('returns [] on corrupt data instead of throwing', () => {
-      localStorage.setItem(STORAGE_KEY, '{broken');
-      expect(loadPlan()).toEqual([]);
-    });
+  	it('returns [] on corrupt data instead of throwing', () => {
+  		localStorage.setItem(STORAGE_KEY, '{broken');
+  		expect(loadPlan()).toEqual([]);
+  	});
   });
   ```
+
   (vitest environment: repo uses happy-dom/jsdom per devDependencies; if `localStorage` is unavailable in the configured environment, add a minimal in-memory stub at the top of the test file — do not add new devDependencies.)
 
 - [ ] **Step 7: Run all three suites, then commit**
 
   Run: `npm run test:unit`
   Expected: PASS (all suites, no regressions).
+
   ```bash
   git add src/lib/utils/planner.ts src/lib/utils/ics.ts src/lib/utils/planner-store.ts src/test/unit/planner.test.ts src/test/unit/ics.test.ts src/test/unit/planner-store.test.ts && git commit -m "feat(planner): week math, recurrence, ics export and localStorage store"
   ```
@@ -237,12 +312,14 @@
 ### Task 3: `/planner` route + tab-bar entry
 
 **Files:**
+
 - Create: `src/routes/planner/+page.server.ts`
 - Create: `src/routes/planner/+page.svelte`
 - Modify: `src/routes/+layout.svelte` (add Planner tab with inline SVG icon, same pattern as existing three tabs)
 - Modify: `src/lib/stores/lang.svelte.ts` (add `planner` label key + any new UI strings, following existing key style)
 
 **Interfaces:**
+
 - Consumes: `normalizeServices` + `services.json` (server load, same as `src/routes/+page.server.ts`), `meals.json`, `MealEntry`, `PlannerAppointment`, `weekDates`/`expandWeek`, `loadPlan`/`savePlan`, `appointmentToICS`/`weekToICS`, `DAY_KEYS`/`DAY_LABELS`, `t()` store.
 - Produces: `/planner` page rendering week-grid (Mon–Sun columns on desktop, stacked day sections on mobile), `data` prop `{ services, meals }`.
 
@@ -256,8 +333,10 @@
   import type { MealEntry } from '$lib/types';
 
   export const load: PageServerLoad = async () => {
-    const services = normalizeServices(servicesData.services as unknown as Record<string, unknown>[]);
-    return { services, meals: mealsData as MealEntry[] };
+  	const services = normalizeServices(
+  		servicesData.services as unknown as Record<string, unknown>[]
+  	);
+  	return { services, meals: mealsData as MealEntry[] };
   };
   ```
 
@@ -283,10 +362,12 @@
 ### Task 4: JSON backup/restore + device-only warning copy
 
 **Files:**
+
 - Modify: `src/routes/planner/+page.svelte` (backup/restore controls + warning banner)
 - Test: extend `src/test/unit/planner-store.test.ts` (export/import round-trip through `JSON.stringify(loadPlan())`)
 
 **Interfaces:**
+
 - Consumes: `loadPlan`/`savePlan` from Task 2.
 - Produces: "Download backup" (serializes `loadPlan()` to `lifeline-planner-backup-YYYY-MM-DD.json`), "Restore" (`<input type="file" accept="application/json">`, validates each entry has `id/title/day/start` before `savePlan`, shows count or error string — no silent partial imports).
 
@@ -294,12 +375,26 @@
 
   ```ts
   it('backup payload restores exactly', () => {
-    const appts = [{ id: 'a', title: 'T', day: 'mon', start: '09:00', end: '10:00', location: 'L', notes: 'N', orgId: null, recurrence: 'weekly', source: 'personal', weekOf: '2026-09-14' }];
-    savePlan(appts as never);
-    const payload = JSON.stringify(loadPlan());
-    localStorage.clear();
-    savePlan(JSON.parse(payload));
-    expect(loadPlan()).toEqual(appts);
+  	const appts = [
+  		{
+  			id: 'a',
+  			title: 'T',
+  			day: 'mon',
+  			start: '09:00',
+  			end: '10:00',
+  			location: 'L',
+  			notes: 'N',
+  			orgId: null,
+  			recurrence: 'weekly',
+  			source: 'personal',
+  			weekOf: '2026-09-14'
+  		}
+  	];
+  	savePlan(appts as never);
+  	const payload = JSON.stringify(loadPlan());
+  	localStorage.clear();
+  	savePlan(JSON.parse(payload));
+  	expect(loadPlan()).toEqual(appts);
   });
   ```
 
@@ -310,6 +405,7 @@
 - [ ] **Step 3: Manual verify + full gate, then commit**
 
   Run: backup → delete all → restore → entries return; invalid file → error, data untouched. Then `npm run test:unit`, `npm run check`, `npm run lint`.
+
   ```bash
   git add src/routes/planner src/test/unit/planner-store.test.ts src/lib/stores/lang.svelte.ts && git commit -m "feat(planner): json backup restore and device-only warning"
   ```
@@ -325,6 +421,7 @@
   npm run lint
   npm run build
   ```
+
   Expected: clean tree except intended files, all suites pass, `svelte-check` 0 errors, prettier/eslint clean, static build succeeds (adapter-static must emit `/planner`).
 
 - [ ] **Step 2: Manual acceptance (dev or preview)**

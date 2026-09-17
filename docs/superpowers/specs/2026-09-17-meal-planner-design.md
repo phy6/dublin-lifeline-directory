@@ -17,15 +17,15 @@ Shipped with the bundle alongside `services.json`. Each record:
 
 ```json
 {
-  "id": "capuchin-breakfast",
-  "orgId": "capuchin-day-centre",
-  "mealType": "breakfast",
-  "days": ["mon", "tue", "wed", "thu", "fri", "sat"],
-  "start": "07:30",
-  "end": "11:30",
-  "address": "29 Bow St, Dublin 7",
-  "notes": "",
-  "verifiedDate": "2026-09-17"
+	"id": "capuchin-breakfast",
+	"orgId": "capuchin-day-centre",
+	"mealType": "breakfast",
+	"days": ["mon", "tue", "wed", "thu", "fri", "sat"],
+	"start": "07:30",
+	"end": "11:30",
+	"address": "29 Bow St, Dublin 7",
+	"notes": "",
+	"verifiedDate": "2026-09-17"
 }
 ```
 

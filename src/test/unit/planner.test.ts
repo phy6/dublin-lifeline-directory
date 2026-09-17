@@ -16,8 +16,32 @@ describe('weekDates', () => {
 
 describe('expandWeek', () => {
 	it('shows weekly entries every week and once entries only their week', () => {
-		const weekly: PlannerAppointment = { id: 'a', title: 'Breakfast', day: 'tue', start: '07:30', end: '11:30', location: 'Capuchin', notes: '', orgId: 'capuchin-day-centre', recurrence: 'weekly', source: 'meal', weekOf: '2026-09-14' };
-		const once: PlannerAppointment = { id: 'b', title: 'GP', day: 'wed', start: '10:00', end: '10:30', location: '', notes: '', orgId: null, recurrence: 'once', source: 'personal', weekOf: '2026-09-16' };
+		const weekly: PlannerAppointment = {
+			id: 'a',
+			title: 'Breakfast',
+			day: 'tue',
+			start: '07:30',
+			end: '11:30',
+			location: 'Capuchin',
+			notes: '',
+			orgId: 'capuchin-day-centre',
+			recurrence: 'weekly',
+			source: 'meal',
+			weekOf: '2026-09-14'
+		};
+		const once: PlannerAppointment = {
+			id: 'b',
+			title: 'GP',
+			day: 'wed',
+			start: '10:00',
+			end: '10:30',
+			location: '',
+			notes: '',
+			orgId: null,
+			recurrence: 'once',
+			source: 'personal',
+			weekOf: '2026-09-16'
+		};
 		const thisWeek = expandWeek([weekly, once], new Date(2026, 8, 14));
 		expect(thisWeek.map((i) => i.appt.id).sort()).toEqual(['a', 'b']);
 		const nextWeek = expandWeek([weekly, once], new Date(2026, 8, 21));
