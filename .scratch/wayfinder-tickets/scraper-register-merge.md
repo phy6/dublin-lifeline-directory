@@ -34,3 +34,9 @@ Also consider: 998 candidates is a review pool, not pipeline input — blindly s
 Live run on the 998 candidates: **9 matched, 4 to confirm, 985 new, 3 targets missing**. Notably it surfaced Crosscare's real registered name — 'St. Laurence O'Toole Catholic Social Care CLG' — as a confirm item, resolving that open question pending a yes. Samaritans is confirmed out of the cut (non-Dublin registered address); `simon-community-employment` and `inner-city-helping-homeless` are also missing from the cut (likely trade names without separate registration). Near-matches deliberately over-trigger ('Cps Trust Ireland' vs COPE, 'Doras Buí...' vs ALONE) — they're questions, not merges.
 
 Promotion stays manual per the plan: `summarize()` prints a sub-1000-char chat-ready summary (counts + numbered yes/no questions) for confirmation via the separate bot-comms project. Nothing in the pipeline changes until a human adds a target to `sources.json`. 5 tests in `test_proposals.py`; 95 passing overall.
+
+## Confirmation round (2026-09-17, in-chat)
+
+First 4 confirm questions answered: **yes** to Capuchin (RCN 20166120) and Crosscare (RCN 20169084, trading name of St. Laurence O'Toole Catholic Social Care CLG); **no** to Cps Trust vs COPE (distinct Sandycove charity) and Doras Buí vs ALONE (distinct Coolock lone-parents centre) — both correctly rejected stretches, as designed. ALONE's real RCN (20020057) verified directly against the register XLSX (Registered, Dublin 8).
+
+Promoted: `rcn` + `registered_name` recorded on `capuchin-day-centre`, `crosscare`, and `alone` targets in `sources.json` (additive fields, no pipeline behavior change). Locked by `test_confirmed_targets_carry_registered_rcn`. 96 tests passing. Remaining: 985 `new_orgs` unreviewed; next register refresh can diff RCNs for drift detection.

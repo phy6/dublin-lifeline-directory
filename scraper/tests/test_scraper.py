@@ -39,6 +39,19 @@ def test_load_config_returns_dict_with_14_targets():
     assert len(config["targets"]) == 14
 
 
+def test_confirmed_targets_carry_registered_rcn():
+    import re
+    config = load_config(CONFIG_PATH)
+    by_id = {t["id"]: t for t in config["targets"]}
+    assert by_id["capuchin-day-centre"]["rcn"] == "20166120"
+    assert by_id["crosscare"]["rcn"] == "20169084"
+    assert by_id["alone"]["rcn"] == "20020057"
+    for tid, target in by_id.items():
+        if "rcn" in target:
+            assert re.match(r"^\d{8}$", target["rcn"]), f"{tid}: malformed RCN"
+            assert target.get("registered_name"), f"{tid}: rcn without registered_name"
+
+
 def test_extract_field_returns_first_non_empty_match():
     html = '<div class="phone"></div><p class="contact-number">555-9999</p>'
     soup = BeautifulSoup(html, "lxml")

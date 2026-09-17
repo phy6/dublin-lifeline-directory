@@ -5,6 +5,8 @@
     {
       "id": "capuchin-day-centre",
       "name": "Capuchin Day Centre",
+      "rcn": "20166120",
+      "registered_name": "Capuchin Day Centre For Homeless People",
       "url": "https://capuchindaycentre.ie/",
       "selectors": {
         "phone": [
@@ -379,6 +381,8 @@
     {
       "id": "crosscare",
       "name": "Crosscare",
+      "rcn": "20169084",
+      "registered_name": "St. Laurence O'Toole Catholic Social Care CLG",
       "url": "https://crosscare.ie/",
       "selectors": {
         "phone": [
@@ -738,6 +742,8 @@
     {
       "id": "alone",
       "name": "ALONE",
+      "rcn": "20020057",
+      "registered_name": "Alone",
       "url": "https://alone.ie/",
       "selectors": {
         "phone": [
