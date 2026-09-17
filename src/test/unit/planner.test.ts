@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { weekDates, expandWeek, type PlannerAppointment } from '$lib/utils/planner';
+import { weekDates, expandWeek, monthGrid, type PlannerAppointment } from '$lib/utils/planner';
 
 const monday = new Date(2026, 8, 14); // a Monday
 
@@ -46,5 +46,19 @@ describe('expandWeek', () => {
 		expect(thisWeek.map((i) => i.appt.id).sort()).toEqual(['a', 'b']);
 		const nextWeek = expandWeek([weekly, once], new Date(2026, 8, 21));
 		expect(nextWeek.map((i) => i.appt.id)).toEqual(['a']);
+	});
+});
+
+describe('monthGrid', () => {
+	it('returns Monday-first rows covering September 2026', () => {
+		const rows = monthGrid(2026, 8);
+		expect(rows.length).toBeGreaterThanOrEqual(4);
+		for (const row of rows) expect(row).toHaveLength(7);
+		const days = rows.flat().filter((d): d is Date => d !== null);
+		expect(days.map((d) => d.getDate()).sort((a, b) => a - b)[0]).toBe(1);
+		expect(days).toHaveLength(30);
+		// 2026-09-01 is a Tuesday → first row starts with a null Monday cell
+		expect(rows[0][0]).toBeNull();
+		expect(rows[0][1]?.getDate()).toBe(1);
 	});
 });

@@ -42,6 +42,20 @@ export interface ExpandedAppointment {
 	date: Date;
 }
 
+/** Monday-first month grid: rows of 7 cells, null for padding days outside the month. */
+export function monthGrid(year: number, monthIndex: number): (Date | null)[][] {
+	const first = new Date(year, monthIndex, 1);
+	const lead = (first.getDay() + 6) % 7;
+	const total = new Date(year, monthIndex + 1, 0).getDate();
+	const cells: (Date | null)[] = [];
+	for (let i = 0; i < lead; i++) cells.push(null);
+	for (let d = 1; d <= total; d++) cells.push(new Date(year, monthIndex, d));
+	while (cells.length % 7 !== 0) cells.push(null);
+	const rows: (Date | null)[][] = [];
+	for (let i = 0; i < cells.length; i += 7) rows.push(cells.slice(i, i + 7));
+	return rows;
+}
+
 export function expandWeek(appts: PlannerAppointment[], weekMonday: Date): ExpandedAppointment[] {
 	const dates = weekDates(weekMonday);
 	const out: ExpandedAppointment[] = [];
