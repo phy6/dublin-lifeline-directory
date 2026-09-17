@@ -91,6 +91,10 @@
 		fabRef?.focus();
 	}
 
+	function onOverlayClick(e: MouseEvent) {
+		if (e.target === e.currentTarget) closeModal();
+	}
+
 	function onKeyDown(e: KeyboardEvent) {
 		if (!open) return;
 		if (e.key === 'Escape') closeModal();
@@ -126,6 +130,7 @@
 		tabindex="-1"
 		bind:this={modalRef}
 		onkeydown={onKeyDown}
+		onclick={onOverlayClick}
 	>
 		<div class="modal-box">
 			<span class="grabber" aria-hidden="true"></span>
