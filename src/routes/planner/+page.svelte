@@ -189,6 +189,53 @@
 	function downloadWeek() {
 		download(`planner-week-${toISODate(dates[0])}.ics`, weekToICS(expanded));
 	}
+
+	let backupMessage = $state('');
+
+	function downloadBackup() {
+		const now = new Date();
+		const stamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+		const blob = new Blob([JSON.stringify(loadPlan())], { type: 'application/json' });
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = `lifeline-planner-backup-${stamp}.json`;
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+		URL.revokeObjectURL(url);
+	}
+
+	function isValidEntry(e: unknown): e is PlannerAppointment {
+		if (typeof e !== 'object' || e === null) return false;
+		const o = e as Record<string, unknown>;
+		return (
+			typeof o.id === 'string' &&
+			typeof o.title === 'string' &&
+			typeof o.day === 'string' &&
+			typeof o.start === 'string'
+		);
+	}
+
+	async function restoreBackup(e: Event) {
+		backupMessage = '';
+		const input = e.target as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+		try {
+			const parsed: unknown = JSON.parse(await file.text());
+			if (!Array.isArray(parsed) || !parsed.every(isValidEntry)) {
+				backupMessage = t('planner-invalid');
+				return;
+			}
+			persist(parsed);
+			backupMessage = t('planner-restored').replace('{count}', String(parsed.length));
+		} catch {
+			backupMessage = t('planner-invalid');
+		} finally {
+			input.value = '';
+		}
+	}
 </script>
 
 <h1>{t('planner-title')}</h1>
@@ -199,7 +246,16 @@
 	<button type="button" onclick={() => (weekOffset = 0)}>{t('planner-today')}</button>
 	<button type="button" onclick={() => (weekOffset += 1)}>{t('planner-next')} →</button>
 	<button type="button" onclick={downloadWeek}>{t('planner-download-week')}</button>
+	<button type="button" onclick={downloadBackup}>{t('planner-backup')}</button>
+	<label
+		>{t('planner-restore')}<input
+			type="file"
+			accept="application/json"
+			onchange={restoreBackup}
+		/></label
+	>
 </div>
+{#if backupMessage}<p role="status">{backupMessage}</p>{/if}
 
 <div class="week-grid">
 	{#each DAY_KEYS as day, i (day)}

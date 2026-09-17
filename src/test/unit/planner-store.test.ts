@@ -21,7 +21,21 @@ beforeEach(() => localStorage.clear());
 
 describe('planner store', () => {
 	it('round-trips appointments', () => {
-		savePlan([{ id: 'a', title: 'T', day: 'mon', start: '09:00', end: '10:00', location: '', notes: '', orgId: null, recurrence: 'once', source: 'personal', weekOf: '2026-09-14' }]);
+		savePlan([
+			{
+				id: 'a',
+				title: 'T',
+				day: 'mon',
+				start: '09:00',
+				end: '10:00',
+				location: '',
+				notes: '',
+				orgId: null,
+				recurrence: 'once',
+				source: 'personal',
+				weekOf: '2026-09-14'
+			}
+		]);
 		expect(loadPlan()).toHaveLength(1);
 		expect(JSON.parse(localStorage.getItem(STORAGE_KEY)!)).toHaveLength(1);
 	});
@@ -29,5 +43,28 @@ describe('planner store', () => {
 	it('returns [] on corrupt data instead of throwing', () => {
 		localStorage.setItem(STORAGE_KEY, '{broken');
 		expect(loadPlan()).toEqual([]);
+	});
+
+	it('backup payload restores exactly', () => {
+		const appts = [
+			{
+				id: 'a',
+				title: 'T',
+				day: 'mon',
+				start: '09:00',
+				end: '10:00',
+				location: 'L',
+				notes: 'N',
+				orgId: null,
+				recurrence: 'weekly',
+				source: 'personal',
+				weekOf: '2026-09-14'
+			}
+		];
+		savePlan(appts as never);
+		const payload = JSON.stringify(loadPlan());
+		localStorage.clear();
+		savePlan(JSON.parse(payload));
+		expect(loadPlan()).toEqual(appts);
 	});
 });
