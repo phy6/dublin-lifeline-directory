@@ -54,18 +54,51 @@
 
 <nav class="tab-bar" aria-label="Main navigation">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>
-		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M9 12h6M9 16h4" /></svg>
+		<svg
+			class="tab-icon"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+			><rect x="8" y="2" width="8" height="4" rx="1" /><path
+				d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"
+			/><path d="M9 12h6M9 16h4" /></svg
+		>
 		<span class="tab-label">{t('directory')}</span>
 	</a>
 	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>
-		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4.5 21 7v13l-6.5-2.5L9 20 3 17.5v-13L9 7l5.5-2.5Z" /><path d="M9 7v13M14.5 4.5v13" /></svg>
+		<svg
+			class="tab-icon"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+			><path d="M14.5 4.5 21 7v13l-6.5-2.5L9 20 3 17.5v-13L9 7l5.5-2.5Z" /><path
+				d="M9 7v13M14.5 4.5v13"
+			/></svg
+		>
 		<span class="tab-label">{t('map')}</span>
 	</a>
 	<a
 		href="{base}/search"
 		aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
 	>
-		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+		<svg
+			class="tab-icon"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg
+		>
 		<span class="tab-label">{t('search')}</span>
 	</a>
 </nav>
@@ -158,34 +191,34 @@
 			padding-bottom: env(safe-area-inset-bottom);
 			box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
 		}
-	.tab-bar a {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 2px;
-		padding: var(--space-2) var(--space-1) calc(var(--space-1) + 2px);
-		min-height: 3.5rem;
-		justify-content: center;
-		color: var(--color-text-secondary);
-		text-decoration: none;
-		font-size: var(--text-xs);
-		font-weight: 600;
-		text-align: center;
-		line-height: var(--leading-tight);
-	}
-	.tab-bar a[aria-current='page'] {
-		color: var(--color-accent);
-	}
-	.tab-bar a:focus-visible {
-		outline: 3px solid var(--color-focus-ring);
-		outline-offset: -3px;
-	}
-	.tab-icon {
-		width: 22px;
-		height: 22px;
-		flex: none;
-	}
+		.tab-bar a {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 2px;
+			padding: var(--space-2) var(--space-1) calc(var(--space-1) + 2px);
+			min-height: 3.5rem;
+			justify-content: center;
+			color: var(--color-text-secondary);
+			text-decoration: none;
+			font-size: var(--text-xs);
+			font-weight: 600;
+			text-align: center;
+			line-height: var(--leading-tight);
+		}
+		.tab-bar a[aria-current='page'] {
+			color: var(--color-accent);
+		}
+		.tab-bar a:focus-visible {
+			outline: 3px solid var(--color-focus-ring);
+			outline-offset: -3px;
+		}
+		.tab-icon {
+			width: 22px;
+			height: 22px;
+			flex: none;
+		}
 		/* FABs stack above the tab bar */
 		.lang-pill {
 			top: max(var(--space-1), env(safe-area-inset-top));
