@@ -11,6 +11,7 @@ from urllib.parse import urljoin, urlparse
 import httpx
 from bs4 import BeautifulSoup
 from scraper.pipeline import _lookup_slug
+from scraper.validate import URL_RE, EMAIL_RE
 
 logger = logging.getLogger(__name__)
 
@@ -161,6 +162,25 @@ def _section_heading(el):
     return ""
 
 
+def quarantine_junk(result: dict) -> List[str]:
+    """Strip chrome-text fields that fail validator format rules.
+
+    Uses the same URL/email patterns as scraper/validate.py, so the gate and
+    the validator share one definition of "good data". Offending fields are
+    set to None (merge_location drops them) and the reasons returned.
+    """
+    reasons = []
+    website = result.get("website")
+    if website is not None and (not isinstance(website, str) or not URL_RE.match(website)):
+        reasons.append(f"website not URL-like: {website!r}")
+        result["website"] = None
+    email = result.get("email")
+    if email is not None and (not isinstance(email, str) or not EMAIL_RE.match(email)):
+        reasons.append(f"email malformed: {email!r}")
+        result["email"] = None
+    return reasons
+
+
 class DublinLifelineScraper:
     def __init__(self, config_path: str):
         self.config = load_config(config_path)
@@ -184,6 +204,12 @@ class DublinLifelineScraper:
             for field, selectors in target["selectors"].items():
                 result[field] = extract_field(soup, selectors)
             result["services"] = extract_services(soup)
+            if source == "live":
+                reasons = quarantine_junk(result)
+                if reasons:
+                    logger.warning("Quarantining %s: %s", target["id"], "; ".join(reasons))
+                    result["source"] = "quarantined"
+                    result["quarantine_reasons"] = reasons
         else:
             result["fallback"] = target.get("fallback", {})
         return result

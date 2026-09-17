@@ -2,9 +2,9 @@
 
 **Blocked by:** scraper-scrape-failure-handling (closed), scraper-data-validation (closed)
 **Blocks:** None
-**Assigned to:** unassigned
-**Status:** Open
-**Label:** needs-triage
+**Assigned to:** agent
+**Status:** Closed — 2026-09-17 (option 1 implemented, 89 tests passing)
+**Label:** ready-for-agent
 
 ## Question
 
@@ -22,8 +22,16 @@ Also consider: option 1 changes `scrapeSuccess` semantics for currently-"live" e
 
 ## Acceptance criteria
 
-- [ ] Detection rule implemented in `scraper/` (pipeline or scraper module, not a one-off script)
-- [ ] Junk-shaped live results no longer recorded as `dataSource: "live", scrapeSuccess: true`
-- [ ] Rules consistent with `scraper/validate.py` error definitions
-- [ ] Tests covering: chrome-text website, null address with 0-coordinates, empty services
-- [ ] Full suite green (`python3 -m pytest scraper/tests/ -q`)
+- [x] Detection rule implemented in `scraper/` (pipeline or scraper module, not a one-off script)
+- [x] Junk-shaped live results no longer recorded as `dataSource: "live", scrapeSuccess: true`
+- [x] Rules consistent with `scraper/validate.py` error definitions
+- [x] Tests covering: chrome-text website, null address with 0-coordinates, empty services
+- [x] Full suite green (`python3 -m pytest scraper/tests/ -q`)
+
+## Resolution
+
+✅ Option 1 implemented. `quarantine_junk()` in `scraper/scraper.py` reuses `URL_RE`/`EMAIL_RE` from `scraper/validate.py` (one shared definition of good data). `fetch_target()` runs it on every `live` result: offending `website`/`email` fields are set to `None` (so `merge_location()` drops them) and `source` is downgraded to `"quarantined"`, which the existing merge `else`-branch maps to `dataSource: "fallback"`, `scrapeSuccess: false` — no pipeline changes needed. `--no-fallback` runs are unaffected (`"quarantined"` doesn't trigger the `("none","archive")` raise); the warning log records the reasons.
+
+Live-verified: capuchin-day-centre's real site extracts `website: "HOME"` nav chrome and is now quarantined instead of shipped as live. Null address alone does NOT trigger the gate (flyer data legitimately fills it); only format violations on present fields do.
+
+Note: `quarantine_reasons` flows through into `services.json` output (via `dict(scraped)` in merge) — transparent, flagged here in case we later want to strip it.

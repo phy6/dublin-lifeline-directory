@@ -7,7 +7,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-from scraper.scraper import load_config, extract_field, extract_services, fetch_with_fallback, DublinLifelineScraper, _RateLimiter, _retry_fetch
+from scraper.scraper import load_config, extract_field, extract_services, fetch_with_fallback, DublinLifelineScraper, _RateLimiter, _retry_fetch, quarantine_junk
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.json")
 CONFIG_PATH = os.path.abspath(CONFIG_PATH)
@@ -115,7 +115,7 @@ async def test_scraper_run_returns_results():
     assert len(results) == 2
     assert results[0]["id"] == "capuchin-day-centre"
     assert results[1]["id"] == "focus-ireland"
-    assert results[0]["source"] in ("live", "archive")
+    assert results[0]["source"] in ("live", "archive", "quarantined")
 
 
 def test_all_config_targets_have_tags_and_category():
@@ -143,6 +143,72 @@ def test_extract_services_from_fixture():
     assert "food" in services
     assert "shelter" in services
     assert len(services) > 0
+
+
+def test_quarantine_junk_strips_chrome_text_website():
+    result = {"id": "x", "website": "HOME", "address": "1 Main St"}
+    reasons = quarantine_junk(result)
+    assert len(reasons) == 1
+    assert "website" in reasons[0]
+    assert result["website"] is None
+    assert result["address"] == "1 Main St"
+
+
+def test_quarantine_junk_strips_malformed_email():
+    result = {"id": "x", "email": "Campaigns", "website": "https://example.com"}
+    reasons = quarantine_junk(result)
+    assert len(reasons) == 1
+    assert result["email"] is None
+    assert result["website"] == "https://example.com"
+
+
+def test_quarantine_junk_passes_clean_result():
+    result = {"id": "x", "website": "https://example.com", "email": "a@example.com", "address": None}
+    assert quarantine_junk(result) == []
+    assert result["website"] == "https://example.com"
+
+
+@pytest.mark.asyncio
+async def test_fetch_target_quarantines_live_junk():
+    scraper = DublinLifelineScraper(CONFIG_PATH)
+    target = {
+        "id": "junk-target",
+        "name": "Junk Target",
+        "url": "https://example.com/",
+        "selectors": {"website": [".nav-home"]},
+        "fallback": {},
+    }
+    html = '<html><body><span class="nav-home">HOME</span></body></html>'
+    with patch("scraper.scraper.fetch_with_fallback", new=AsyncMock(return_value=(html, "live"))):
+        result = await scraper.fetch_target(target)
+    assert result["source"] == "quarantined"
+    assert result["website"] is None
+    assert len(result["quarantine_reasons"]) == 1
+
+
+@pytest.mark.asyncio
+async def test_fetch_target_keeps_clean_live_result():
+    scraper = DublinLifelineScraper(CONFIG_PATH)
+    target = {
+        "id": "clean-target",
+        "name": "Clean Target",
+        "url": "https://example.com/",
+        "selectors": {"phone": [".phone"]},
+        "fallback": {},
+    }
+    html = '<html><body><span class="phone">01-2345678</span></body></html>'
+    with patch("scraper.scraper.fetch_with_fallback", new=AsyncMock(return_value=(html, "live"))):
+        result = await scraper.fetch_target(target)
+    assert result["source"] == "live"
+    assert "quarantine_reasons" not in result
+
+
+def test_quarantined_maps_to_fallback_in_merge():
+    from scraper.pipeline import merge_location
+    scraped = {"id": "x", "name": "X", "source": "quarantined", "services": [], "fallback": {}}
+    merged = merge_location(scraped, flyer=None, fallback={})
+    assert merged["dataSource"] == "fallback"
+    assert merged["scrapeSuccess"] is False
 
 
 def test_tag_patterns_are_valid_slugs():
