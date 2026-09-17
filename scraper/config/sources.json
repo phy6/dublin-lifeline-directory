@@ -8,6 +8,7 @@
 			"rcn": "20166120",
 			"registered_name": "Capuchin Day Centre For Homeless People",
 			"url": "https://capuchindaycentre.ie/",
+			"contactUrl": "https://capuchindaycentre.ie/contact/",
 			"selectors": {
 				"phone": ["a[href^=\"tel\"]", ".phone", ".contact-number", ".footer-phone", "p.phone"],
 				"address": [
@@ -26,9 +27,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -96,9 +96,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -165,9 +164,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -223,9 +221,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -280,9 +277,8 @@
 				],
 				"email": [".contact-email", "a[href^=\"mailto\"]", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".about-text",
@@ -339,9 +335,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -396,9 +391,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -453,9 +447,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -510,9 +503,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -567,9 +559,8 @@
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])",
-					".footer-link"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -614,8 +605,8 @@
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -658,8 +649,8 @@
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -702,8 +693,8 @@
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",
@@ -746,8 +737,8 @@
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
 				"website": [
-					".website-link",
-					"a[href^=\"http\"]:not([href^=\"mailto\"]):not([href^=\"tel\"])"
+					"link[rel=\"canonical\"]",
+					"meta[property=\"og:url\"]"
 				],
 				"description": [
 					".services-description",

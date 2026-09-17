@@ -49,10 +49,26 @@ def load_config(config_path: str) -> dict:
         return json.load(f)
 
 
-def extract_field(soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:
+def extract_field(soup: BeautifulSoup, selectors: List[str], field: str = "") -> Optional[str]:
     for selector in selectors:
         element = soup.select_one(selector)
         if element is not None:
+            # For link-backed fields the value lives in href, not text
+            # (e.g. <a href="/">HOME</a> must not extract as "HOME").
+            if field in ("website", "email") and element.name in ("a", "link"):
+                href = (element.get("href") or "").strip()
+                if href and href != "#":
+                    if field == "email":
+                        href = href.removeprefix("mailto:").split("?")[0]
+                    if href:
+                        return href
+                # href missing/unusable: skip to next selector, don't fall
+                # back to link text (that's nav chrome).
+                continue
+            if field == "website" and element.name == "meta":
+                content = (element.get("content") or "").strip()
+                if content:
+                    return content
             text = element.get_text(strip=True)
             if text:
                 return text
@@ -188,6 +204,13 @@ def quarantine_junk(result: dict) -> List[str]:
     if email is not None and (not isinstance(email, str) or not EMAIL_RE.match(email)):
         reasons.append(f"email malformed: {email!r}")
         result["email"] = None
+    # Empty-record gate: a live fetch that yields no address, description,
+    # phone, email, website, or services extracted nothing usable (even if
+    # nothing was technically "junk"). Quarantine so merge falls back.
+    # Empty-record gate (only if no format gate already fired — avoids
+    # double-counting a record already quarantined for junk).
+    if not reasons and not any(result.get(f) for f in ("address", "description", "phone", "email", "website")) and not result.get("services"):
+        reasons.append("empty record: no usable fields extracted")
     return reasons
 
 
@@ -218,8 +241,32 @@ class DublinLifelineScraper:
         if html:
             soup = BeautifulSoup(html, "lxml")
             for field, selectors in target["selectors"].items():
-                result[field] = extract_field(soup, selectors)
+                result[field] = extract_field(soup, selectors, field)
             result["services"] = extract_services(soup)
+            # Website defaults to the scraped URL itself (canonical identity).
+            # Only a canonical/og:url override replaces it — never nav chrome.
+            if not result.get("website"):
+                result["website"] = target["url"]
+            # Contact-page fallback: if the homepage yielded no contact
+            # fields at all and the target declares a contactUrl, re-extract
+            # only the missing fields from the contact page (rate-limited).
+            if (
+                target.get("contactUrl")
+                and not any(result.get(f) for f in ("phone", "email", "address", "hours", "description"))
+            ):
+                await self.rate_limiter.wait()
+                try:
+                    async with httpx.AsyncClient(follow_redirects=True) as contact_client:
+                        contact_html = await _retry_fetch(contact_client, target["contactUrl"])
+                    contact_soup = BeautifulSoup(contact_html, "lxml")
+                    for field, selectors in target["selectors"].items():
+                        if not result.get(field) and field != "website":
+                            val = extract_field(contact_soup, selectors, field)
+                            if val:
+                                result[field] = val
+                    result["contactFallback"] = True
+                except Exception:
+                    pass
             if source == "live":
                 reasons = quarantine_junk(result)
                 if reasons:

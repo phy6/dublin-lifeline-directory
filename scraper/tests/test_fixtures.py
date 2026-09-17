@@ -88,10 +88,14 @@ def test_all_fixtures_have_selectors():
         with open(fixture_path) as f:
             html = f.read()
         soup = BeautifulSoup(html, "lxml")
-        # At least 70% of selector fields must have a match
+        # Website is excluded: it defaults to the target URL with optional
+        # canonical/og:url override, so fixtures need no canonical tag.
         matched = 0
-        total = len(target["selectors"])
+        total = 0
         for field, selectors in target["selectors"].items():
+            if field == "website":
+                continue
+            total += 1
             if any(soup.select_one(s) is not None for s in selectors):
                 matched += 1
         assert matched / total >= 0.7, f"{target['id']}: only {matched}/{total} selectors matched"

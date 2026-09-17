@@ -59,6 +59,25 @@ def test_extract_field_returns_first_non_empty_match():
     assert result == "555-9999"
 
 
+def test_extract_field_website_prefers_href_over_link_text():
+    html = '<nav><a class="nav-home" href="https://example.com/about">HOME</a></nav>'
+    soup = BeautifulSoup(html, "lxml")
+    assert extract_field(soup, [".nav-home"], "website") == "https://example.com/about"
+
+
+def test_extract_field_website_skips_bare_nav_text():
+    html = '<nav><a class="nav-home" href="/">HOME</a></nav>'
+    soup = BeautifulSoup(html, "lxml")
+    assert extract_field(soup, [".nav-home"], "website") == "/"
+
+
+def test_quarantine_junk_flags_empty_record():
+    result = {"id": "x", "address": None, "phone": None, "website": None, "services": []}
+    reasons = quarantine_junk(result)
+    assert len(reasons) == 1
+    assert "empty record" in reasons[0]
+
+
 def test_parse_hours_canonical_range():
     from scraper.scraper import parse_hours
     assert parse_hours("Mon-Fri 09:00-17:00") == {"mon-fri": "09:00-17:00"}
@@ -222,6 +241,30 @@ async def test_fetch_target_keeps_clean_live_result():
         result = await scraper.fetch_target(target)
     assert result["source"] == "live"
     assert "quarantine_reasons" not in result
+
+
+@pytest.mark.asyncio
+async def test_fetch_target_uses_contact_url_when_homepage_empty():
+    scraper = DublinLifelineScraper(CONFIG_PATH)
+    target = {
+        "id": "contact-target",
+        "name": "Contact Target",
+        "url": "https://example.com/",
+        "contactUrl": "https://example.com/contact/",
+        "selectors": {"phone": [".phone"], "email": ["a.contact-mail"]},
+        "fallback": {},
+    }
+    home_html = '<html><body><p>Welcome, no contact info here</p></body></html>'
+    contact_html = '<html><body><span class="phone">01-8780404</span><a class="contact-mail" href="mailto:info@example.com">Email</a></body></html>'
+    with (
+        patch("scraper.scraper.fetch_with_fallback", new=AsyncMock(return_value=(home_html, "live"))),
+        patch("scraper.scraper._retry_fetch", new=AsyncMock(return_value=contact_html)),
+    ):
+        result = await scraper.fetch_target(target)
+    assert result["phone"] == "01-8780404"
+    assert result["email"] == "info@example.com"
+    assert result.get("contactFallback") is True
+    assert result["source"] == "live"
 
 
 def test_quarantined_maps_to_fallback_in_merge():
