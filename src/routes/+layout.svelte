@@ -30,9 +30,15 @@
 </svelte:head>
 
 <nav class="top-nav" aria-label="Main navigation">
-	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>Directory</a>
-	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>Map</a>
-	<a href="{base}/search" aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}>Search</a>
+	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}
+		>Directory</a
+	>
+	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}
+		>Map</a
+	>
+	<a href="{base}/search" aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
+		>Search</a
+	>
 </nav>
 
 <div id="emergency-fab" role="complementary" aria-label="Emergency contacts">
@@ -56,6 +62,24 @@
 </div>
 
 {@render children()}
+
+<nav class="tab-bar" aria-label="Main navigation">
+	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>
+		<span aria-hidden="true" class="tab-icon">📋</span>
+		<span class="tab-label">Directory</span>
+	</a>
+	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>
+		<span aria-hidden="true" class="tab-icon">🗺️</span>
+		<span class="tab-label">Map</span>
+	</a>
+	<a
+		href="{base}/search"
+		aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
+	>
+		<span aria-hidden="true" class="tab-icon">🔍</span>
+		<span class="tab-label">Search</span>
+	</a>
+</nav>
 
 <div class="a11y-fab">
 	<TextScaleToggle />
@@ -160,14 +184,54 @@
 		flex-direction: column;
 		gap: var(--space-2);
 	}
+	.tab-bar {
+		display: none;
+	}
 	@media (max-width: 600px) {
-		.top-nav {
-			gap: var(--space-2);
-			padding: var(--space-2);
+		:global(body) {
+			padding-bottom: calc(72px + env(safe-area-inset-bottom));
 		}
-		.top-nav a {
+		.top-nav {
+			display: none;
+		}
+		.tab-bar {
+			display: flex;
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			z-index: 1500;
+			background: var(--color-surface);
+			border-top: 1px solid var(--color-border);
+			padding-bottom: env(safe-area-inset-bottom);
+			box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
+		}
+		.tab-bar a {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 2px;
+			padding: var(--space-2) var(--space-1) calc(var(--space-1) + 2px);
+			min-height: 56px;
+			justify-content: center;
+			color: var(--color-text-secondary);
+			text-decoration: none;
 			font-size: var(--text-xs);
-			padding: var(--space-1);
+			font-weight: 600;
+		}
+		.tab-bar a[aria-current='page'] {
+			color: var(--color-accent);
+		}
+		.tab-icon {
+			font-size: 1.375rem;
+			line-height: 1;
+		}
+		/* Leave room for the tab bar + chatbot FAB above it */
+		.a11y-fab {
+			bottom: calc(76px + env(safe-area-inset-bottom));
+			right: max(var(--space-1), env(safe-area-inset-right));
+			gap: var(--space-2);
 		}
 		#emergency-fab {
 			top: max(var(--space-1), env(safe-area-inset-top));
@@ -185,11 +249,6 @@
 			font-size: var(--text-xs);
 			min-width: 80px;
 			padding: var(--space-1) var(--space-2);
-		}
-		.a11y-fab {
-			bottom: max(var(--space-1), env(safe-area-inset-bottom));
-			right: max(var(--space-1), env(safe-area-inset-right));
-			gap: var(--space-2);
 		}
 	}
 </style>
