@@ -18,7 +18,7 @@
 	{/if}
 </svelte:head>
 
-<nav class="top-nav" aria-label="Main navigation">
+<nav class="top-nav" aria-label="Primary">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}
 		>{t('directory')}</a
 	>
@@ -138,7 +138,8 @@
 	}
 	@media (max-width: 600px) {
 		:global(body) {
-			padding-bottom: calc(72px + env(safe-area-inset-bottom));
+			/* rem so bottom clearance scales with the text-size toggle */
+			padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
 		}
 		.top-nav {
 			display: none;
@@ -155,23 +156,29 @@
 			padding-bottom: env(safe-area-inset-bottom);
 			box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.12);
 		}
-		.tab-bar a {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 2px;
-			padding: var(--space-2) var(--space-1) calc(var(--space-1) + 2px);
-			min-height: 56px;
-			justify-content: center;
-			color: var(--color-text-secondary);
-			text-decoration: none;
-			font-size: var(--text-xs);
-			font-weight: 600;
-		}
-		.tab-bar a[aria-current='page'] {
-			color: var(--color-accent);
-		}
+	.tab-bar a {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 2px;
+		padding: var(--space-2) var(--space-1) calc(var(--space-1) + 2px);
+		min-height: 3.5rem;
+		justify-content: center;
+		color: var(--color-text-secondary);
+		text-decoration: none;
+		font-size: var(--text-xs);
+		font-weight: 600;
+		text-align: center;
+		line-height: var(--leading-tight);
+	}
+	.tab-bar a[aria-current='page'] {
+		color: var(--color-accent);
+	}
+	.tab-bar a:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: -3px;
+	}
 	.tab-icon {
 		width: 22px;
 		height: 22px;
