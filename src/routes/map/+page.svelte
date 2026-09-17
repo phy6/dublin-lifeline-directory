@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
+	import { t } from '$lib/stores/lang.svelte';
 	import 'leaflet/dist/leaflet.css';
 
 	const { data } = $props();
@@ -55,10 +56,10 @@
 </script>
 
 <main id="main-content">
-	<h1>Service Map</h1>
-	<p>Find support services across Dublin City on the interactive map below.</p>
+	<h1>{t('map-title')}</h1>
+	<p>{t('map-intro')}</p>
 	<p class="map-instructions">
-		Use arrow keys to navigate, press Enter or Space on a marker to view details.
+		{t('map-help')}
 	</p>
 	<div bind:this={mapEl} id="map" style="width: 100%;"></div>
 </main>

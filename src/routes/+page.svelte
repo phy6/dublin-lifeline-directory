@@ -4,6 +4,7 @@
 	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 	import { assets } from '$app/paths';
+	import { t } from '$lib/stores/lang.svelte';
 
 	const { data } = $props();
 	const dataServices = data.services;
@@ -77,8 +78,8 @@
 </svelte:head>
 
 <main id="main-content">
-	<h1>Dublin City Support</h1>
-	<p>Find day centres, GP clinics, and mobile health units across Dublin City.</p>
+	<h1>{t('app-title')}</h1>
+	<p>{t('app-intro')}</p>
 
 	<FilterBar
 		{categories}
@@ -93,7 +94,8 @@
 		{announceText}
 	</div>
 	<div class="stats">
-		{filtered.length} services found
+		{filtered.length}
+		{t('services-found')}
 		{#if selectedDay !== 'all'}
 			open on {selectedDay.toUpperCase()}
 		{:else}
@@ -103,7 +105,7 @@
 	<ServiceList services={filtered} id="service-list" />
 
 	<nav>
-		<a href="{assets}/map">View on Map</a>
+		<a href="{assets}/map">{t('view-on-map')}</a>
 	</nav>
 </main>
 

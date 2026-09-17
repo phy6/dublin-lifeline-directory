@@ -2,9 +2,10 @@
 	import TextScaleToggle from '$lib/components/TextScaleToggle.svelte';
 	import LowDataToggle from '$lib/components/LowDataToggle.svelte';
 	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+	import { lang, setLang as onLang } from '$lib/stores/lang.svelte';
 
-	let { lang = 'en', onLang }: { lang: string; onLang: (v: 'en' | 'ga') => void } = $props();
 	let open = $state(false);
+	const langCode = $derived(lang.current);
 </script>
 
 <button
@@ -12,7 +13,7 @@
 	aria-haspopup="dialog"
 	aria-expanded={open}
 	aria-controls="settings-sheet"
-	aria-label={lang === 'ga' ? 'Socruithe' : 'Settings'}
+	aria-label={langCode === 'ga' ? 'Socruithe' : 'Settings'}
 	onclick={() => (open = true)}
 >
 	<span aria-hidden="true">⚙️</span>
@@ -29,31 +30,31 @@
 		<div class="sheet">
 			<span class="grabber" aria-hidden="true"></span>
 			<div class="sheet-header">
-				<h3 id="settings-title">{lang === 'ga' ? 'Socruithe' : 'Settings'}</h3>
+				<h3 id="settings-title">{langCode === 'ga' ? 'Socruithe' : 'Settings'}</h3>
 				<button class="close" onclick={() => (open = false)} aria-label="Close settings">✕</button>
 			</div>
 			<div class="rows">
-				<section class="row" aria-label={lang === 'ga' ? 'Méid téacs' : 'Text size'}>
+				<section class="row" aria-label={langCode === 'ga' ? 'Méid téacs' : 'Text size'}>
 					<TextScaleToggle />
 				</section>
-				<section class="row" aria-label={lang === 'ga' ? 'Téama' : 'Theme'}>
+				<section class="row" aria-label={langCode === 'ga' ? 'Téama' : 'Theme'}>
 					<ThemeToggle />
 				</section>
 				<section class="row data-row" aria-label="Low data mode">
-					<span class="row-label">{lang === 'ga' ? 'Modh sonraí íseal' : 'Low data mode'}</span>
+					<span class="row-label">{langCode === 'ga' ? 'Modh sonraí íseal' : 'Low data mode'}</span>
 					<LowDataToggle />
 				</section>
 				<section class="row lang-row" aria-label="Language">
 					<label for="settings-lang" class="row-label"
-						>{lang === 'ga' ? 'Teanga' : 'Language'}</label
+						>{langCode === 'ga' ? 'Teanga' : 'Language'}</label
 					>
 					<select
 						id="settings-lang"
-						value={lang}
+						value={langCode}
 						onchange={(e) => onLang((e.target as HTMLSelectElement).value as 'en' | 'ga')}
 					>
-						<option value="en" selected={lang === 'en'}>English</option>
-						<option value="ga" selected={lang === 'ga'}>Gaeilge</option>
+						<option value="en" selected={langCode === 'en'}>English</option>
+						<option value="ga" selected={langCode === 'ga'}>Gaeilge</option>
 					</select>
 				</section>
 			</div>

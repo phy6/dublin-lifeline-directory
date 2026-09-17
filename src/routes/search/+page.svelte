@@ -3,6 +3,7 @@
 	import FilterBar from '$lib/components/FilterBar.svelte';
 	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
+	import { t } from '$lib/stores/lang.svelte';
 
 	const { data } = $props();
 	const dataServices = data.services;
@@ -64,13 +65,13 @@
 		if (selectedDay !== 'all') {
 			announceText = `${filtered.length} services found open on ${selectedDay.toUpperCase()}`;
 		} else {
-			announceText = `${filtered.length} services found across ${categories.length} categories`;
+			announceText = `${filtered.length} ${t('services-found')} across ${categories.length} categories`;
 		}
 	});
 </script>
 
 <main id="main-content">
-	<h1>Search Services</h1>
+	<h1>{t('search-title')}</h1>
 	<FilterBar
 		{categories}
 		{selectedCategory}
@@ -84,7 +85,8 @@
 		{announceText}
 	</div>
 	<div class="stats">
-		{filtered.length} services found
+		{filtered.length}
+		{t('services-found')}
 		{#if selectedDay !== 'all'}
 			open on {selectedDay.toUpperCase()}
 		{:else}

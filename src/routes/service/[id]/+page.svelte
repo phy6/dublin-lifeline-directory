@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
+	import { t } from '$lib/stores/lang.svelte';
 
 	const { data } = $props();
 	let service = $state(data.service ?? null);
@@ -8,14 +9,14 @@
 
 {#if service}
 	<main id="main-content">
-		<a href="{base}/" class="back-link">← Back to directory</a>
+		<a href="{base}/" class="back-link">← {t('back')}</a>
 		<div class="service-detail">
 			<div class="category">{service.category}</div>
 			<h1>{service.name}</h1>
 			<p class="description">{service.description}</p>
 
 			<section>
-				<h2>Location</h2>
+				<h2>{t('location')}</h2>
 				{#if service.address}<p>{service.address}</p>{/if}
 				{#if service.phone}
 					<p>
@@ -42,7 +43,7 @@
 			</section>
 
 			<section>
-				<h2>Opening Hours</h2>
+				<h2>{t('opening-hours')}</h2>
 				{#if typeof service.hours === 'string'}
 					<p>{service.hours}</p>
 				{:else if service.hours && typeof service.hours === 'object'}
@@ -55,12 +56,12 @@
 						{/each}
 					</dl>
 				{:else}
-					<p>Opening hours not available.</p>
+					<p>{t('no-hours')}</p>
 				{/if}
 			</section>
 
 			<section>
-				<h2>Services Offered</h2>
+				<h2>{t('services-offered')}</h2>
 				<div class="tags">
 					{#each service.services ?? [] as srv (srv)}
 						<span class="tag">{srv}</span>
@@ -69,7 +70,7 @@
 			</section>
 
 			<section>
-				<h2>Categories</h2>
+				<h2>{t('categories')}</h2>
 				<div class="tags">
 					{#each service.tags ?? [] as tag (tag)}
 						<span class="tag">{tag}</span>
@@ -78,16 +79,18 @@
 			</section>
 
 			<footer>
-				<small>Last verified: {service.lastVerified} · Source: {service.dataSource}</small>
+				<small
+					>{t('last-verified')}: {service.lastVerified} · {t('source')}: {service.dataSource}</small
+				>
 			</footer>
 		</div>
 	</main>
 {:else}
 	<div class="not-found">
-		<h2>Service not found</h2>
-		<p>The service you're looking for doesn't exist or has been removed.</p>
+		<h2>{t('not-found')}</h2>
+		<p>{t('not-found-body')}</p>
 		<nav>
-			<a href="{base}/search">Search for another service</a>
+			<a href="{base}/search">{t('search-another')}</a>
 			<span aria-hidden="true"> or </span>
 			<a href="{base}/">return to directory</a>
 		</nav>

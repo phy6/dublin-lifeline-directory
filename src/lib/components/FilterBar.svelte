@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { DAY_KEYS, DAY_LABELS } from '$lib/utils/hours';
+	import { t } from '$lib/stores/lang.svelte';
 
 	let {
 		categories,
@@ -26,18 +27,18 @@
 	<input
 		id="search-input"
 		type="search"
-		placeholder="Search by name, address, or service type..."
+		placeholder={t('search-placeholder')}
 		bind:value={query}
 		oninput={() => onSearch(query)}
 	/>
-	<div class="filter-chips" role="group" aria-label="Filter by category">
+	<div class="filter-chips" role="group" aria-label={t('filter-category')}>
 		<button
 			class:active={selectedCategory === 'All'}
 			onclick={() => onFilter('All')}
 			aria-pressed={selectedCategory === 'All'}
 			aria-controls={resultsId}
 		>
-			All Categories
+			{t('all-categories')}
 		</button>
 		{#each categories as cat (cat)}
 			<button
@@ -50,14 +51,14 @@
 			</button>
 		{/each}
 	</div>
-	<div class="filter-chips" role="group" aria-label="Filter by day">
+	<div class="filter-chips" role="group" aria-label={t('filter-day')}>
 		<button
 			class:active={selectedDay === 'all'}
 			onclick={() => onDayFilter('all')}
 			aria-pressed={selectedDay === 'all'}
 			aria-controls={resultsId}
 		>
-			All Days
+			{t('all-days')}
 		</button>
 		{#each DAY_KEYS as day, i (day)}
 			<button

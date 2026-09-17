@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import type { ServiceLocation } from '$lib/types';
 	import { getOpenNowStatus } from '$lib/utils/hours';
+	import { t } from '$lib/stores/lang.svelte';
 
 	let { service }: { service: ServiceLocation } = $props();
 	const openStatus = $derived(getOpenNowStatus(service.hours));
@@ -14,9 +15,9 @@
 	<div class="card-header">
 		<div class="category">{service.category}</div>
 		{#if openStatus === 'open'}
-			<span class="open-badge" aria-label="Open now">Open now</span>
+			<span class="open-badge" aria-label={t('open-now')}>{t('open-now')}</span>
 		{:else if openStatus === 'closed'}
-			<span class="closed-badge" aria-label="Closed now">Closed</span>
+			<span class="closed-badge" aria-label={t('closed')}>{t('closed')}</span>
 		{/if}
 	</div>
 	<h3>{service.name}</h3>
@@ -36,7 +37,7 @@
 			{/each}
 		{/if}
 	</div>
-	<a href="{base}/service/{service.id}" class="card-link">View details</a>
+	<a href="{base}/service/{service.id}" class="card-link">{t('view-details')}</a>
 </article>
 
 <style>

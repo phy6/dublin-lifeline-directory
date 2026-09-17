@@ -10,16 +10,16 @@
 		resolveLabel,
 		isLeaf,
 		findServicesForTag,
-		type ChatbotTree,
-		type Lang
+		type ChatbotTree
 	} from '$lib/utils/chatbot';
+	import { lang as langStore, t } from '$lib/stores/lang.svelte';
 
 	const chatbotTree = tree as unknown as ChatbotTree;
 	const allServices = normalizeServices(
 		servicesData.services as unknown as Record<string, unknown>[]
 	);
 	let open = $state(false);
-	let lang: Lang = $state('en');
+	const lang = $derived(langStore.current);
 	let nodeKey = $state('start');
 	let log = $state<{ who: 'bot' | 'user'; text: string }[]>([]);
 
@@ -29,13 +29,6 @@
 			? findServicesForTag(allServices, node.action.tag, 3)
 			: []
 	);
-
-	function detectLang() {
-		if (typeof window !== 'undefined') {
-			const saved = localStorage.getItem('dcs-language');
-			lang = saved === 'ga' ? 'ga' : 'en';
-		}
-	}
 
 	function renderNode(key: string) {
 		const n = getNode(chatbotTree, key);
@@ -59,7 +52,6 @@
 	}
 
 	function openModal() {
-		detectLang();
 		open = true;
 		if (log.length === 0) startOver();
 	}

@@ -2,79 +2,70 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import { base } from '$app/paths';
+	import { lang, setLang, loadLang, t } from '$lib/stores/lang.svelte';
 	import OfflineBanner from '$lib/components/OfflineBanner.svelte';
 	import Chatbot from '$lib/components/Chatbot.svelte';
 	import SettingsSheet from '$lib/components/SettingsSheet.svelte';
 	import '$lib/styles/tokens.css';
 	let { children } = $props();
-	let lang = $state('en');
-
-	function loadLang() {
-		if (typeof window !== 'undefined') {
-			const saved = localStorage.getItem('dcs-language');
-			if (saved) lang = saved;
-			else lang = navigator.language.startsWith('ga') ? 'ga' : 'en';
-			document.documentElement.lang = lang;
-		}
-	}
-
-	function setLang(v: 'en' | 'ga') {
-		lang = v;
-		if (typeof window !== 'undefined') {
-			document.documentElement.lang = v;
-			localStorage.setItem('dcs-language', v);
-		}
-	}
 
 	onMount(loadLang);
 </script>
 
 <svelte:head>
-	{#if lang === 'ga'}
+	{#if lang.current === 'ga'}
 		<title>Seirbhísí Chathair Bhaile Átha Cliath</title>
 	{/if}
 </svelte:head>
 
 <nav class="top-nav" aria-label="Main navigation">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}
-		>Directory</a
+		>{t('directory')}</a
 	>
 	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}
-		>Map</a
+		>{t('map')}</a
 	>
 	<a href="{base}/search" aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
-		>Search</a
+		>{t('search')}</a
 	>
 </nav>
 
 <div class="lang-pill" role="group" aria-label="Language">
-	<button aria-pressed={lang === 'en'} class:active={lang === 'en'} onclick={() => setLang('en')}>
+	<button
+		aria-pressed={lang.current === 'en'}
+		class:active={lang.current === 'en'}
+		onclick={() => setLang('en')}
+	>
 		EN
 	</button>
-	<button aria-pressed={lang === 'ga'} class:active={lang === 'ga'} onclick={() => setLang('ga')}>
+	<button
+		aria-pressed={lang.current === 'ga'}
+		class:active={lang.current === 'ga'}
+		onclick={() => setLang('ga')}
+	>
 		GA
 	</button>
 </div>
 
-<SettingsSheet {lang} onLang={setLang} />
+<SettingsSheet />
 
 {@render children()}
 
 <nav class="tab-bar" aria-label="Main navigation">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>
 		<span aria-hidden="true" class="tab-icon">📋</span>
-		<span class="tab-label">Directory</span>
+		<span class="tab-label">{t('directory')}</span>
 	</a>
 	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>
 		<span aria-hidden="true" class="tab-icon">🗺️</span>
-		<span class="tab-label">Map</span>
+		<span class="tab-label">{t('map')}</span>
 	</a>
 	<a
 		href="{base}/search"
 		aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
 	>
 		<span aria-hidden="true" class="tab-icon">🔍</span>
-		<span class="tab-label">Search</span>
+		<span class="tab-label">{t('search')}</span>
 	</a>
 </nav>
 

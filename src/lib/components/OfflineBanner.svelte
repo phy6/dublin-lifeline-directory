@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { t } from '$lib/stores/lang.svelte';
 	let online = $state(true);
 
 	function update() {
@@ -19,7 +20,7 @@
 
 {#if !online}
 	<div class="offline-banner" role="status">
-		You are offline. Showing saved information — some details may be out of date.
+		{t('offline')}
 	</div>
 {/if}
 
