@@ -95,7 +95,23 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict) -> dict:
         merged["dataSource"] = "fallback"
         merged["scrapeSuccess"] = False
     merged["lastScraped"] = datetime.now(timezone.utc).isoformat()
-    merged["tags"] = merged.get("tags", [])
+
+    if flyer:
+        flyer_tags = flyer.get("services_categories", []) + flyer.get("healthcare_services", [])
+        merged["tags"] = normalize_services(flyer_tags)
+        if source in ("live", "archive"):
+            scraped_services = normalize_services(scraped.get("services", []))
+            fallback_services = normalize_services(fallback.get("services", []))
+            merged["dynamicActivities"] = [s for s in scraped_services if s not in fallback_services]
+            merged["activityMatchCount"] = len(merged["dynamicActivities"])
+        else:
+            merged["dynamicActivities"] = []
+            merged["activityMatchCount"] = 0
+    else:
+        merged["tags"] = merged.get("tags", [])
+        merged["dynamicActivities"] = []
+        merged["activityMatchCount"] = 0
+
     merged["description"] = merged.get("description", f"{merged.get('name', '')} service location")
     merged["lastVerified"] = merged.get("lastVerified", datetime.now(timezone.utc).strftime("%Y-%m-%d"))
 
