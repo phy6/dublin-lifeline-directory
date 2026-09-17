@@ -135,6 +135,10 @@
 	@media (max-width: 600px) {
 		.filter-bar {
 			padding: var(--space-2);
+			position: sticky;
+			top: 0;
+			z-index: 900;
+			box-shadow: var(--shadow-sm);
 		}
 		input[type='search'] {
 			font-size: var(--text-base);

@@ -202,8 +202,8 @@
 <style>
 	.chatbot-fab {
 		position: fixed;
-		right: 14px;
-		bottom: 14px;
+		right: max(var(--space-2), env(safe-area-inset-right));
+		bottom: max(var(--space-2), env(safe-area-inset-bottom));
 		z-index: 2200;
 		background: var(--color-accent);
 		color: var(--color-text-on-accent);
@@ -212,7 +212,9 @@
 		padding: 12px 16px;
 		font-weight: 700;
 		cursor: pointer;
-		min-height: 44px;
+		min-height: 48px;
+		min-width: 48px;
+		box-shadow: var(--shadow-md);
 	}
 	.modal-overlay {
 		position: fixed;
