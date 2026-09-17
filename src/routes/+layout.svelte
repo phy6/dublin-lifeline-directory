@@ -47,8 +47,13 @@
 	>
 </nav>
 
-<div id="emergency-fab" role="complementary" aria-label="Emergency contacts">
-	<a href="tel:112" aria-label="Call emergency services 112">112</a>
+<div class="lang-pill" role="group" aria-label="Language">
+	<button aria-pressed={lang === 'en'} class:active={lang === 'en'} onclick={() => setLang('en')}>
+		EN
+	</button>
+	<button aria-pressed={lang === 'ga'} class:active={lang === 'ga'} onclick={() => setLang('ga')}>
+		GA
+	</button>
 </div>
 
 <SettingsSheet {lang} onLang={setLang} />
@@ -104,40 +109,36 @@
 	.top-nav a[aria-current='page'] {
 		background: rgba(255, 255, 255, 0.25);
 	}
-	#emergency-fab {
+	.lang-pill {
 		position: fixed;
 		top: max(var(--space-2), env(safe-area-inset-top));
 		right: max(var(--space-2), env(safe-area-inset-right));
-		z-index: 9999;
+		z-index: 9998;
+		display: flex;
+		background: var(--color-surface);
+		border: 2px solid var(--color-border-strong);
+		border-radius: var(--radius-full);
+		overflow: hidden;
 	}
-	#emergency-fab a {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
+	.lang-pill button {
+		border: 0;
+		background: transparent;
+		color: var(--color-text-secondary);
+		font-size: var(--text-xs);
+		font-weight: 700;
+		padding: var(--space-1) var(--space-2);
 		min-width: 44px;
 		min-height: 44px;
-		background: var(--color-success);
+		cursor: pointer;
+		font-family: var(--font-sans);
+	}
+	.lang-pill button.active {
+		background: var(--color-accent);
 		color: var(--color-text-on-accent);
-		padding: var(--space-2) var(--space-3);
-		border-radius: var(--radius-md);
-		text-decoration: none;
-		font-weight: 700;
-		font-size: var(--text-lg);
-		border: 2px solid var(--color-warning);
-		box-shadow: var(--shadow-lg);
 	}
-	@media (prefers-reduced-motion: no-preference) {
-		#emergency-fab a:hover {
-			background: var(--color-success-container);
-			color: var(--color-success-on-container);
-		}
-		#emergency-fab a:active {
-			transform: scale(0.96);
-		}
-	}
-	#emergency-fab a:focus-visible {
+	.lang-pill button:focus-visible {
 		outline: 3px solid var(--color-focus-ring);
-		outline-offset: 2px;
+		outline-offset: -3px;
 	}
 	.tab-bar {
 		display: none;
@@ -183,15 +184,9 @@
 			line-height: 1;
 		}
 		/* FABs stack above the tab bar */
-		#emergency-fab {
+		.lang-pill {
 			top: max(var(--space-1), env(safe-area-inset-top));
 			right: max(var(--space-1), env(safe-area-inset-right));
-		}
-		#emergency-fab a {
-			font-size: var(--text-base);
-			padding: var(--space-1) var(--space-2);
-			min-width: 44px;
-			min-height: 44px;
 		}
 	}
 </style>
