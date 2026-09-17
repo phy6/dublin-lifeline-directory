@@ -59,6 +59,16 @@ def extract_field(soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:
     return None
 
 
+def parse_hours(raw: str) -> dict:
+    """Parse a raw hours string into canonical {day-range: time-range} dict."""
+    import re
+    text = raw.strip()
+    m = re.match(r"^([A-Za-z]+-[A-Za-z]+)\s+(\d{2}:\d{2}-\d{2}:\d{2})$", text)
+    if not m:
+        return {"default": text}
+    return {m.group(1).lower(): m.group(2)}
+
+
 async def fetch_url(client: httpx.AsyncClient, url: str, timeout: float = 5.0) -> str:
     response = await client.get(url, timeout=timeout, follow_redirects=True)
     response.raise_for_status()

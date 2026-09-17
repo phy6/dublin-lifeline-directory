@@ -59,6 +59,11 @@ def test_extract_field_returns_first_non_empty_match():
     assert result == "555-9999"
 
 
+def test_parse_hours_canonical_range():
+    from scraper.scraper import parse_hours
+    assert parse_hours("Mon-Fri 09:00-17:00") == {"mon-fri": "09:00-17:00"}
+
+
 @pytest.mark.asyncio
 async def test_retry_logic_works_with_mocked_failure():
     call_count = 0

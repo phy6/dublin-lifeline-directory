@@ -135,7 +135,7 @@ def test_validate_hours_invalid_time_range():
         "hours": {"mon-fri": "17:00-09:00"},
     }
     result = validate_location(loc)
-    assert any("not after start" in w for w in result["warnings"])
+    assert any("not after start" in e for e in result["errors"])
 
 
 def test_validate_hours_all_closed():
@@ -150,7 +150,22 @@ def test_validate_hours_all_closed():
         "hours": {"mon-fri": "closed"},
     }
     result = validate_location(loc)
-    assert any("invalid format" in w for w in result["warnings"])
+    assert any("invalid format" in e for e in result["errors"])
+
+
+def test_validate_hours_fail_closed_invalid_range():
+    loc = {
+        "id": "test",
+        "name": "Test",
+        "address": "1 St",
+        "latitude": 53.0,
+        "longitude": -6.0,
+        "category": "Test",
+        "services": ["food"],
+        "hours": {"mon-fri": "17:00-09:00"},
+    }
+    result = validate_location(loc)
+    assert any("hours" in e for e in result["errors"])
 
 
 def test_validate_clinic_invalid_location_id():

@@ -47,11 +47,11 @@ def validate_location(loc: dict) -> dict:
     hours = loc.get("hours")
     if hours is not None:
         if not isinstance(hours, dict) or len(hours) == 0:
-            warnings.append(f"{loc.get('id', 'unknown')}: hours must be a non-empty object")
+            errors.append(f"{loc.get('id', 'unknown')}: hours must be a non-empty object")
         else:
             valid, msg = _validate_hours(hours)
             if not valid:
-                warnings.append(f"{loc.get('id', 'unknown')}: {msg}")
+                errors.append(f"{loc.get('id', 'unknown')}: {msg}")
 
     email = loc.get("email")
     if email is not None and (not isinstance(email, str) or not EMAIL_RE.match(email)):
