@@ -84,6 +84,16 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict) -> dict:
         if field in merged and merged[field] is None:
             del merged[field]
 
+    # The scraper rarely extracts a category, but every target carries a
+    # human-curated one in its fallback config — use it instead of None.
+    if not merged.get("category"):
+        merged["category"] = fallback.get("category") or "Uncategorised"
+
+    # Confirmed Charities Register identity flows through to the output.
+    for key in ("rcn", "registered_name"):
+        if scraped.get(key):
+            merged[key] = scraped[key]
+
     if "latitude" not in merged or merged.get("latitude") is None:
         merged["latitude"] = scraped.get("latitude", fallback.get("latitude", 0))
     if "longitude" not in merged or merged.get("longitude") is None:

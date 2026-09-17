@@ -16,15 +16,19 @@
 
 			<section>
 				<h2>Location</h2>
-				<p>{service.address}</p>
-				<p>
-					<a href="tel:{service.phone}" aria-label="Call {service.name} at {service.phone}"
-						>{service.phone}</a
-					>
-				</p>
-				<p>
-					<a href="mailto:{service.email}" aria-label="Email {service.name}">{service.email}</a>
-				</p>
+				{#if service.address}<p>{service.address}</p>{/if}
+				{#if service.phone}
+					<p>
+						<a href="tel:{service.phone}" aria-label="Call {service.name} at {service.phone}"
+							>{service.phone}</a
+						>
+					</p>
+				{/if}
+				{#if service.email}
+					<p>
+						<a href="mailto:{service.email}" aria-label="Email {service.name}">{service.email}</a>
+					</p>
+				{/if}
 				{#if service.website && service.website !== ''}
 					<p>
 						<a

@@ -198,7 +198,13 @@ class DublinLifelineScraper:
             "name": target["name"],
             "source": source,
             "url": target["url"],
+            # Always attached: merge_location() backfills category and
+            # carries the confirmed register identity into the output.
+            "fallback": target.get("fallback", {}),
         }
+        for key in ("rcn", "registered_name"):
+            if target.get(key):
+                result[key] = target[key]
         if html:
             soup = BeautifulSoup(html, "lxml")
             for field, selectors in target["selectors"].items():
@@ -210,8 +216,8 @@ class DublinLifelineScraper:
                     logger.warning("Quarantining %s: %s", target["id"], "; ".join(reasons))
                     result["source"] = "quarantined"
                     result["quarantine_reasons"] = reasons
-        else:
-            result["fallback"] = target.get("fallback", {})
+        # No HTML (source "none"): merged output falls back to
+        # target["fallback"] in merge_location().
         return result
 
     async def run(self, targets: Optional[List[str]] = None) -> List[dict]:

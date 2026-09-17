@@ -152,6 +152,23 @@ def test_bump_version_major_for_deletions():
     assert result == "4.0.0"
 
 
+def test_merge_location_backfills_category_and_rcn_from_fallback():
+    from scraper.pipeline import merge_location
+    scraped = {"id": "x", "name": "X", "source": "live", "category": None, "rcn": "20166120"}
+    fallback = {"id": "x", "name": "X", "category": "Emergency Shelter"}
+    merged = merge_location(scraped, None, fallback)
+    assert merged["category"] == "Emergency Shelter"
+    assert merged["rcn"] == "20166120"
+
+
+def test_merge_location_keeps_scraped_category_when_present():
+    from scraper.pipeline import merge_location
+    scraped = {"id": "x", "name": "X", "source": "live", "category": "Food"}
+    fallback = {"id": "x", "name": "X", "category": "Emergency Shelter"}
+    merged = merge_location(scraped, None, fallback)
+    assert merged["category"] == "Food"
+
+
 def test_timestamp_only_churn_still_mints_minor_bump():
     # Documents current behavior (see scraper-version-bump-semantics):
     # refreshed timestamps alone count as updates -> minor, not patch.
