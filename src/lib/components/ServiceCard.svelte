@@ -46,7 +46,7 @@
 		background: var(--color-surface);
 		border-radius: var(--radius-lg);
 		padding: var(--space-3);
-		box-shadow: var(--shadow-md);
+		box-shadow: var(--shadow-sm);
 		text-decoration: none;
 		color: inherit;
 		transition:
@@ -77,7 +77,7 @@
 		background: var(--color-accent);
 		color: var(--color-text-on-accent);
 		padding: 2px 8px;
-		border-radius: var(--radius-sm);
+		border-radius: var(--radius-full);
 		font-size: var(--text-xs);
 		display: inline-block;
 	}
@@ -125,7 +125,7 @@
 		background: var(--color-accent-container);
 		color: var(--color-accent-on-container);
 		padding: 2px 6px;
-		border-radius: var(--radius-sm);
+		border-radius: var(--radius-full);
 		font-size: var(--text-xs);
 	}
 	.day {
