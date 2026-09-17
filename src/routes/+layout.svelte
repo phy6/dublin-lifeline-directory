@@ -101,6 +101,23 @@
 		>
 		<span class="tab-label">{t('search')}</span>
 	</a>
+	<a
+		href="{base}/planner"
+		aria-current={page.url.pathname === `${base}/planner` ? 'page' : undefined}
+	>
+		<svg
+			class="tab-icon"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+			aria-hidden="true"
+			><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg
+		>
+		<span class="tab-label">{t('planner')}</span>
+	</a>
 </nav>
 
 <OfflineBanner />
