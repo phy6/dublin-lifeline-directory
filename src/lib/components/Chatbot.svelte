@@ -12,7 +12,7 @@
 		findServicesForTag,
 		type ChatbotTree
 	} from '$lib/utils/chatbot';
-	import { lang as langStore, t } from '$lib/stores/lang.svelte';
+	import { lang as langStore } from '$lib/stores/lang.svelte';
 
 	const chatbotTree = tree as unknown as ChatbotTree;
 	const allServices = normalizeServices(

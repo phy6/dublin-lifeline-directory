@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { ServiceLocation } from '$lib/types';
 	import { t } from '$lib/stores/lang.svelte';
 
 	const { data } = $props();

@@ -135,6 +135,7 @@ No extra dependencies for retry logic — custom async retry wrapper with expone
 Reads `scraped_output.json` + `flyer-data.json`, produces final `services.json`.
 
 **Steps:**
+
 1. Load `scraped_output.json`
 2. Load `flyer-data.json` (human-verified enrichments: coordinates, phone numbers)
 3. For each target in scraped output:
@@ -147,10 +148,12 @@ Reads `scraped_output.json` + `flyer-data.json`, produces final `services.json`.
 6. Write to `src/lib/data/services.json` and `static/services.json`
 
 **Merge rules (human-verified wins):**
+
 - If flyer-data.json has non-null value for phone, coordinates, email, website, hours → use it
 - Scraper fills gaps for locations not in flyer-data.json or fields missing in flyer
 
 **Version bumping:**
+
 - Patch (x.y.Z+1): only metadata changes (timestamps, nextSync)
 - Minor (x.Y+1.0): additions or updates to service data
 - Major ((X+1).0.0): schema changes or deletions
@@ -175,6 +178,7 @@ python scraper/main.py --output path/to/output.json
 ```
 
 **Flow:**
+
 1. Parse CLI args
 2. Load config
 3. If `--dry-run`, print targets and exit
@@ -191,6 +195,7 @@ python scraper/main.py --output path/to/output.json
 Local HTML archive directory. Contains saved HTML files from each target (copied from `/home/martin/Dublin Services/docs/`).
 
 **Fallback strategy:**
+
 1. Try live fetch with `httpx`
 2. If fetch fails, check `scraper/docs/<id>.html` or `scraper/docs/dublin_lifeline_<id>.html`
 3. If archive exists, parse it and mark `dataSource: 'local-archive'`
@@ -210,6 +215,7 @@ Local HTML archive directory. Contains saved HTML files from each target (copied
 ```
 
 Changes from current workflow:
+
 - `pip install` reads from `scraper/requirements.txt` instead of installing packages inline
 - `git add` includes both `src/lib/data/services.json` and `static/services.json`
 - `--flyer-only` flag optional for faster runs

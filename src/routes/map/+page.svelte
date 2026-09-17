@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import type { ServiceLocation } from '$lib/types';
 	import { t } from '$lib/stores/lang.svelte';
 	import 'leaflet/dist/leaflet.css';
 

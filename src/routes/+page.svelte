@@ -1,7 +1,6 @@
 <script lang="ts">
 	import ServiceList from '$lib/components/ServiceList.svelte';
 	import FilterBar from '$lib/components/FilterBar.svelte';
-	import type { ServiceLocation } from '$lib/types';
 	import { isOpenOnDay, type DayKey } from '$lib/utils/hours';
 	import { assets } from '$app/paths';
 	import { t } from '$lib/stores/lang.svelte';

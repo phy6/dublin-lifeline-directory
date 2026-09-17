@@ -1,5 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { getNode, resolveText, isLeaf, validateTree, findServicesForTag, type ChatbotTree } from '$lib/utils/chatbot';
+import {
+	getNode,
+	resolveText,
+	isLeaf,
+	validateTree,
+	findServicesForTag,
+	type ChatbotTree
+} from '$lib/utils/chatbot';
 import type { ServiceLocation } from '$lib/types';
 
 const tree: ChatbotTree = {
@@ -38,16 +45,34 @@ describe('chatbot tree renderer', () => {
 
 	it('validates next keys exist', () => {
 		expect(validateTree(tree)).toEqual([]);
-		const bad = { ...tree, start: { ...tree.start, options: [{ label: { en: 'x' }, next: 'nope' }] } };
+		const bad = {
+			...tree,
+			start: { ...tree.start, options: [{ label: { en: 'x' }, next: 'nope' }] }
+		};
 		expect(validateTree(bad as ChatbotTree).length).toBeGreaterThan(0);
 	});
 
 	describe('findServicesForTag', () => {
 		const svc = (over: Partial<ServiceLocation>): ServiceLocation => ({
-			id: 'x', name: 'Test', address: null, phone: null, email: null, website: null,
-			hours: null, tags: null, services: null, category: 'Food',
-			latitude: 0, longitude: 0, description: '', lastVerified: '',
-			dynamicActivities: [], activityMatchCount: 0, dataSource: 't', lastScraped: '', ...over
+			id: 'x',
+			name: 'Test',
+			address: null,
+			phone: null,
+			email: null,
+			website: null,
+			hours: null,
+			tags: null,
+			services: null,
+			category: 'Food',
+			latitude: 0,
+			longitude: 0,
+			description: '',
+			lastVerified: '',
+			dynamicActivities: [],
+			activityMatchCount: 0,
+			dataSource: 't',
+			lastScraped: '',
+			...over
 		});
 		const services = [
 			svc({ id: 'a', name: 'Capuchin', tags: ['food'], category: 'Food' }),

@@ -10,6 +10,8 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
+	// Scratch notes and scraped snapshots — not shipped, not linted
+	{ ignores: ['.scratch/**', 'scraper/docs/**', 'scraper/tests/fixtures/**'] },
 	js.configs.recommended,
 	ts.configs.recommended,
 	svelte.configs.recommended,

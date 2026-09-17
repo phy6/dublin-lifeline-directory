@@ -10,3 +10,7 @@ bun.lockb
 
 # Scratch notes (issue tracker, prototypes) — not shipped, not linted
 .scratch/
+
+# Scraped snapshots and research docs — byte-identical fixtures, not formatted
+scraper/docs/
+scraper/tests/fixtures/

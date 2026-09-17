@@ -6,56 +6,108 @@
 		},
 		"options": [
 			{ "label": { "en": "A meal today", "ga": "Béile inniu" }, "next": "meal" },
-			{ "label": { "en": "Food to bring home", "ga": "Bia le tabhairt abhaile" }, "next": "parcel" },
+			{
+				"label": { "en": "Food to bring home", "ga": "Bia le tabhairt abhaile" },
+				"next": "parcel"
+			},
 			{ "label": { "en": "Clothes", "ga": "Éadaí" }, "next": "clothing" },
 			{ "label": { "en": "Shower", "ga": "Cithfholcadh" }, "next": "shower" },
-			{ "label": { "en": "Somewhere to sleep tonight", "ga": "Áit codlata anocht" }, "next": "sleep" },
+			{
+				"label": { "en": "Somewhere to sleep tonight", "ga": "Áit codlata anocht" },
+				"next": "sleep"
+			},
 			{ "label": { "en": "Health help", "ga": "Cabhair sláinte" }, "next": "health" },
-			{ "label": { "en": "Advice on welfare or housing", "ga": "Comhairle leasa nó tithíochta" }, "next": "advice" },
+			{
+				"label": { "en": "Advice on welfare or housing", "ga": "Comhairle leasa nó tithíochta" },
+				"next": "advice"
+			},
 			{ "label": { "en": "Wifi or charging", "ga": "Wifi nó luchtú" }, "next": "connectivity" }
 		]
 	},
 	"meal": {
 		"text": { "en": "Hot meal services near you.", "ga": "Seirbhísí béilí te in aice leat." },
-		"action": { "type": "filter", "tag": "meal", "label": { "en": "Show meal services", "ga": "Taispeáin béilí" } }
+		"action": {
+			"type": "filter",
+			"tag": "meal",
+			"label": { "en": "Show meal services", "ga": "Taispeáin béilí" }
+		}
 	},
 	"parcel": {
 		"text": { "en": "Grocery parcels to take away.", "ga": "Dáileachtaí grósaera." },
-		"action": { "type": "filter", "tag": "parcel", "label": { "en": "Show parcel services", "ga": "Taispeáin dáileachtaí" } }
+		"action": {
+			"type": "filter",
+			"tag": "parcel",
+			"label": { "en": "Show parcel services", "ga": "Taispeáin dáileachtaí" }
+		}
 	},
 	"clothing": {
 		"text": { "en": "Free clothing services.", "ga": "Seirbhísí éadaí saora." },
-		"action": { "type": "filter", "tag": "clothing", "label": { "en": "Show clothing", "ga": "Taispeáin éadaí" } }
+		"action": {
+			"type": "filter",
+			"tag": "clothing",
+			"label": { "en": "Show clothing", "ga": "Taispeáin éadaí" }
+		}
 	},
 	"shower": {
 		"text": { "en": "Showers and hygiene services.", "ga": "Cithfholcadáin agus sláinteachas." },
-		"action": { "type": "filter", "tag": "shower", "label": { "en": "Show showers", "ga": "Taispeáin cithfholcadáin" } }
+		"action": {
+			"type": "filter",
+			"tag": "shower",
+			"label": { "en": "Show showers", "ga": "Taispeáin cithfholcadáin" }
+		}
 	},
 	"sleep": {
 		"text": {
 			"en": "For a bed tonight call DRHE first — the fastest official route.",
 			"ga": "Le haghaidh leaba anocht glaoigh ar DRHE ar dtús."
 		},
-		"action": { "type": "tel", "number": "1800707707", "label": { "en": "Call DRHE — 1800 707 707", "ga": "Glaoigh ar DRHE" } },
-		"secondaryAction": { "type": "filter", "tag": "shelter", "label": { "en": "See housing services", "ga": "Féach seirbhísí tithíochta" } }
+		"action": {
+			"type": "tel",
+			"number": "1800707707",
+			"label": { "en": "Call DRHE — 1800 707 707", "ga": "Glaoigh ar DRHE" }
+		},
+		"secondaryAction": {
+			"type": "filter",
+			"tag": "shelter",
+			"label": { "en": "See housing services", "ga": "Féach seirbhísí tithíochta" }
+		}
 	},
 	"health": {
 		"text": { "en": "Free or low-cost health help.", "ga": "Cabhair sláinte saor in aisce." },
-		"action": { "type": "filter", "tag": "health", "label": { "en": "Show health services", "ga": "Taispeáin sláinte" } }
+		"action": {
+			"type": "filter",
+			"tag": "health",
+			"label": { "en": "Show health services", "ga": "Taispeáin sláinte" }
+		}
 	},
 	"advice": {
 		"text": { "en": "Advice on welfare and housing.", "ga": "Comhairle leasa agus tithíochta." },
-		"action": { "type": "filter", "tag": "advice", "label": { "en": "Show advice services", "ga": "Taispeáin comhairle" } }
+		"action": {
+			"type": "filter",
+			"tag": "advice",
+			"label": { "en": "Show advice services", "ga": "Taispeáin comhairle" }
+		}
 	},
 	"connectivity": {
-		"text": { "en": "Free wifi, desks and charging.", "ga": "Wifi, deasca agus luchtú saor in aisce." },
-		"action": { "type": "filter", "tag": "connectivity", "label": { "en": "Show wifi spots", "ga": "Taispeáin wifi" } }
+		"text": {
+			"en": "Free wifi, desks and charging.",
+			"ga": "Wifi, deasca agus luchtú saor in aisce."
+		},
+		"action": {
+			"type": "filter",
+			"tag": "connectivity",
+			"label": { "en": "Show wifi spots", "ga": "Taispeáin wifi" }
+		}
 	},
 	"no-match": {
 		"text": {
 			"en": "No exact match — try search or browse the directory.",
 			"ga": "Níor aimsíodh meaitseáil — bain triail as cuardach."
 		},
-		"action": { "type": "filter", "tag": "", "label": { "en": "Browse all services", "ga": "Brabhsáil seirbhísí" } }
+		"action": {
+			"type": "filter",
+			"tag": "",
+			"label": { "en": "Browse all services", "ga": "Brabhsáil seirbhísí" }
+		}
 	}
 }

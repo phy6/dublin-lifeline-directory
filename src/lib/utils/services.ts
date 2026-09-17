@@ -83,6 +83,7 @@ export function matchesNeed(service: ServiceLocation, need: string): boolean {
 
 export function distinctNeeds(services: ServiceLocation[]): string[] {
 	const seen = new Set<string>();
-	for (const s of services) for (const n of s.services ?? []) if ((NEEDS as readonly string[]).includes(n)) seen.add(n);
+	for (const s of services)
+		for (const n of s.services ?? []) if ((NEEDS as readonly string[]).includes(n)) seen.add(n);
 	return [...seen].sort();
 }

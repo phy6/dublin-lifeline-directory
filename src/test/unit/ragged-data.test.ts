@@ -1,9 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-	normalizeService,
-	normalizeServices,
-	distinctCategories
-} from '$lib/utils/services';
+import { normalizeService, normalizeServices, distinctCategories } from '$lib/utils/services';
 import { getHoursForDay, getOpenNowStatus } from '$lib/utils/hours';
 
 describe('ragged pipeline data (3.3.0 shape)', () => {
@@ -45,9 +41,7 @@ describe('ragged pipeline data (3.3.0 shape)', () => {
 
 	it('normalizeServices + distinctCategories handle the real dataset', async () => {
 		const data = (await import('$lib/data/services.json')).default;
-		const services = normalizeServices(
-			data.services as unknown as Record<string, unknown>[]
-		);
+		const services = normalizeServices(data.services as unknown as Record<string, unknown>[]);
 		expect(services).toHaveLength(14);
 		// Every service renders without throwing on hours/tags/services access
 		for (const s of services) {
