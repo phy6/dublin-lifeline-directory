@@ -4,6 +4,8 @@
 	import { base } from '$app/paths';
 	import TextScaleToggle from '$lib/components/TextScaleToggle.svelte';
 	import LowDataToggle from '$lib/components/LowDataToggle.svelte';
+	import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+	import OfflineBanner from '$lib/components/OfflineBanner.svelte';
 	import Chatbot from '$lib/components/Chatbot.svelte';
 	import '$lib/styles/tokens.css';
 	let { children } = $props();
@@ -58,8 +60,10 @@
 <div class="a11y-fab">
 	<TextScaleToggle />
 	<LowDataToggle />
+	<ThemeToggle />
 </div>
 
+<OfflineBanner />
 <Chatbot />
 
 <style>
