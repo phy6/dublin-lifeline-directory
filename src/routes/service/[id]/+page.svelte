@@ -4,6 +4,8 @@
 
 	const { data } = $props();
 	let service = $state(data.service ?? null);
+	// tel: URIs must not contain spaces or brackets — dialable chars only.
+	const telHref = $derived(service?.phone ? `tel:${service.phone.replace(/[^+\d]/g, '')}` : null);
 </script>
 
 {#if service}
@@ -17,9 +19,9 @@
 			<section>
 				<h2>{t('location')}</h2>
 				{#if service.address}<p>{service.address}</p>{/if}
-				{#if service.phone}
+				{#if service.phone && telHref}
 					<p>
-						<a href="tel:{service.phone}" aria-label="Call {service.name} at {service.phone}"
+						<a href={telHref} aria-label="Call {service.name} at {service.phone}"
 							>{service.phone}</a
 						>
 					</p>

@@ -380,3 +380,9 @@ def test_dumps_prettier_matches_prettier_conventions():
     assert '"long_list": [\n\t\t"addiction",' in text
     for line in text.splitlines():
         assert line == line.rstrip()
+
+def test_merge_location_strips_phone_label_prefix():
+    from scraper.pipeline import merge_location
+    scraped = {"id": "x", "name": "X", "phone": "Freephone: 1800 78 68 28", "source": "live", "services": [], "fallback": {}}
+    merged = merge_location(scraped, flyer=None, fallback={})
+    assert merged["phone"] == "1800 78 68 28"

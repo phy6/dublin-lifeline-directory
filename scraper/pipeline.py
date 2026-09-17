@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
@@ -145,6 +146,16 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
     for field in ("phone", "email", "website", "hours"):
         if field in merged and merged[field] is None:
             del merged[field]
+
+    # Phone sanitize: scraped text often carries a label prefix
+    # ("Freephone: 1800 ...", "Tel: 01 ..."). Strip it so the directory
+    # shows a dialable number and tel: links work.
+    phone = merged.get("phone")
+    if isinstance(phone, str):
+        cleaned = re.sub(r"^(freephone|freecall|tel|telephone|phone|fax|lo-?call)\s*:\s*", "", phone, flags=re.IGNORECASE)
+        cleaned = re.sub(r"\s+", " ", cleaned).strip()
+        if cleaned:
+            merged["phone"] = cleaned
 
     # The scraper rarely extracts a category, but every target carries a
     # human-curated one in its fallback config — use it instead of None.
