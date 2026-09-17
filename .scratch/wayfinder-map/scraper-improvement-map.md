@@ -22,8 +22,8 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - [Scraper CLI interface](scraper-cli-interface.md): CLI flags for `--targets`, `--flyer-only`, `--dry-run`, `--output`, `--config`, `--no-fallback`, `--verbose`
 - [Rate limiting and retry strategy](scraper-rate-limiting.md): ✅ Closed — `_RateLimiter` (6s interval, ±0.5 jitter), `_retry_fetch` with exponential backoff, 5s httpx timeout, all in `scraper/scraper.py`; no extra deps
 - [Local HTML archive fallback](scraper-local-archive-fallback.md): ✅ Closed — `scraper/docs/` with 20+ HTML archives; `fetch_with_fallback()` checks `{id}.html` and `dublin_lifeline_{id}.html`; `--no-fallback` flag raises on archive/none sources
-- [Provider discovery feature](scraper-provider-discovery.md): Deferred — out of scope for MVP; current 14 targets are sufficient
-- [Merge strategy for dynamicActivities vs static services](scraper-dynamic-activities-merge.md): ✅ Closed (partial) — `normalize_services()` and `DISPLAY_TO_SLUG` mapping implemented; `dynamicActivities`, `activityMatchCount`, and flyer category-based `tags` need to be added to `merge_location()` in `pipeline.py`
+- [Provider discovery feature](scraper-provider-discovery.md): ✅ Implemented — `discover_providers()` + `--discover` + 4 tests (69 passing); live run yields 0 (6/7 URLs dead, refresh needed)
+- [Merge strategy for dynamicActivities vs static services](scraper-dynamic-activities-merge.md): ✅ Closed — `merge_location()` implements `dynamicActivities` (scraped services not in fallback), `activityMatchCount`, `tags` from `services_categories` + `healthcare_services` via `normalize_services()`. Pipeline 3.3.0, 14 services. Tags present for flyer-matched (capuchin-day-centre: 9, merchants-quay-ireland: 7). `dynamicActivities` empty because scraper extracts `description` not structured `services` field
 - [Scrape failure handling](scraper-scrape-failure-handling.md): ✅ Closed (partial) — `merge_location()` implements `scrapeSuccess`/`dataSource` tracking; flyer-only locations handled via lookup; **bugs:** `services.json` has stale `dataSource: "scraped"` values from old pipeline run; no repeated-failure removal or review flag
 - [Data validation schema](scraper-data-validation.md): ✅ Closed — `scraper/validate.py` with custom validators (no pydantic): location errors/warnings, hours format/ordering, service slug validation, clinic location_id check. `scraper/tests/test_validation.py` with 14 tests. CLI: `python3 scraper/validate.py src/lib/data/services.json`
 - [Version bumping strategy](scraper-version-bumping.md): ✅ Closed — `bump_version()` implements all semver rules using `compute_diff()` output; `nextSync` set to `pipelineRun + 7 days`; 4 tests in `test_pipeline.py`
@@ -40,4 +40,4 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - Real-time/background sync (PWA uses StaleWhileRevalidate)
 - Provider submission forms (Web3Forms - separate feature)
 - Native app builds
-- Provider discovery feature — deferred as out of scope for MVP; current 14 targets are stable and sufficient
+- ~~Provider discovery feature — deferred as out of scope for MVP~~ → implemented; live URL refresh still out of scope

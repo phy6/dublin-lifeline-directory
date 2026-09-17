@@ -6,6 +6,7 @@ import random
 import re
 import time
 from typing import Optional, Tuple, List
+from urllib.parse import urljoin
 
 import httpx
 from bs4 import BeautifulSoup
@@ -58,7 +59,7 @@ def extract_field(soup: BeautifulSoup, selectors: List[str]) -> Optional[str]:
 
 
 async def fetch_url(client: httpx.AsyncClient, url: str, timeout: float = 5.0) -> str:
-    response = await client.get(url, timeout=timeout)
+    response = await client.get(url, timeout=timeout, follow_redirects=True)
     response.raise_for_status()
     return response.text
 
@@ -99,7 +100,7 @@ async def fetch_with_fallback(target: dict, docs_dir: str, client: Optional[http
     target_id = target["id"]
     own_client = client is None
     if own_client:
-        client = httpx.AsyncClient()
+        client = httpx.AsyncClient(follow_redirects=True)
     try:
         html = await _retry_fetch(client, url)
         return html, "live"
@@ -161,3 +162,62 @@ class DublinLifelineScraper:
         with open(output_path, "w") as f:
             json.dump(results, f, indent=2)
         return results
+
+    async def discover_providers(self) -> List[dict]:
+        discovery = self.config.get("discovery")
+        if not discovery or not discovery.get("urls"):
+            logger.info("No discovery URLs configured")
+            return []
+        discovery_urls = discovery["urls"]
+        discovery_selectors = discovery.get("selectors", {})
+        name_selectors = discovery_selectors.get("name", ["h2 a", "h3 a"])
+        interval = discovery.get("interval", 60000) / 1000.0
+        max_results = discovery.get("maxResults", 50)
+        discovered = []
+        seen_urls = set()
+        async with httpx.AsyncClient(follow_redirects=True) as client:
+            for idx, dir_url in enumerate(discovery_urls):
+                try:
+                    html = await _retry_fetch(client, dir_url)
+                    soup = BeautifulSoup(html, "lxml")
+                    for selector in name_selectors:
+                        for el in soup.select(selector):
+                            # el may itself be the link (e.g. "h2 a" returns <a>)
+                            link = None
+                            if el.name == "a" and el.get("href"):
+                                link = el
+                            elif el.get("href"):
+                                link = el
+                            else:
+                                parent = el.find_parent("a")
+                                if parent and parent.get("href"):
+                                    link = parent
+                                else:
+                                    child = el.select_one("a[href]")
+                                    if child:
+                                        link = child
+                            if link is None:
+                                continue
+                            name = el.get_text(strip=True)
+                            if not name or len(name) < 3:
+                                continue
+                            url = link["href"].strip()
+                            if url.startswith(("mailto:", "tel:", "#", "javascript:")):
+                                continue
+                            if not url.startswith("http"):
+                                url = urljoin(dir_url, url)
+                            norm = url.rstrip("/").lower()
+                            if norm in seen_urls:
+                                continue
+                            seen_urls.add(norm)
+                            discovered.append({"name": name, "url": url, "source": dir_url})
+                            if len(discovered) >= max_results:
+                                break
+                        if len(discovered) >= max_results:
+                            break
+                    if idx < len(discovery_urls) - 1:
+                        await asyncio.sleep(interval)
+                except Exception as e:
+                    logger.warning(f"Discovery failed for {dir_url}: {e}")
+        logger.info(f"Discovery complete: {len(discovered)} providers found")
+        return discovered[:max_results]
