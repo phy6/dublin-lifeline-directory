@@ -4,10 +4,10 @@
 
 **Blocked by:** None (can start immediately)
 
-**Status:** ready-for-agent
+**Status:** completed
 
-- [ ] Add `<div role="status" aria-live="polite" id="results-announcer" class="sr-only">` to `src/routes/+page.svelte` and `src/routes/search/+page.svelte`
-- [ ] Update announcer text when `filtered.length` changes (via reactive statement or effect)
-- [ ] Announcement should say: `"{count} services found"` or `"{count} services found open on {day}"`
-- [ ] Ensure existing stats text remains visible for sighted users
-- [ ] Test with screen reader: filter by category, day, and search — each change should announce
+- [x] Add `<div role="status" aria-live="polite" id="results-announcer" class="sr-only">` to `src/routes/+page.svelte` and `src/routes/search/+page.svelte`
+- [x] Update announcer text when `filtered.length` changes (via reactive statement or effect)
+- [x] Announcement should say: `"{count} services found"` or `"{count} services found open on {day}"`
+- [x] Ensure existing stats text remains visible for sighted users
+- [x] Test with screen reader: filter by category, day, and search — each change should announce
