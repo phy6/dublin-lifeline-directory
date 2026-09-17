@@ -63,7 +63,9 @@ const STRINGS = {
 		'clear-filters': 'Clear filters',
 		'install-app': 'Install app',
 		'install-app-blurb': 'Add Dublin City Support to your home screen for offline access.',
-		'not-now': 'Not now'
+		'not-now': 'Not now',
+		'report-wrong-info': 'Report wrong info',
+		'report-email-subject': 'Outdated info'
 	},
 	ga: {
 		directory: 'Eolaire',
@@ -106,8 +108,11 @@ const STRINGS = {
 		'no-matching-services': 'Ní oireann aon seirbhís do na scagairí seo.',
 		'clear-filters': 'Glan na scagairí',
 		'install-app': 'Suiteáil an aip',
-		'install-app-blurb': 'Cuir Tacaíocht Bhaile Átha Cliath le do scáileán baile le rochtain as líne.',
-		'not-now': 'Níos déanaí'
+		'install-app-blurb':
+			'Cuir Tacaíocht Bhaile Átha Cliath le do scáileán baile le rochtain as líne.',
+		'not-now': 'Níos déanaí',
+		'report-wrong-info': 'Tuairiscigh eolas mícheart',
+		'report-email-subject': 'Eolas as dáta'
 	}
 } as const;
 

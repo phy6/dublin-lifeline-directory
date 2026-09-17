@@ -6,6 +6,13 @@
 	let service = $state(data.service ?? null);
 	// tel: URIs must not contain spaces or brackets — dialable chars only.
 	const telHref = $derived(service?.phone ? `tel:${service.phone.replace(/[^+\d]/g, '')}` : null);
+	// Directory feedback inbox — where "report wrong info" mails go.
+	const FEEDBACK_EMAIL = 'info@dublinlifeline.ie';
+	const reportHref = $derived(
+		service
+			? `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(`${t('report-email-subject')}: ${service.name}`)}&body=${encodeURIComponent(`Please update the information for ${service.name} (${service.address ?? 'no address'}).\n\nCurrent data may be incorrect. Please verify and update.`)}`
+			: null
+	);
 </script>
 
 {#if service}
@@ -21,8 +28,7 @@
 				{#if service.address}<p>{service.address}</p>{/if}
 				{#if service.phone && telHref}
 					<p>
-						<a href={telHref} aria-label="Call {service.name} at {service.phone}"
-							>{service.phone}</a
+						<a href={telHref} aria-label="Call {service.name} at {service.phone}">{service.phone}</a
 						>
 					</p>
 				{/if}
@@ -83,6 +89,11 @@
 				<small
 					>{t('last-verified')}: {service.lastVerified} · {t('source')}: {service.dataSource}</small
 				>
+				{#if reportHref}
+					<p>
+						<a href={reportHref}>{t('report-wrong-info')}</a>
+					</p>
+				{/if}
 			</footer>
 		</div>
 	</main>
