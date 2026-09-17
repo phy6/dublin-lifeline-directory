@@ -422,7 +422,7 @@
 		{
 			"id": "peter-mcverry-trust",
 			"name": "Peter McVerry Trust",
-			"url": "https://www.petermcverrytrust.org/",
+			"url": "https://pmvtrust.ie/",
 			"selectors": {
 				"phone": [
 					"a[href^=\"tel\"]",
@@ -460,13 +460,13 @@
 			},
 			"fallback": {
 				"name": "Peter McVerry Trust",
-				"address": "10 South Cumberland Street, Dublin 1",
-				"phone": "+353-1-878-0404",
+				"address": "27 Sherrard Street Upper, Dublin 1, D01 H7K5",
+				"phone": "+353-1-823-0776",
 				"hours": {
 					"mon-fri": "09:00-17:00"
 				},
-				"email": "info@petermcverrytrust.org",
-				"website": "https://www.petermcverrytrust.org",
+				"email": "info@pmvtrust.ie",
+				"website": "https://pmvtrust.ie",
 				"services": ["homelessness", "housing", "support", "addiction"],
 				"tags": ["homelessness", "housing", "addiction", "support", "youth"],
 				"category": "Housing Support",
