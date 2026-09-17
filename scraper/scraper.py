@@ -6,7 +6,7 @@ import random
 import re
 import time
 from typing import Optional, Tuple, List
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
@@ -170,13 +170,24 @@ class DublinLifelineScraper:
             return []
         discovery_urls = discovery["urls"]
         discovery_selectors = discovery.get("selectors", {})
-        name_selectors = discovery_selectors.get("name", ["h2 a", "h3 a"])
+        default_name_selectors = discovery_selectors.get("name", ["h2 a", "h3 a"])
         interval = discovery.get("interval", 60000) / 1000.0
         max_results = discovery.get("maxResults", 50)
         discovered = []
         seen_urls = set()
+        # URL entries may be plain strings (global selectors) or dicts
+        # {url, name_selectors?, capture_category?} for site-specific extraction.
+        normalized = []
+        for entry in discovery_urls:
+            if isinstance(entry, str):
+                normalized.append({"url": entry})
+            else:
+                normalized.append(entry)
         async with httpx.AsyncClient(follow_redirects=True) as client:
-            for idx, dir_url in enumerate(discovery_urls):
+            for idx, entry in enumerate(normalized):
+                dir_url = entry["url"]
+                name_selectors = entry.get("name_selectors", default_name_selectors)
+                capture_category = entry.get("capture_category", False)
                 try:
                     html = await _retry_fetch(client, dir_url)
                     soup = BeautifulSoup(html, "lxml")
@@ -209,13 +220,23 @@ class DublinLifelineScraper:
                             norm = url.rstrip("/").lower()
                             if norm in seen_urls:
                                 continue
+                            # Skip links back to the directory itself.
+                            if urlparse(norm).netloc == urlparse(dir_url).netloc:
+                                continue
                             seen_urls.add(norm)
-                            discovered.append({"name": name, "url": url, "source": dir_url})
+                            item = {"name": name, "url": url, "source": dir_url}
+                            if capture_category:
+                                heading = el.find_previous(["h2", "h3"])
+                                if heading is not None:
+                                    cat = heading.get_text(strip=True)
+                                    if cat:
+                                        item["category"] = cat
+                            discovered.append(item)
                             if len(discovered) >= max_results:
                                 break
                         if len(discovered) >= max_results:
                             break
-                    if idx < len(discovery_urls) - 1:
+                    if idx < len(normalized) - 1:
                         await asyncio.sleep(interval)
                 except Exception as e:
                     logger.warning(f"Discovery failed for {dir_url}: {e}")

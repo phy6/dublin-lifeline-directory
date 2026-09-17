@@ -13,11 +13,11 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), "..", "config", "sources.j
 
 DIR_HTML = """
 <html><body>
-<h2><a href="/org/alpha">Alpha Centre</a></h2>
+<h2><a href="https://example.com/org/alpha">Alpha Centre</a></h2>
 <h3><a href="https://example.org/beta">Beta Shelter</a></h3>
 <div class="org-name"><a href="/gamma">Gamma House</a></div>
 <h2><a href="mailto:x@y.z">Mail link</a></h2>
-<h2><a href="/org/alpha">Alpha Centre</a></h2>
+<h2><a href="https://example.com/org/alpha">Alpha Centre</a></h2>
 </body></html>
 """
 
@@ -25,7 +25,7 @@ DIR_HTML = """
 def _make_scraper():
     s = DublinLifelineScraper(CONFIG_PATH)
     s.config["discovery"] = {
-        "urls": ["https://example.com/dir"],
+        "urls": ["https://directory.example.net/dir"],
         "selectors": {"name": ["h2 a", "h3 a", ".org-name"]},
         "interval": 0,
         "maxResults": 10,
@@ -34,7 +34,7 @@ def _make_scraper():
 
 
 @pytest.mark.asyncio
-async def test_discover_providers_parses_links_dedupes_and_joins_relative():
+async def test_discover_providers_parses_links_dedupes_and_skips_self_links():
     s = _make_scraper()
 
     async def fake_retry(client, url, timeout=5.0, max_attempts=3, base_delay=2.0):
@@ -44,12 +44,14 @@ async def test_discover_providers_parses_links_dedupes_and_joins_relative():
         with patch("asyncio.sleep", new=AsyncMock()):
             res = await s.discover_providers()
 
-    assert len(res) == 3
+    # Gamma resolves to the directory host itself -> excluded; Alpha deduped; mailto excluded.
+    assert len(res) == 2
     assert res[0]["name"] == "Alpha Centre"
     assert res[0]["url"] == "https://example.com/org/alpha"
     urls = [r["url"] for r in res]
     assert "https://example.org/beta" in urls
     assert not any(u.startswith("mailto:") for u in urls)
+    assert not any("Gamma" in r["name"] for r in res)
 
 
 @pytest.mark.asyncio
@@ -97,3 +99,95 @@ async def test_run_discovery_no_fallback_raises():
     with patch("scraper.main.fetch_with_fallback", new=AsyncMock(return_value=(None, "none"))):
         with pytest.raises(RuntimeError):
             await run_discovery(mock_scraper, no_fallback=True)
+
+
+FOCUS_HTML = """
+<html><body><div class="two-col-content__row"><div>
+<h3>Advice, information, advocacy and support</h3>
+<ul>
+<li><a href="http://www.threshold.ie/">Threshold</a></li>
+<li><a href="https://www.svp.ie/Home.aspx">Saint Vincent DePaul</a></li>
+</ul>
+<h3>Legal</h3>
+<ul><li><a href="https://mercylaw.ie/">Mercy Law Resource Centre</a></li></ul>
+</div></div></body></html>
+"""
+
+
+@pytest.mark.asyncio
+async def test_discover_dict_entry_uses_scoped_selectors_and_category():
+    s = DublinLifelineScraper(CONFIG_PATH)
+    s.config["discovery"] = {
+        "urls": [
+            {
+                "url": "https://example.com/orgs",
+                "name_selectors": [".two-col-content__row li a"],
+                "capture_category": True,
+            }
+        ],
+        "selectors": {"name": ["h2 a"]},
+        "interval": 0,
+        "maxResults": 10,
+    }
+
+    async def fake_retry(client, url, timeout=5.0, max_attempts=3, base_delay=2.0):
+        return FOCUS_HTML
+
+    with patch("scraper.scraper._retry_fetch", side_effect=fake_retry):
+        with patch("asyncio.sleep", new=AsyncMock()):
+            res = await s.discover_providers()
+
+    assert len(res) == 3
+    by_name = {r["name"]: r for r in res}
+    assert by_name["Threshold"]["category"] == "Advice, information, advocacy and support"
+    assert by_name["Mercy Law Resource Centre"]["category"] == "Legal"
+    assert by_name["Threshold"]["url"] == "http://www.threshold.ie/"
+
+
+@pytest.mark.asyncio
+async def test_discover_string_entry_stays_backward_compatible():
+    s = DublinLifelineScraper(CONFIG_PATH)
+    s.config["discovery"] = {
+        "urls": ["https://directory.example.net/dir"],
+        "selectors": {"name": ["h2 a"]},
+        "interval": 0,
+        "maxResults": 10,
+    }
+    html = '<html><body><h2><a href="https://example.com/x">X Org</a></h2></body></html>'
+
+    async def fake_retry(client, url, timeout=5.0, max_attempts=3, base_delay=2.0):
+        return html
+
+    with patch("scraper.scraper._retry_fetch", side_effect=fake_retry):
+        with patch("asyncio.sleep", new=AsyncMock()):
+            res = await s.discover_providers()
+
+    assert len(res) == 1
+    assert res[0]["name"] == "X Org"
+    assert "category" not in res[0]
+
+
+@pytest.mark.asyncio
+async def test_discover_skips_links_back_to_directory_itself():
+    s = DublinLifelineScraper(CONFIG_PATH)
+    s.config["discovery"] = {
+        "urls": ["https://directory.example.net/orgs"],
+        "selectors": {"name": ["li a"]},
+        "interval": 0,
+        "maxResults": 10,
+    }
+    html = (
+        '<html><body><ul>'
+        '<li><a href="https://directory.example.net/">Directory Home</a></li>'
+        '<li><a href="https://example.org/real-org">Real Org</a></li>'
+        "</ul></body></html>"
+    )
+
+    async def fake_retry(client, url, timeout=5.0, max_attempts=3, base_delay=2.0):
+        return html
+
+    with patch("scraper.scraper._retry_fetch", side_effect=fake_retry):
+        with patch("asyncio.sleep", new=AsyncMock()):
+            res = await s.discover_providers()
+
+    assert [r["name"] for r in res] == ["Real Org"]

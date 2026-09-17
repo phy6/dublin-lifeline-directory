@@ -71,6 +71,8 @@ async def run_discovery(scraper, no_fallback):
         if no_fallback and source in ("none", "archive"):
             raise RuntimeError(f"Fetch failed for {slug} with no fallback allowed (source={source})")
         result = {"id": slug, "name": prov["name"], "url": prov["url"], "source": source}
+        if prov.get("category"):
+            result["category"] = prov["category"]
         if html:
             soup = BeautifulSoup(html, "lxml")
             for field in ("phone", "address", "description"):

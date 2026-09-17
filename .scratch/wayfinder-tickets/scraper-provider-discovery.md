@@ -28,3 +28,10 @@ Recommendation: **Defer**. The current target list is stable. Discovery can be a
 - (Earlier "0 providers" reading was a timeout artifact: real 60s sleeps between URLs killed the run early.)
 - Fixes applied: `follow_redirects=True` on httpx clients, multi-selector matching, link-is-element handling (`h2 a` returns `<a>`), mailto/tel/# filtering, `urljoin` for relative URLs, slugify via regex, `getattr(args,"discover",False)` for backward-compat mocks.
 - Remaining: refresh `discovery.urls` with live directory sources before `--discover` is useful in production.
+
+## Live sources wired (2026-09-17, per user pointers)
+
+- **Focus Ireland useful-organisations** (`focusireland.ie/get-help/useful-organisations/`): 200, static HTML. All 35 external org links live in `.two-col-content__row li a` (verified against live DOM). `discover_providers()` now returns **35 providers with categories** (20 advice/homelessness, 7 legal, 3 state services, 5 gov departments) — Threshold, SVP, Simon, Crosscare, PMVT, MABS, Women's Aid, DRHE, etc.
+- **Charities Regulator**: HTML pages behind Cloudflare 403, but the published **register XLSX downloads directly** (38MB, verified 200). New `scraper/fetch_register.py` downloads/parses/filters it: 14,469 rows → 11,475 Registered → 3,152 Dublin → **998 candidates** (homeless classification / poverty / community-welfare purpose). Overlap check: 12/14 existing targets match a candidate by name (missing: Samaritans — national org, non-Dublin address; Crosscare — different registered legal name). Run: `python3 scraper/fetch_register.py --download`.
+- Config changes: `discovery.urls` replaced (5 dead + 2 junk-yielding URLs dropped, reasons above); entries support `{url, name_selectors?, capture_category?}` dicts, plain strings still work. `register_xlsx` URL stored in config. Same-domain links excluded (a directory no longer "discovers" itself).
+- 80 tests passing (69 + 11 new: discovery dict-entry/category/self-link-exclusion, register filter + end-to-end on generated workbook).
