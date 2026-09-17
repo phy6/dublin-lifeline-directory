@@ -9,7 +9,6 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from scraper import DublinLifelineScraper, load_config
 from scraper.pipeline import run_pipeline
-from scraper.scraper import extract_services, fetch_with_fallback
 
 logger = logging.getLogger(__name__)
 
@@ -50,38 +49,43 @@ def get_targets(config, args):
     return config["targets"]
 
 
-async def run_scraper(scraper, targets, no_fallback):
-    results = await scraper.run(targets=[t["id"] for t in targets])
+def _enforce_no_fallback(results, no_fallback):
     if no_fallback:
         for r in results:
             if r.get("source") in ("none", "archive"):
                 raise RuntimeError(f"Fetch failed for {r['id']} with no fallback allowed (source={r.get('source')})")
+
+
+async def run_scraper(scraper, targets, no_fallback):
+    results = await scraper.run(targets=[t["id"] for t in targets])
+    _enforce_no_fallback(results, no_fallback)
     return results
 
 
+def _slugify(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") or "discovered"
+
+
 async def run_discovery(scraper, no_fallback):
-    from bs4 import BeautifulSoup
     discovered = await scraper.discover_providers()
     logger.info("Discovered %d providers", len(discovered))
     results = []
     for prov in discovered:
-        slug = re.sub(r"[^a-z0-9]+", "-", prov["name"].lower()).strip("-") or "discovered"
+        slug = _slugify(prov["name"])
         target = {"id": slug, "name": prov["name"], "url": prov["url"], "selectors": {}, "fallback": {}}
-        html, source = await fetch_with_fallback(target, scraper.docs_dir)
-        if no_fallback and source in ("none", "archive"):
-            raise RuntimeError(f"Fetch failed for {slug} with no fallback allowed (source={source})")
-        result = {"id": slug, "name": prov["name"], "url": prov["url"], "source": source}
+        result = await scraper.fetch_target(target)
         if prov.get("category"):
             result["category"] = prov["category"]
-        if html:
-            soup = BeautifulSoup(html, "lxml")
-            for field in ("phone", "address", "description"):
-                result[field] = None
-            result["services"] = extract_services(soup)
-        else:
-            result["services"] = []
         results.append(result)
+    _enforce_no_fallback(results, no_fallback)
     return results
+
+
+def _pipeline_paths(config_path, output_override):
+    project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(config_path))))
+    flyer_path = os.path.join(project_root, ".scratch", "wayfinder-map", "research", "flyer-data.json")
+    output_dir = output_override or os.path.join(project_root, "src", "lib", "data")
+    return flyer_path, output_dir
 
 
 async def main():
@@ -103,9 +107,7 @@ async def main():
             os.makedirs(os.path.dirname(scraped_path), exist_ok=True)
             with open(scraped_path, "w") as f:
                 json.dump(results, f, indent=2)
-            project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(config_path))))
-            flyer_path = os.path.join(project_root, ".scratch", "wayfinder-map", "research", "flyer-data.json")
-            output_dir = args.output or os.path.join(project_root, "src", "lib", "data")
+            flyer_path, output_dir = _pipeline_paths(config_path, args.output)
             pipeline_result = run_pipeline(scraped_path, flyer_path, output_dir)
             logger.info("Discovery complete. Version: %s", pipeline_result["version"])
             return 0
@@ -127,9 +129,7 @@ async def main():
         results = await run_scraper(scraper, targets, args.no_fallback)
         scraped_path = os.path.join(scraper.output_dir, "scraped_output.json")
 
-        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(config_path))))
-        flyer_path = os.path.join(project_root, ".scratch", "wayfinder-map", "research", "flyer-data.json")
-        output_dir = args.output or os.path.join(project_root, "src", "lib", "data")
+        flyer_path, output_dir = _pipeline_paths(config_path, args.output)
 
         pipeline_result = run_pipeline(scraped_path, flyer_path, output_dir)
 

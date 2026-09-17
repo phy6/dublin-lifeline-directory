@@ -67,24 +67,45 @@ async def test_run_discovery_slugifies_and_extracts_services():
     from scraper.main import run_discovery
 
     mock_scraper = MagicMock()
-    mock_scraper.docs_dir = "/tmp"
     mock_scraper.discover_providers = AsyncMock(
         return_value=[
-            {"name": "Alpha Centre", "url": "https://example.com/alpha", "source": "https://example.com/dir"},
-            {"name": "Beta! Shelter @Dublin", "url": "https://example.com/beta", "source": "https://example.com/dir"},
+            {"name": "Alpha Centre", "url": "https://example.com/alpha", "discovered_via": "https://example.com/dir"},
+            {"name": "Beta! Shelter @Dublin", "url": "https://example.com/beta", "discovered_via": "https://example.com/dir"},
         ]
     )
-    fake_html = "<html><body><h3>Food and Meal Services</h3></body></html>"
-    with patch(
-        "scraper.main.fetch_with_fallback",
-        new=AsyncMock(side_effect=[(fake_html, "live"), (None, "none")]),
-    ):
-        res = await run_discovery(mock_scraper, no_fallback=False)
+    mock_scraper.fetch_target = AsyncMock(
+        side_effect=[
+            {"id": "alpha-centre", "name": "Alpha Centre", "url": "https://example.com/alpha", "source": "live", "services": ["food"]},
+            {"id": "beta-shelter-dublin", "name": "Beta! Shelter @Dublin", "url": "https://example.com/beta", "source": "none", "services": []},
+        ]
+    )
+    res = await run_discovery(mock_scraper, no_fallback=False)
 
     assert res[0]["id"] == "alpha-centre"
     assert res[1]["id"] == "beta-shelter-dublin"
     assert res[0]["services"] == ["food"]
     assert res[1]["services"] == []
+    # fetch_target receives a slug id and empty selectors (discovery has no per-target selectors).
+    first_target = mock_scraper.fetch_target.call_args_list[0][0][0]
+    assert first_target["id"] == "alpha-centre"
+    assert first_target["selectors"] == {}
+
+
+@pytest.mark.asyncio
+async def test_run_discovery_passes_category_through():
+    from scraper.main import run_discovery
+
+    mock_scraper = MagicMock()
+    mock_scraper.discover_providers = AsyncMock(
+        return_value=[
+            {"name": "Alpha", "url": "https://example.com/a", "discovered_via": "d", "category": "Legal"},
+        ]
+    )
+    mock_scraper.fetch_target = AsyncMock(
+        return_value={"id": "alpha", "name": "Alpha", "url": "https://example.com/a", "source": "live", "services": []}
+    )
+    res = await run_discovery(mock_scraper, no_fallback=False)
+    assert res[0]["category"] == "Legal"
 
 
 @pytest.mark.asyncio
@@ -92,13 +113,14 @@ async def test_run_discovery_no_fallback_raises():
     from scraper.main import run_discovery
 
     mock_scraper = MagicMock()
-    mock_scraper.docs_dir = "/tmp"
     mock_scraper.discover_providers = AsyncMock(
-        return_value=[{"name": "Alpha", "url": "https://example.com/a", "source": "d"}]
+        return_value=[{"name": "Alpha", "url": "https://example.com/a", "discovered_via": "d"}]
     )
-    with patch("scraper.main.fetch_with_fallback", new=AsyncMock(return_value=(None, "none"))):
-        with pytest.raises(RuntimeError):
-            await run_discovery(mock_scraper, no_fallback=True)
+    mock_scraper.fetch_target = AsyncMock(
+        return_value={"id": "alpha", "name": "Alpha", "url": "https://example.com/a", "source": "none", "services": []}
+    )
+    with pytest.raises(RuntimeError):
+        await run_discovery(mock_scraper, no_fallback=True)
 
 
 FOCUS_HTML = """
@@ -191,3 +213,28 @@ async def test_discover_skips_links_back_to_directory_itself():
             res = await s.discover_providers()
 
     assert [r["name"] for r in res] == ["Real Org"]
+
+
+@pytest.mark.asyncio
+async def test_discover_self_link_check_ignores_www_and_case():
+    from scraper.scraper import _same_host
+
+    assert _same_host("https://WWW.Example.COM/page", "https://example.com/dir")
+    assert _same_host("https://example.com/a", "https://www.example.com/b")
+    assert not _same_host("https://example.com/a", "https://other.org/b")
+
+
+@pytest.mark.asyncio
+async def test_discover_category_prefers_own_section_heading():
+    from scraper.scraper import _section_heading
+    from bs4 import BeautifulSoup
+
+    html = (
+        "<html><body>"
+        "<h2>Site chrome heading</h2><nav><a href='https://example.com/nav'>x</a></nav>"
+        "<h2>Real section</h2><ul><li><a href='https://example.org/o'>Org</a></li></ul>"
+        "</body></html>"
+    )
+    soup = BeautifulSoup(html, "lxml")
+    link = soup.select_one("ul li a")
+    assert _section_heading(link) == "Real section"

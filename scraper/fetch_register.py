@@ -27,6 +27,19 @@ HEADER_ROW = 2
 DATA_START_ROW = 3
 MAX_CONSECUTIVE_EMPTY = 100
 
+# Column positions in the Public Register sheet (header row 2).
+COL_RCN = 0
+COL_NAME = 1
+COL_AKA = 2
+COL_STATUS = 3
+COL_CLASSIFICATION = 4
+COL_ADDRESS = 5
+COL_PURPOSE = 10
+
+
+def _get_project_root() -> str:
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 def parse_register(path: str) -> tuple[list[dict], dict]:
     """Parse the register workbook. Returns (rows, meta)."""
@@ -53,24 +66,32 @@ def parse_register(path: str) -> tuple[list[dict], dict]:
         empty = 0
         rows.append(
             {
-                "rcn": str(r[0]),
-                "name": str(r[1] or "").strip(),
-                "aka": str(r[2]).strip() if r[2] else None,
-                "status": str(r[3] or "").strip(),
-                "classification": str(r[4] or "").strip(),
-                "address": str(r[5] or "").strip(),
-                "purpose": str(r[10] or "").strip() if len(r) > 10 else "",
+                "rcn": str(r[COL_RCN]),
+                "name": str(r[COL_NAME] or "").strip(),
+                "aka": str(r[COL_AKA]).strip() if r[COL_AKA] else None,
+                "status": str(r[COL_STATUS] or "").strip(),
+                "classification": str(r[COL_CLASSIFICATION] or "").strip(),
+                "address": str(r[COL_ADDRESS] or "").strip(),
+                "purpose": str(r[COL_PURPOSE] or "").strip() if len(r) > COL_PURPOSE else "",
             }
         )
     wb.close()
     return rows, meta
 
 
+def is_registered(row: dict) -> bool:
+    return row["status"] == "Registered"
+
+
+def is_dublin(row: dict) -> bool:
+    return "dublin" in row["address"].lower()
+
+
 def is_relevant(row: dict) -> bool:
     """Registered + Dublin address + homelessness/poverty/community-welfare remit."""
-    if row["status"] != "Registered":
+    if not is_registered(row):
         return False
-    if "dublin" not in row["address"].lower():
+    if not is_dublin(row):
         return False
     classification = row["classification"].lower()
     purpose = row["purpose"].lower()
@@ -98,8 +119,8 @@ def download_register(url: str, dest: str, timeout: float = 120.0) -> str:
 
 def run(xlsx_path: str, output_path: str) -> dict:
     rows, meta = parse_register(xlsx_path)
-    registered = [r for r in rows if r["status"] == "Registered"]
-    dublin = [r for r in registered if "dublin" in r["address"].lower()]
+    registered = [r for r in rows if is_registered(r)]
+    dublin = [r for r in registered if is_dublin(r)]
     candidates = filter_candidates(rows)
     result = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -136,8 +157,7 @@ def parse_args(args=None):
 def main(args=None) -> int:
     parsed = parse_args(args)
     logging.basicConfig(level=logging.DEBUG if parsed.verbose else logging.INFO)
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    default_dir = os.path.join(project_root, "scraper", "output")
+    default_dir = os.path.join(_get_project_root(), "scraper", "output")
     if parsed.download or not parsed.xlsx:
         dest = parsed.xlsx or os.path.join(default_dir, "public-register-of-charities.xlsx")
         logger.info("Downloading register to %s", dest)

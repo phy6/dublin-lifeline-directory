@@ -124,6 +124,43 @@ def _get_project_root() -> str:
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+def _norm_host(netloc: str) -> str:
+    """Normalize a URL host for comparison: lowercase, strip www."""
+    host = (netloc or "").lower()
+    if host.startswith("www."):
+        host = host[4:]
+    return host
+
+
+def _same_host(url_a: str, url_b: str) -> bool:
+    return _norm_host(urlparse(url_a).netloc) == _norm_host(urlparse(url_b).netloc)
+
+
+def _section_heading(el):
+    """Nearest h2/h3 owning the element's section.
+
+    Walks up through ancestors, scanning each level's preceding siblings,
+    so the heading found is the one heading the element's own section rather
+    than whatever heading happens to be nearest in document order (which may
+    be unrelated site chrome). Falls back to document-order search.
+    """
+    node = el
+    for _ in range(5):
+        parent = getattr(node, "parent", None)
+        if parent is None:
+            break
+        for sib in node.previous_siblings:
+            if getattr(sib, "name", None) in ("h2", "h3"):
+                text = sib.get_text(strip=True)
+                if text:
+                    return text
+        node = parent
+    heading = el.find_previous(["h2", "h3"])
+    if heading is not None:
+        return heading.get_text(strip=True)
+    return ""
+
+
 class DublinLifelineScraper:
     def __init__(self, config_path: str):
         self.config = load_config(config_path)
@@ -221,16 +258,14 @@ class DublinLifelineScraper:
                             if norm in seen_urls:
                                 continue
                             # Skip links back to the directory itself.
-                            if urlparse(norm).netloc == urlparse(dir_url).netloc:
+                            if _same_host(url, dir_url):
                                 continue
                             seen_urls.add(norm)
-                            item = {"name": name, "url": url, "source": dir_url}
+                            item = {"name": name, "url": url, "discovered_via": dir_url}
                             if capture_category:
-                                heading = el.find_previous(["h2", "h3"])
-                                if heading is not None:
-                                    cat = heading.get_text(strip=True)
-                                    if cat:
-                                        item["category"] = cat
+                                cat = _section_heading(el)
+                                if cat:
+                                    item["category"] = cat
                             discovered.append(item)
                             if len(discovered) >= max_results:
                                 break
