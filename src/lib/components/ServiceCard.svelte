@@ -50,14 +50,16 @@
 		box-shadow: var(--shadow-sm);
 		text-decoration: none;
 		color: inherit;
-		transition:
-			transform 0.2s,
-			box-shadow 0.2s;
 		max-width: 100%;
 		box-sizing: border-box;
 		border: 1px solid var(--color-border);
 	}
 	@media (prefers-reduced-motion: no-preference) {
+		.card {
+			transition:
+				transform 0.2s,
+				box-shadow 0.2s;
+		}
 		.card:hover {
 			transform: translateY(-2px);
 			box-shadow: var(--shadow-lg);
@@ -150,9 +152,11 @@
 		font-weight: 600;
 		font-size: var(--text-sm);
 		text-align: center;
-		transition: background-color 0.15s;
 	}
 	@media (prefers-reduced-motion: no-preference) {
+		.card-link {
+			transition: background-color 0.15s;
+		}
 		.card-link:hover {
 			background: var(--color-accent-hover);
 		}

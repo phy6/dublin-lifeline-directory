@@ -53,18 +53,18 @@
 
 <nav class="tab-bar" aria-label="Main navigation">
 	<a href="{base}/" aria-current={page.url.pathname === `${base}/` ? 'page' : undefined}>
-		<span aria-hidden="true" class="tab-icon">📋</span>
+		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M9 12h6M9 16h4" /></svg>
 		<span class="tab-label">{t('directory')}</span>
 	</a>
 	<a href="{base}/map" aria-current={page.url.pathname === `${base}/map` ? 'page' : undefined}>
-		<span aria-hidden="true" class="tab-icon">🗺️</span>
+		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4.5 21 7v13l-6.5-2.5L9 20 3 17.5v-13L9 7l5.5-2.5Z" /><path d="M9 7v13M14.5 4.5v13" /></svg>
 		<span class="tab-label">{t('map')}</span>
 	</a>
 	<a
 		href="{base}/search"
 		aria-current={page.url.pathname === `${base}/search` ? 'page' : undefined}
 	>
-		<span aria-hidden="true" class="tab-icon">🔍</span>
+		<svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
 		<span class="tab-label">{t('search')}</span>
 	</a>
 </nav>
@@ -89,9 +89,11 @@
 		letter-spacing: 0.02em;
 		padding: var(--space-1) var(--space-2);
 		border-radius: var(--radius-sm);
-		transition: background-color 0.15s;
 	}
 	@media (prefers-reduced-motion: no-preference) {
+		.top-nav a {
+			transition: background-color 0.15s;
+		}
 		.top-nav a:hover {
 			background: rgba(255, 255, 255, 0.15);
 			text-decoration: none;
@@ -170,10 +172,11 @@
 		.tab-bar a[aria-current='page'] {
 			color: var(--color-accent);
 		}
-		.tab-icon {
-			font-size: 1.375rem;
-			line-height: 1;
-		}
+	.tab-icon {
+		width: 22px;
+		height: 22px;
+		flex: none;
+	}
 		/* FABs stack above the tab bar */
 		.lang-pill {
 			top: max(var(--space-1), env(safe-area-inset-top));

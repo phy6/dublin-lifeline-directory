@@ -114,10 +114,14 @@
 		font-size: var(--text-sm);
 		font-weight: 600;
 		cursor: pointer;
-		transition: all 0.15s;
 		min-height: 44px;
 		min-width: 44px;
 		font-family: var(--font-sans);
+	}
+	@media (prefers-reduced-motion: no-preference) {
+		.filter-chips button {
+			transition: all 0.15s;
+		}
 	}
 	.filter-chips button:hover {
 		border-color: var(--color-accent);
