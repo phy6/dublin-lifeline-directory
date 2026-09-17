@@ -1,9 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Text Scaling', () => {
+	async function openSettings(page: import('@playwright/test').Page) {
+		await page.getByRole('button', { name: 'Settings', exact: true }).click();
+	}
+
 	test('scales text from 100% to 200%', async ({ page }) => {
 		await page.goto('/');
 		await page.waitForLoadState('networkidle');
+		await openSettings(page);
 
 		const html = page.locator('html');
 		await expect(html).toHaveCSS('font-size', '16px');
@@ -24,12 +29,14 @@ test.describe('Text Scaling', () => {
 	test('persists text scale preference across reloads', async ({ page }) => {
 		await page.goto('/');
 		await page.waitForLoadState('networkidle');
+		await openSettings(page);
 
 		await page.getByRole('button', { name: /set text size to 175%/i }).click();
 		await expect(page.locator('html')).toHaveCSS('font-size', '28px');
 
 		await page.reload();
 		await page.waitForLoadState('networkidle');
+		await openSettings(page);
 
 		await expect(page.locator('html')).toHaveCSS('font-size', '28px');
 		await expect(page.getByRole('button', { name: /set text size to 175%/i })).toHaveAttribute(
@@ -41,8 +48,9 @@ test.describe('Text Scaling', () => {
 	test('text scale buttons have proper accessibility attributes', async ({ page }) => {
 		await page.goto('/');
 		await page.waitForLoadState('networkidle');
+		await openSettings(page);
 
-		const panel = page.getByRole('group', { name: /text size controls/i });
+		const panel = page.getByRole('group', { name: /text size/i });
 		await expect(panel).toBeVisible();
 
 		const buttons = page.getByRole('button', { name: /set text size to/i });
@@ -59,6 +67,7 @@ test.describe('Text Scaling', () => {
 	test('text scaling works with low data mode enabled', async ({ page }) => {
 		await page.goto('/');
 		await page.waitForLoadState('networkidle');
+		await openSettings(page);
 
 		await page.getByRole('button', { name: /enable low data mode/i }).click();
 		await expect(page.getByRole('button', { name: /disable low data mode/i })).toBeVisible();

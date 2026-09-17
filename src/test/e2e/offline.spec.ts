@@ -16,6 +16,9 @@ test.describe('Offline Mode', () => {
 		await page.goto('/');
 		await page.waitForLoadState('networkidle');
 
+		// Low data toggle lives in the settings sheet behind the gear FAB
+		await page.getByRole('button', { name: 'Settings', exact: true }).click();
+
 		// Click the low data toggle button
 		const toggleButton = page.getByRole('button', { name: /enable low data mode/i });
 		await expect(toggleButton).toBeVisible();

@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Scratch notes (issue tracker, prototypes) — not shipped, not linted
+.scratch/
