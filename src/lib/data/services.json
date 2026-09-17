@@ -1,6 +1,6 @@
 {
-	"version": "3.4.0",
-	"lastUpdated": "2026-09-17T04:20:52.709654+00:00",
+	"version": "3.5.0",
+	"lastUpdated": "2026-09-17T08:47:25.667544+00:00",
 	"generatedBy": "Dublin Lifeline Pipeline",
 	"services": [
 		{
@@ -40,15 +40,14 @@
 			"rcn": "20166120",
 			"registered_name": "Capuchin Day Centre For Homeless People",
 			"phone": "01 872 0770",
-			"address": null,
+			"address": "29 Bow St, Dublin 7",
 			"hours": {
 				"monday": "07:30-11:30, 12:30-15:00",
 				"tuesday": "07:30-11:30, 12:30-15:00",
 				"wednesday": "07:30-11:30, 12:30-15:00",
 				"thursday": "07:30-11:30, 12:30-15:00",
 				"friday": "07:30-11:30, 12:30-15:00",
-				"saturday": "07:30-11:30, 12:30-15:00",
-				"sunday": null
+				"saturday": "07:30-11:30, 12:30-15:00"
 			},
 			"description": null,
 			"services": ["connectivity", "food", "hygiene", "medical"],
@@ -58,17 +57,17 @@
 			"category": "Food",
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709023+00:00",
+			"lastScraped": "2026-09-17T08:47:25.666085+00:00",
 			"tags": [
-				"chiropodist",
 				"connectivity",
-				"dentist",
-				"doctor",
 				"food",
-				"healthcare",
 				"hygiene",
-				"nurse",
-				"optician"
+				"homeless",
+				"emergency",
+				"medical",
+				"support",
+				"family",
+				"children"
 			],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
@@ -108,26 +107,34 @@
 				"description": "Merchants Quay Ireland provides addiction treatment, recovery services, and support for people affected by substance misuse in Dublin."
 			},
 			"phone": "01 524 0160",
-			"address": null,
+			"address": "8 Merchants Quay, Dublin 8",
 			"hours": {
 				"monday": "08:00-19:00",
 				"tuesday": "08:00-19:00",
 				"wednesday": "08:00-19:00",
 				"thursday": "08:00-19:00",
 				"friday": "08:00-19:00",
-				"saturday": null,
 				"sunday": "08:00-14:00"
 			},
 			"email": "fundraising@mqi.ie",
 			"description": null,
-			"services": ["doctor-nurse-dentist", "food  phone charging", "shower"],
+			"services": ["addiction-support", "community", "food", "medical", "shelter", "support"],
 			"latitude": 53.343,
 			"longitude": -6.269,
 			"category": "Food",
 			"dataSource": "live",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709158+00:00",
-			"tags": ["connectivity", "dentist", "doctor", "food", "healthcare", "hygiene", "nurse"],
+			"lastScraped": "2026-09-17T08:47:25.666298+00:00",
+			"tags": [
+				"connectivity",
+				"food",
+				"hygiene",
+				"addiction",
+				"recovery",
+				"harm-reduction",
+				"homeless",
+				"community"
+			],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
 			"lastVerified": "2026-09-17"
@@ -155,20 +162,24 @@
 				"description": "Focus Ireland provides housing and support services for people experiencing homelessness in Dublin."
 			},
 			"phone": "018815900",
-			"address": null,
+			"address": "218-222 Phibsborough Road, Dublin 7",
 			"email": "help@focusireland.ie",
 			"description": null,
-			"services": [],
+			"services": ["housing", "shelter", "support"],
 			"quarantine_reasons": ["website not URL-like: 'Campaigns'"],
 			"category": "Housing Support",
 			"latitude": 53.3592,
 			"longitude": -6.2742,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709264+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666467+00:00",
+			"tags": ["homelessness", "housing", "support"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:30",
+				"default": "09:00-17:30"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -193,19 +204,22 @@
 				"description": "Dublin Simon Community provides emergency accommodation and support for people experiencing homelessness in Dublin."
 			},
 			"phone": "(01) 671 5551",
-			"address": null,
+			"address": "85 Capel Street, Dublin 1",
 			"email": "fundraising@dubsimon.ie",
 			"description": null,
-			"services": [],
+			"services": ["housing", "shelter"],
 			"category": "Emergency Shelter",
 			"latitude": 53.3496,
 			"longitude": -6.2687,
 			"dataSource": "live",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709301+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666561+00:00",
+			"tags": ["homelessness", "emergency", "accommodation"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:30"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -230,19 +244,22 @@
 				"description": "Samaritans Ireland provides confidential emotional support to people in distress or at risk of suicide."
 			},
 			"phone": "116 123",
-			"address": null,
+			"address": "191 Great Denmark Street, Dublin 1",
 			"description": null,
-			"services": [],
+			"services": ["mental-health"],
 			"quarantine_reasons": ["website not URL-like: 'Donate now'"],
 			"category": "Crisis Support",
 			"latitude": 53.3556,
 			"longitude": -6.2558,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709335+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666652+00:00",
+			"tags": ["crisis", "mental-health", "helpline"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-sun": "09:00-21:00"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -268,19 +285,22 @@
 			},
 			"rcn": "20169084",
 			"registered_name": "St. Laurence O'Toole Catholic Social Care CLG",
-			"address": null,
+			"address": "127 Parnell Square West, Dublin 1",
 			"email": "info@crosscare.ie",
 			"description": null,
-			"services": [],
+			"services": ["community", "elderly", "support"],
 			"category": "Community Support",
 			"latitude": 53.3533,
 			"longitude": -6.2625,
 			"dataSource": "live",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709371+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666743+00:00",
+			"tags": ["elderly", "community", "support"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -305,20 +325,23 @@
 				"description": "Mendicity Institution provides support and services for elderly and vulnerable people in Dublin."
 			},
 			"phone": "01-6773308",
-			"address": null,
+			"address": "115 Usher's Island, Dublin 8",
 			"email": "info@mendicity.org",
 			"description": null,
-			"services": [],
+			"services": ["community", "elderly"],
 			"quarantine_reasons": ["website not URL-like: 'Services'"],
 			"category": "Community Support",
 			"latitude": 53.3461,
 			"longitude": -6.2818,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709404+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666829+00:00",
+			"tags": ["elderly", "community", "social"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -344,18 +367,20 @@
 			},
 			"phone": "+353-1-878-0123",
 			"address": "8 North Richmond Street, Dublin 1",
-			"hours": "Mon-Fri 09:00-17:00",
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"email": "info@petermcverrytrust.org",
 			"website": "https://www.petermcverrytrust.org/",
 			"description": null,
-			"services": [],
+			"services": ["addiction-support", "housing", "shelter", "support"],
 			"category": "Housing Support",
 			"latitude": 53.3491,
 			"longitude": -6.2617,
 			"dataSource": "local-archive",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709437+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.666913+00:00",
+			"tags": ["homelessness", "housing", "addiction", "support", "youth"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
 			"lastVerified": "2026-09-17"
@@ -383,18 +408,20 @@
 			},
 			"phone": "+353-1-822-3555",
 			"address": "68-72 Amiens Street, Dublin 1",
-			"hours": "Mon-Fri 09:00-17:00",
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"email": "info@copeireland.ie",
 			"website": "https://www.copeireland.ie/",
 			"description": null,
-			"services": [],
+			"services": ["community", "elderly", "medical", "support"],
 			"category": "Community Support",
 			"latitude": 53.3528,
 			"longitude": -6.2605,
 			"dataSource": "local-archive",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709469+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667019+00:00",
+			"tags": ["elderly", "community", "support", "health", "carers"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
 			"lastVerified": "2026-09-17"
@@ -422,18 +449,20 @@
 			},
 			"phone": "+353-1-878-0404",
 			"address": "Various locations, Dublin",
-			"hours": "Mon-Fri 09:00-17:00",
+			"hours": {
+				"mon-fri": "09:00-17:30"
+			},
 			"email": "info@simoncommunity.ie",
 			"website": "https://www.simoncommunity.ie/employment/",
 			"description": null,
-			"services": [],
+			"services": ["employment", "shelter", "support"],
 			"category": "Community Support",
 			"latitude": 53.3492,
 			"longitude": -6.2689,
 			"dataSource": "local-archive",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709501+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667110+00:00",
+			"tags": ["employment", "training", "homelessness", "support", "community"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
 			"lastVerified": "2026-09-17"
@@ -462,18 +491,21 @@
 			"rcn": "20020057",
 			"registered_name": "Alone",
 			"phone": "0818 222 024",
-			"address": null,
+			"address": "Olympic House, Pleasants Street, Dublin 8",
 			"description": null,
-			"services": [],
+			"services": ["community", "elderly", "medical", "support"],
 			"category": "Community Support",
 			"latitude": 53.3362,
 			"longitude": -6.2718,
 			"dataSource": "live",
 			"scrapeSuccess": true,
-			"lastScraped": "2026-09-17T04:20:52.709534+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667204+00:00",
+			"tags": ["elderly", "community", "support", "befriending", "isolation"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -503,10 +535,14 @@
 			"longitude": -6.2758,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709567+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667298+00:00",
+			"services": ["clothing", "food", "outreach", "shelter", "support"],
+			"tags": ["homeless", "emergency", "outreach", "food", "clothing"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-sun": "09:00-17:00"
+			},
 			"description": "Inner City Helping Homeless service location",
 			"lastVerified": "2026-09-17"
 		},
@@ -532,20 +568,23 @@
 				"description": "Safetynet provides GP and primary care services to homeless and vulnerable people in Dublin."
 			},
 			"phone": "01 2336990",
-			"address": null,
+			"address": "27-29 Merchant's Quay, Dublin 8",
 			"email": "info@primarycaresafetynet.ie",
 			"description": null,
-			"services": [],
+			"services": ["medical", "shelter"],
 			"quarantine_reasons": ["website not URL-like: 'View Report >'"],
 			"category": "Health Support",
 			"latitude": 53.3429,
 			"longitude": -6.2742,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709599+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667397+00:00",
+			"tags": ["medical", "health", "homeless", "GP"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:30-16:30"
+			},
 			"lastVerified": "2026-09-17"
 		},
 		{
@@ -582,10 +621,14 @@
 			"longitude": -6.2602,
 			"dataSource": "fallback",
 			"scrapeSuccess": false,
-			"lastScraped": "2026-09-17T04:20:52.709631+00:00",
-			"tags": [],
+			"lastScraped": "2026-09-17T08:47:25.667491+00:00",
+			"services": ["addiction-support", "counselling", "outreach", "support"],
+			"tags": ["addiction", "harm-reduction", "needle exchange", "counselling", "outreach"],
 			"dynamicActivities": [],
 			"activityMatchCount": 0,
+			"hours": {
+				"mon-fri": "09:00-17:00"
+			},
 			"description": "Ana Liffey Drug Project service location",
 			"lastVerified": "2026-09-17"
 		}
@@ -603,8 +646,8 @@
 			"Housing Support"
 		],
 		"coverage": "Dublin City Centre",
-		"nextSync": "2026-09-17T04:20:52.709681Z",
-		"pipelineRun": "2026-09-17T04:20:52.709697+00:00",
+		"nextSync": "2026-09-17T08:47:25.667572Z",
+		"pipelineRun": "2026-09-17T08:47:25.667590+00:00",
 		"differencesDetected": 14,
 		"additions": 0,
 		"updates": 14,

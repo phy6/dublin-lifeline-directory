@@ -176,6 +176,12 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
     if flyer:
         flyer_tags = flyer.get("services_categories", []) + flyer.get("healthcare_services", [])
         merged["tags"] = normalize_services(flyer_tags)
+        # Union with curated fallback tags (raw vocabulary; tags unvalidated).
+        seen = {t.lower() for t in merged["tags"]}
+        for t in fallback.get("tags", []):
+            if t.lower() not in seen:
+                merged["tags"].append(t)
+                seen.add(t.lower())
         if source in ("live", "archive"):
             scraped_services = normalize_services(scraped.get("services", []))
             fallback_services = normalize_services(fallback.get("services", []))
@@ -194,6 +200,29 @@ def merge_location(scraped: dict, flyer: dict, fallback: dict, editorial: dict |
             merged["tags"] = list(fallback.get("tags", []))
         merged["dynamicActivities"] = []
         merged["activityMatchCount"] = 0
+
+    # Services must be a non-empty NEEDS array: normalize whatever the
+    # branches left (scraped raw is unnormalized), then fall back to the
+    # curated fallback truth.
+    merged["services"] = normalize_services(merged.get("services", []))
+    if not merged["services"]:
+        merged["services"] = normalize_services(
+            fallback.get("services", [])
+        ) or normalize_services(scraped.get("services", []))
+
+    # Hours must be a non-empty dict of strings: strip null days (scraped
+    # nulls) and non-dict shapes (archive plain-text strings), falling back
+    # to the curated fallback hours.
+    hours = merged.get("hours")
+    if isinstance(hours, dict):
+        hours = {d: h for d, h in hours.items() if isinstance(h, str)}
+    if not isinstance(hours, dict) or not hours:
+        fb_hours = fallback.get("hours")
+        hours = fb_hours if isinstance(fb_hours, dict) and fb_hours else hours
+    if hours is None:
+        merged.pop("hours", None)
+    else:
+        merged["hours"] = hours
 
     merged["description"] = merged.get("description", f"{merged.get('name', '')} service location")
     merged["lastVerified"] = merged.get("lastVerified", datetime.now(timezone.utc).strftime("%Y-%m-%d"))

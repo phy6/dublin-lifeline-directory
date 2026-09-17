@@ -127,8 +127,11 @@ async def test_rate_limiter_adds_delay():
 
 
 @pytest.mark.asyncio
-async def test_scraper_run_returns_results():
+async def test_scraper_run_returns_results(tmp_path):
     scraper = DublinLifelineScraper(CONFIG_PATH)
+    # run() persists to output_dir: redirect at tmp so the test never
+    # clobbers the real scraper/output/scraped_output.json.
+    scraper.output_dir = str(tmp_path)
     results = await scraper.run(targets=["capuchin-day-centre", "focus-ireland"])
     assert len(results) == 2
     assert results[0]["id"] == "capuchin-day-centre"

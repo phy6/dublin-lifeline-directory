@@ -185,6 +185,38 @@ def test_merge_location_backfills_services_and_tags_from_fallback():
     assert merged["address"] == "29 Bow St, Dublin 7"
 
 
+def test_merge_location_flyer_branch_falls_back_to_curated_services():
+    from scraper.pipeline import merge_location
+    scraped = {
+        "id": "x",
+        "name": "X",
+        "source": "live",
+        "services": ["doctor-nurse-dentist", "food  phone charging", "shower"],
+    }
+    flyer = {"services": [], "services_categories": ["Shower & Clothes washing"]}
+    fallback = {"id": "x", "services": ["addiction", "support"], "tags": ["addiction"]}
+    merged = merge_location(scraped, flyer, fallback)
+    assert merged["services"] == ["addiction-support", "support"]
+    assert "addiction" in merged["tags"] and "hygiene" in merged["tags"]
+
+
+def test_merge_location_sanitizes_hours_null_days_and_string_hours():
+    from scraper.pipeline import merge_location
+    fb_hours = {"mon-fri": "09:00-17:00"}
+    m1 = merge_location(
+        {"id": "a", "name": "A", "source": "live", "hours": {"saturday": None}},
+        None,
+        {"id": "a", "hours": fb_hours},
+    )
+    assert m1["hours"] == fb_hours
+    m2 = merge_location(
+        {"id": "b", "name": "B", "source": "archive", "hours": "Mon-Fri 09:00-17:00"},
+        None,
+        {"id": "b", "hours": fb_hours},
+    )
+    assert m2["hours"] == fb_hours
+
+
 def test_timestamp_only_churn_still_mints_minor_bump():
     # Documents current behavior (see scraper-version-bump-semantics):
     # refreshed timestamps alone count as updates -> minor, not patch.
