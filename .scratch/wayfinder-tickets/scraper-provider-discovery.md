@@ -2,7 +2,9 @@
 
 **Blocked by:** scraper-python-implementation
 **Blocks:** None
-**Status:** Deferred (out of scope for MVP)
+**Status:** Closed — Out of scope for MVP
+
+> **Closed per wayfinder review:** Provider discovery deferred as out of scope for MVP. See map's "Out of scope" section.
 
 ## Question
 

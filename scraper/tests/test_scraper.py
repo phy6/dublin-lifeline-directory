@@ -111,3 +111,19 @@ async def test_scraper_run_returns_results():
     assert results[0]["id"] == "capuchin-day-centre"
     assert results[1]["id"] == "focus-ireland"
     assert results[0]["source"] in ("live", "archive")
+
+
+def test_all_config_targets_have_tags_and_category():
+    config = load_config(CONFIG_PATH)
+    for target in config["targets"]:
+        fallback = target.get("fallback", {})
+        assert len(fallback.get("tags", [])) > 0, f"{target['id']}: missing tags"
+        assert fallback.get("category"), f"{target['id']}: missing category"
+
+
+def test_tag_patterns_are_valid_slugs():
+    import re
+    config = load_config(CONFIG_PATH)
+    for target in config["targets"]:
+        for tag in target.get("tags", []):
+            assert re.match(r"^[a-z-]+$", tag), f"{target['id']}: tag '{tag}' is not a valid slug"

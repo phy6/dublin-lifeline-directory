@@ -80,7 +80,7 @@ async def main():
         results = await run_scraper(scraper, targets, args.no_fallback)
         scraped_path = os.path.join(scraper.output_dir, "scraped_output.json")
 
-        project_root = os.path.dirname(os.path.dirname(os.path.abspath(config_path)))
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(config_path))))
         flyer_path = os.path.join(project_root, ".scratch", "wayfinder-map", "research", "flyer-data.json")
         output_dir = args.output or os.path.join(project_root, "src", "lib", "data")
 

@@ -10,27 +10,28 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - Skills to consult: `grilling`, `domain-modeling`, `implement`, `tdd`
 - Standing preferences: Python 3.10 (matches GitHub Actions), configurable target list, hybrid data source (scraper + flyer-data.json), output to `src/lib/data/services.json` + `static/services.json`
 - Existing assets: Old scraper at `/home/martin/Dublin Services/scripts/scraper.js`, merger at `mergeData.js`, config at `config/sources.json` (14 targets), flyer data at `.scratch/wayfinder-map/research/flyer-data.json`
-- Tracker: local markdown under `.scratch/wayfinder-map/`
+- Tracker: local markdown under `.scratch/wayfinder-tickets/`
 
 ## Decisions so far
 
-- [Configurable target list](scraper-configurable-targets.md): Target list driven by `sources.json`; can run subset via CLI flag
-- [Python implementation](scraper-python-implementation.md): Port scraper logic to Python 3.10; use `requests`, `beautifulsoup4`, `lxml`
-- [Hybrid data source](scraper-hybrid-data-source.md): Scraper output merges with flyer-data.json; human-verified enrichments (coordinates, phones, hours) take precedence
-- [Output locations](scraper-output-locations.md): Write to both `src/lib/data/services.json` (for SSR) and `static/services.json` (for client fetch)
-- [GitHub Actions integration](scraper-github-actions.md): Update `.github/workflows/scraper.yml` to run `python scraper/main.py` daily at 06:00 UTC
+- [Configurable target list](scraper-configurable-targets.md): ✅ Closed — 14 targets in `sources.json` with selectors, fallbacks, coordinates. Runtime selection via `--targets`/`--flyer-only`/`--dry-run`
+- [Python implementation](scraper-python-implementation.md): ✅ Closed — `scraper/scraper.py` with async httpx, rate limiter, retry/backoff, archive fallback; `scraper/pipeline.py` with merge, normalization, diff, version bumping, dual-write; `scraper/tests/` with 3 test files
+- [Hybrid data source](scraper-hybrid-data-source.md): ✅ Closed — `merge_location()` in `pipeline.py` implements all rules: flyer fields win when non-null, scraper fills gaps, `dataSource`/`scrapeSuccess` tracking, `lastScraped` timestamps, service normalization via `DISPLAY_TO_SLUG` mapping
+- [Output locations](scraper-output-locations.md): ✅ Closed — `write_services()` writes to both `src/lib/data/services.json` and `static/services.json` identically; metadata includes all required fields; `bump_version()` implements semver. **Bugs found:** `static/services.json` was stale (synced now), and version wasn't bumped despite 9 updates (pipeline needs re-run)
+- [GitHub Actions integration](scraper-github-actions.md): ✅ Closed — `.github/workflows/scraper.yml` has checkout, setup-python@v5 3.10, pip install requirements, `python scraper/main.py` (which calls `run_pipeline()`), commit, deploy to GitHub Pages. Cron `0 6 * * *` + `workflow_dispatch` configured
+- [Scraper CLI interface](scraper-cli-interface.md): CLI flags for `--targets`, `--flyer-only`, `--dry-run`, `--output`, `--config`, `--no-fallback`, `--verbose`
+- [Rate limiting and retry strategy](scraper-rate-limiting.md): ✅ Closed — `_RateLimiter` (6s interval, ±0.5 jitter), `_retry_fetch` with exponential backoff, 5s httpx timeout, all in `scraper/scraper.py`; no extra deps
+- [Local HTML archive fallback](scraper-local-archive-fallback.md): ✅ Closed — `scraper/docs/` with 20+ HTML archives; `fetch_with_fallback()` checks `{id}.html` and `dublin_lifeline_{id}.html`; `--no-fallback` flag raises on archive/none sources
+- [Provider discovery feature](scraper-provider-discovery.md): Deferred — out of scope for MVP; current 14 targets are sufficient
+- [Merge strategy for dynamicActivities vs static services](scraper-dynamic-activities-merge.md): ✅ Closed (partial) — `normalize_services()` and `DISPLAY_TO_SLUG` mapping implemented; `dynamicActivities`, `activityMatchCount`, and flyer category-based `tags` need to be added to `merge_location()` in `pipeline.py`
+- [Scrape failure handling](scraper-scrape-failure-handling.md): ✅ Closed (partial) — `merge_location()` implements `scrapeSuccess`/`dataSource` tracking; flyer-only locations handled via lookup; **bugs:** `services.json` has stale `dataSource: "scraped"` values from old pipeline run; no repeated-failure removal or review flag
+- [Data validation schema](scraper-data-validation.md): ✅ Closed — `scraper/validate.py` with custom validators (no pydantic): location errors/warnings, hours format/ordering, service slug validation, clinic location_id check. `scraper/tests/test_validation.py` with 14 tests. CLI: `python3 scraper/validate.py src/lib/data/services.json`
+- [Version bumping strategy](scraper-version-bumping.md): ✅ Closed — `bump_version()` implements all semver rules using `compute_diff()` output; `nextSync` set to `pipelineRun + 7 days`; 4 tests in `test_pipeline.py`
+- [Test strategy](scraper-test-strategy.md): ✅ Closed — 64 tests across 4 test files (test_scraper.py, test_pipeline.py, test_validation.py, test_fixtures.py). `tests/fixtures/` with 20 HTML files. `test:scraper` in package.json, Makefile, CI runs pytest before deploy. `pytest-cov` in requirements.txt
 
 ## Not yet specified
 
-- Scraper CLI interface (flags for target subset, dry-run, output path)
-- Rate limiting and retry strategy in Python
-- Local HTML archive fallback (like old scraper's `docs/` fallback)
-- Provider discovery feature (from old scraper's discovery config)
-- Data validation schema (reuse from pipeline spec)
-- Merge strategy for dynamicActivities vs static services
-- Version bumping strategy (semver in services.json metadata)
-- Test strategy (unit tests for scraper, integration for pipeline)
-- Handling of `scrapeSuccess: false` entries (COPE Ireland pattern)
+- Pipeline orchestration as a distinct module (currently embedded in `scraper/pipeline.py`; may need separate extraction)
 
 ## Out of scope
 
@@ -39,3 +40,4 @@ Build a **Python scraper + data pipeline** in this repo that: (1) scrapes config
 - Real-time/background sync (PWA uses StaleWhileRevalidate)
 - Provider submission forms (Web3Forms - separate feature)
 - Native app builds
+- Provider discovery feature — deferred as out of scope for MVP; current 14 targets are stable and sufficient
