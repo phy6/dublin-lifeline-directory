@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 DISPLAY_TO_SLUG = {
     "Food": "food",
+    "Food and Meal Services": "food",
     "Hot Meals": "food",
     "Hot Meals (Breakfast & Lunch)": "food",
     "Shower & Clothes washing": "hygiene",
@@ -18,9 +19,13 @@ DISPLAY_TO_SLUG = {
     "Doctor/Nurse/Dentist/Chiropodist/Optician": "medical",
     "Doctor/Nurse/Dentist": "medical",
     "Doctor/Nurse": "medical",
+    "Medical and Hygiene Services": "medical",
     "GP Clinic services": "medical",
     "Employment Clinic (Mon 6:15pm)": "employment",
     "Clothes (market on Fridays 16:00)": "clothing",
+    "Family Support Services": "family",
+    "Family Support": "family",
+    "Support Services": "support",
 }
 
 

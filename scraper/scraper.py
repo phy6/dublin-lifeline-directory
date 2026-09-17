@@ -9,18 +9,21 @@ from typing import Optional, Tuple, List
 
 import httpx
 from bs4 import BeautifulSoup
+from scraper.pipeline import _lookup_slug
 
 logger = logging.getLogger(__name__)
 
 
 def extract_services(soup: BeautifulSoup) -> List[str]:
+    result: List[str] = []
     for script in soup.find_all("script"):
         if script.string and "var servicesData" in script.string:
-            start = script.string.find("[")
-            end = script.string.rfind("]") + 1
+            s = script.string
+            start = s.find("[")
+            end = s.rfind("]") + 1
             if start != -1 and end != 0:
                 try:
-                    return json.loads(script.string[start:end])
+                    return json.loads(s[start:end])
                 except (json.JSONDecodeError, ValueError):
                     pass
     desc_div = soup.select_one(".services-description")
@@ -29,7 +32,14 @@ def extract_services(soup: BeautifulSoup) -> List[str]:
         match = re.search(r"Services:\s*(.+)", text)
         if match:
             return [s.strip() for s in match.group(1).split(",")]
-    return []
+    for h3 in soup.find_all("h3"):
+        text = h3.get_text(strip=True)
+        if not text:
+            continue
+        slug = _lookup_slug(text)
+        if slug and slug not in result:
+            result.append(slug)
+    return result
 
 
 def load_config(config_path: str) -> dict:
