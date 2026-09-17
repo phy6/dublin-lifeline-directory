@@ -19,6 +19,31 @@ function formatFloating(date: Date): string {
 	);
 }
 
+function formatUTC(date: Date): string {
+	return (
+		`${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}` +
+		`T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`
+	);
+}
+
+/** Fold a content line to ≤75 octets per RFC 5545 §3.1 (byte-safe for ASCII; our output is ASCII post-escape). */
+function foldLine(line: string): string {
+	const bytes = line.length;
+	if (bytes <= 75) return line;
+	let out = '';
+	let start = 0;
+	while (start < line.length) {
+		const chunk = line.slice(start, start + 74);
+		out += (start === 0 ? '' : '\r\n ') + chunk;
+		start += 74;
+	}
+	return out;
+}
+
+function joinCRLF(lines: string[]): string {
+	return lines.map(foldLine).join('\r\n') + '\r\n';
+}
+
 function withTime(date: Date, time: string): Date {
 	const [h, m] = time.split(':').map(Number);
 	return new Date(date.getFullYear(), date.getMonth(), date.getDate(), h, m ?? 0, 0);
@@ -28,7 +53,7 @@ export function appointmentToICS(appt: PlannerAppointment, date: Date): string {
 	const lines = [
 		'BEGIN:VEVENT',
 		`UID:${appt.id}@dublinlifeline`,
-		`DTSTAMP:${formatFloating(new Date())}`,
+		`DTSTAMP:${formatUTC(new Date())}`,
 		`DTSTART:${formatFloating(withTime(date, appt.start))}`,
 		`DTEND:${formatFloating(withTime(date, appt.end))}`,
 		`SUMMARY:${escapeICSText(appt.title)}`,
@@ -37,16 +62,19 @@ export function appointmentToICS(appt: PlannerAppointment, date: Date): string {
 	];
 	if (appt.recurrence === 'weekly') lines.push('RRULE:FREQ=WEEKLY');
 	lines.push('END:VEVENT');
-	return lines.join('\r\n');
+	return joinCRLF(lines);
 }
 
 export function weekToICS(items: { appt: PlannerAppointment; date: Date }[]): string {
-	const events = items.map((i) => appointmentToICS(i.appt, i.date));
-	return [
+	const eventLines = items.flatMap((i) =>
+		appointmentToICS(i.appt, i.date).split('\r\n').filter(Boolean)
+	);
+	return joinCRLF([
 		'BEGIN:VCALENDAR',
 		'VERSION:2.0',
 		'PRODID:-//DublinLifeline//Planner//EN',
-		...events,
+		'CALSCALE:GREGORIAN',
+		...eventLines,
 		'END:VCALENDAR'
-	].join('\r\n');
+	]);
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { appointmentToICS } from '$lib/utils/ics';
+import { appointmentToICS, weekToICS } from '$lib/utils/ics';
 
 describe('appointmentToICS', () => {
 	it('emits VEVENT with RRULE for weekly entries', () => {
@@ -46,5 +46,29 @@ describe('appointmentToICS', () => {
 		);
 		expect(ics).not.toContain('RRULE');
 		expect(ics).toContain('SUMMARY:GP\\; follow-up\\, urgent');
+	});
+
+	it('emits strict RFC 5545: UTC DTSTAMP, trailing CRLF, CALSCALE, folded long lines', () => {
+		const appt = {
+			id: 'c',
+			title:
+				'A very long appointment title that will definitely exceed seventy-five octets once prefixed',
+			day: 'wed' as const,
+			start: '10:00',
+			end: '10:30',
+			location: '',
+			notes: '',
+			orgId: null,
+			recurrence: 'once' as const,
+			source: 'personal' as const,
+			weekOf: '2026-09-16'
+		};
+		const ics = weekToICS([{ appt, date: new Date(2026, 8, 16) }]);
+		expect(ics).toMatch(/DTSTAMP:\d{8}T\d{6}Z/);
+		expect(ics.endsWith('END:VCALENDAR\r\n')).toBe(true);
+		expect(ics).toContain('CALSCALE:GREGORIAN');
+		for (const line of ics.split('\r\n')) {
+			expect(new TextEncoder().encode(line).length).toBeLessThanOrEqual(75);
+		}
 	});
 });

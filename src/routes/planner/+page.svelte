@@ -4,7 +4,7 @@
 	import { DAY_KEYS, DAY_LABELS, type DayKey } from '$lib/utils/hours';
 	import { weekDates, expandWeek, toISODate, type PlannerAppointment } from '$lib/utils/planner';
 	import { loadPlan, savePlan } from '$lib/utils/planner-store';
-	import { appointmentToICS, weekToICS } from '$lib/utils/ics';
+	import { weekToICS } from '$lib/utils/ics';
 	import type { MealEntry } from '$lib/types';
 	import type { ServiceLocation } from '$lib/types';
 
@@ -176,14 +176,7 @@
 	}
 
 	function downloadOne(appt: PlannerAppointment, date: Date) {
-		const ics = [
-			'BEGIN:VCALENDAR',
-			'VERSION:2.0',
-			'PRODID:-//DublinLifeline//Planner//EN',
-			appointmentToICS(appt, date),
-			'END:VCALENDAR'
-		].join('\r\n');
-		download(`${appt.id}.ics`, ics);
+		download(`${appt.id}.ics`, weekToICS([{ appt, date }]));
 	}
 
 	function downloadWeek() {
