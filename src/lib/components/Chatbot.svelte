@@ -20,7 +20,8 @@
 	);
 	let open = $state(false);
 	let fabRef: HTMLButtonElement | undefined = $state(undefined);
-	let modalRef: HTMLDivElement | undefined = $state(undefined);
+	let dialogRef: HTMLDialogElement | undefined = $state(undefined);
+	let titleRef: HTMLHeadingElement | undefined = $state(undefined);
 	const lang = $derived(langStore.current);
 	let nodeKey = $state('start');
 	let log = $state<{ who: 'bot' | 'user'; text: string }[]>([]);
@@ -53,52 +54,40 @@
 		renderNode('start');
 	}
 
-	function focusables(): HTMLElement[] {
-		if (!modalRef) return [];
-		return [...modalRef.querySelectorAll('button, a[href]')].filter(
-			(el) => el instanceof HTMLElement && !el.hasAttribute('disabled')
-		) as HTMLElement[];
-	}
-
-	function focusFirst() {
-		// Wait a tick so the {#if open} block has rendered.
-		requestAnimationFrame(() => focusables()[0]?.focus());
-	}
-
-	function trapTab(e: KeyboardEvent) {
-		if (e.key !== 'Tab') return;
-		const items = focusables();
-		if (items.length === 0) return;
-		const first = items[0];
-		const last = items[items.length - 1];
-		if (e.shiftKey && document.activeElement === first) {
-			e.preventDefault();
-			last.focus();
-		} else if (!e.shiftKey && document.activeElement === last) {
-			e.preventDefault();
-			first.focus();
+	function syncDialog() {
+		if (!dialogRef) return;
+		if (open && !dialogRef.open) {
+			dialogRef.showModal();
+			// Heading first so screen-reader users land on context, not a button.
+			requestAnimationFrame(() => titleRef?.focus());
+		} else if (!open && dialogRef.open) {
+			dialogRef.close();
 		}
 	}
+
+	$effect(syncDialog);
 
 	function openModal() {
 		open = true;
 		if (log.length === 0) startOver();
-		focusFirst();
 	}
 
 	function closeModal() {
+		dialogRef?.close();
 		open = false;
 		fabRef?.focus();
 	}
 
-	function onOverlayClick(e: MouseEvent) {
-		if (e.target === e.currentTarget) closeModal();
+	function onDialogClose() {
+		// Native Escape/backdrop paths funnel here; keep state + focus in sync.
+		if (open) {
+			open = false;
+			fabRef?.focus();
+		}
 	}
 
-	function onKeyDown(e: KeyboardEvent) {
-		if (!open) return;
-		if (e.key === 'Escape') closeModal();
-		else trapTab(e);
+	function onOverlayClick(e: MouseEvent) {
+		if (e.target === dialogRef) closeModal();
 	}
 
 	function actionHref(action: NonNullable<typeof node>['action']): string {
@@ -121,20 +110,17 @@
 </button>
 
 {#if open}
-	<div
+	<dialog
 		class="modal-overlay active"
 		id="chatbot-modal"
-		role="dialog"
-		aria-modal="true"
 		aria-labelledby="chatbot-title"
-		tabindex="-1"
-		bind:this={modalRef}
-		onkeydown={onKeyDown}
+		bind:this={dialogRef}
+		onclose={onDialogClose}
 		onclick={onOverlayClick}
 	>
 		<div class="modal-box">
 			<span class="grabber" aria-hidden="true"></span>
-			<h3 id="chatbot-title">
+			<h3 id="chatbot-title" bind:this={titleRef} tabindex="-1">
 				{lang === 'ga' ? 'Faigh an tseirbhís cheart' : 'Find the right service'}
 			</h3>
 			<p class="crisis">
@@ -196,7 +182,7 @@
 			>
 			<button class="close" onclick={closeModal} aria-label="Close chat">✕</button>
 		</div>
-	</div>
+	</dialog>
 {/if}
 
 <style>
@@ -219,6 +205,10 @@
 	.modal-overlay {
 		position: fixed;
 		inset: 0;
+		border: 0;
+		margin: 0;
+		max-width: 100vw;
+		max-height: 100dvh;
 		background: rgba(0, 0, 0, 0.5);
 		display: none;
 		z-index: 2201;

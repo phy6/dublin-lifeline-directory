@@ -70,9 +70,13 @@
 	let announceText = $state('');
 	$effect(() => {
 		if (selectedDay !== 'all') {
-			announceText = `${filtered.length} services found open on ${selectedDay.toUpperCase()}`;
+			announceText = t('results-day')
+				.replace('{count}', String(filtered.length))
+				.replace('{day}', selectedDay.toUpperCase());
 		} else {
-			announceText = `${filtered.length} ${t('services-found')} across ${categories.length} categories`;
+			announceText = t('results-all')
+				.replace('{count}', String(filtered.length))
+				.replace('{categories}', String(categories.length));
 		}
 	});
 </script>
@@ -93,12 +97,14 @@
 		{announceText}
 	</div>
 	<div class="stats">
-		{filtered.length}
-		{t('services-found')}
 		{#if selectedDay !== 'all'}
-			open on {selectedDay.toUpperCase()}
+			{t('results-day')
+				.replace('{count}', String(filtered.length))
+				.replace('{day}', selectedDay.toUpperCase())}
 		{:else}
-			across {categories.length} categories
+			{t('results-all')
+				.replace('{count}', String(filtered.length))
+				.replace('{categories}', String(categories.length))}
 		{/if}
 	</div>
 	<ServiceList services={filtered} id="service-list" onReset={resetAll} />

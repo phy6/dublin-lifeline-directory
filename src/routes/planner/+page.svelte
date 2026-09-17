@@ -539,6 +539,16 @@
 <style>
 	h1 {
 		padding: 0 var(--space-3);
+		color: var(--color-accent);
+		margin-bottom: var(--space-2);
+		font-size: var(--text-2xl);
+		line-height: var(--leading-tight);
+		text-wrap: balance;
+	}
+	@media (max-width: 600px) {
+		h1 {
+			font-size: var(--text-xl);
+		}
 	}
 	.device-warning {
 		margin: 0 var(--space-3) var(--space-3);
@@ -546,6 +556,8 @@
 		background: var(--color-warning-bg, #fff8e1);
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
+		font-size: var(--text-base);
+		line-height: var(--leading-relaxed);
 	}
 	.view-switch {
 		display: flex;
@@ -574,7 +586,18 @@
 	}
 	@media (max-width: 900px) {
 		.week-grid:not(.single) {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+	@media (max-width: 600px) {
+		.week-grid:not(.single) {
 			grid-template-columns: 1fr;
+		}
+		.month-grid {
+			max-width: 24rem;
+		}
+		.month-cell {
+			min-height: 44px;
 		}
 	}
 	.day-col {
@@ -624,10 +647,12 @@
 		display: grid;
 		gap: 2px;
 		min-width: 0;
+		overflow-wrap: break-word;
 	}
 	.appt-when {
 		color: var(--color-text-secondary);
 		font-size: var(--text-sm);
+		line-height: var(--leading-normal);
 	}
 	.card-menu {
 		position: relative;

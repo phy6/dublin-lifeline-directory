@@ -58,13 +58,16 @@
 	},
 	"sleep": {
 		"text": {
-			"en": "For a bed tonight call DRHE first — the fastest official route.",
-			"ga": "Le haghaidh leaba anocht glaoigh ar DRHE ar dtús."
+			"en": "For a bed tonight, call the Dublin Region Homeless Executive (DRHE) first — it is the fastest official route to a bed.",
+			"ga": "Le haghaidh leaba anocht, glaoigh ar Fheidhmeannacht Réigiún Bhaile Átha Cliath do Dhaoine gan Dídean (DRHE) ar dtús."
 		},
 		"action": {
 			"type": "tel",
 			"number": "1800707707",
-			"label": { "en": "Call DRHE — 1800 707 707", "ga": "Glaoigh ar DRHE" }
+			"label": {
+				"en": "Call DRHE on 1800 707 707 (free)",
+				"ga": "Glaoigh ar DRHE ar 1800 707 707 (saor in aisce)"
+			}
 		},
 		"secondaryAction": {
 			"type": "filter",

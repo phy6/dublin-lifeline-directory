@@ -61,6 +61,16 @@
 		{t('map-help')}
 	</p>
 	<div bind:this={mapEl} id="map" style="width: 100%;"></div>
+	<details class="map-list">
+		<summary>{t('map-list-fallback')}</summary>
+		<ul>
+			{#each services as s (s.id)}
+				<li>
+					<a href="{base}/service/{s.id}">{s.name}</a>{s.address ? ` — ${s.address}` : ''}
+				</li>
+			{/each}
+		</ul>
+	</details>
 </main>
 
 <style>
@@ -93,6 +103,23 @@
 		color: var(--color-text-muted);
 		font-style: italic;
 		margin-bottom: var(--space-3);
+	}
+	.map-list {
+		margin-top: var(--space-3);
+	}
+	.map-list summary {
+		cursor: pointer;
+		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+		font-weight: 600;
+	}
+	.map-list ul {
+		list-style: none;
+		margin: var(--space-2) 0 0;
+		padding: 0;
+		display: grid;
+		gap: var(--space-2);
 	}
 	@media (max-width: 600px) {
 		#map {
