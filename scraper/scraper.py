@@ -72,6 +72,14 @@ def extract_field(soup: BeautifulSoup, selectors: List[str], field: str = "") ->
             text = element.get_text(strip=True)
             if text:
                 return text
+    # Phone regex fallback: some sites (e.g. crosscare.ie) render the number
+    # as plain text with no tel: link or phone class. Scan page text for an
+    # Irish landline pattern before giving up.
+    if field == "phone":
+        page_text = soup.get_text(" ", strip=True)
+        m = re.search(r"\(?01\)?[\s\-]?\d{3,4}[\s\-]?\d{4}", page_text)
+        if m:
+            return m.group(0).strip()
     return None
 
 
@@ -131,8 +139,21 @@ async def fetch_with_fallback(target: dict, docs_dir: str, client: Optional[http
     try:
         html = await _retry_fetch(client, url)
         return html, "live"
-    except Exception:
-        pass
+    except Exception as exc:
+        # SSL-only fallback: some small-org sites (e.g. aldp.ie) serve a
+        # cert chain Python can't verify. Retry once without verification
+        # rather than dropping straight to archive/fallback. Other errors
+        # (DNS, refused, timeout) go directly to archive.
+        if "ssl" not in str(exc).lower() and "certificate" not in str(exc).lower():
+            pass
+        else:
+            try:
+                async with httpx.AsyncClient(follow_redirects=True, verify=False) as insecure_client:
+                    html = await _retry_fetch(insecure_client, url)
+                    logger.warning("Fetched %s with unverified TLS", url)
+                    return html, "live"
+            except Exception:
+                pass
     finally:
         if own_client:
             await client.aclose()

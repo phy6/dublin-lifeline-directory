@@ -267,6 +267,29 @@ async def test_fetch_target_uses_contact_url_when_homepage_empty():
     assert result["source"] == "live"
 
 
+def test_extract_field_phone_regex_fallback():
+    html = '<div><p>Call us on 01 836 0011 today</p></div>'
+    soup = BeautifulSoup(html, "lxml")
+    assert extract_field(soup, [".phone", ".contact-number"], "phone") == "01 836 0011"
+
+
+def test_extract_field_phone_selector_beats_regex():
+    html = '<div><span class="phone">01-1111111</span><p>Also 01 836 0011</p></div>'
+    soup = BeautifulSoup(html, "lxml")
+    assert extract_field(soup, [".phone"], "phone") == "01-1111111"
+
+
+@pytest.mark.asyncio
+async def test_fetch_with_fallback_retries_insecure_tls(tmp_path):
+    from scraper.scraper import fetch_with_fallback
+    target = {"id": "tls-target", "name": "TLS", "url": "https://example.com/", "fallback": {}}
+    with patch("scraper.scraper._retry_fetch", side_effect=[Exception("[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed"), "<html></html>"]) as m:
+        html, source = await fetch_with_fallback(target, str(tmp_path))
+    assert source == "live"
+    assert html == "<html></html>"
+    assert m.call_count == 2
+
+
 def test_quarantined_maps_to_fallback_in_merge():
     from scraper.pipeline import merge_location
     scraped = {"id": "x", "name": "X", "source": "quarantined", "services": [], "fallback": {}}
