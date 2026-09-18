@@ -12,47 +12,93 @@
 </script>
 
 <article class="card">
-	<div class="card-header">
-		<div class="category">{service.category}</div>
-		{#if openStatus === 'open'}
-			<span class="open-badge" aria-label={t('open-now')}>{t('open-now')}</span>
-		{:else if openStatus === 'closed'}
-			<span class="closed-badge" aria-label={t('closed')}>{t('closed')}</span>
-		{/if}
-	</div>
-	<h3>{service.name}</h3>
-	<p class="address">{service.address}</p>
+	<a href="{base}/service/{service.id}" class="row-link" aria-label="{service.name}">
+		<span class="status-dot {openStatus}" aria-hidden="true"></span>
+		<span class="row-body">
+			<span class="row-top">
+				<span class="category">{service.category}</span>
+				{#if openStatus === 'open'}
+					<span class="open-text">{t('open-now')}</span>
+				{:else if openStatus === 'closed'}
+					<span class="closed-text">{t('closed')}</span>
+				{/if}
+			</span>
+			<span class="row-name">{service.name}</span>
+			<span class="address">{service.address}</span>
+		</span>
+	</a>
 	<p class="phone">{service.phone}</p>
 	<div class="tags">
-		{#each (service.tags ?? []).slice(0, 4) as tag (tag)}
+		{#each (service.tags ?? []).slice(0, 3) as tag (tag)}
 			<span class="tag">{tag}</span>
 		{/each}
 	</div>
-	<div class="hours">
-		{#if typeof service.hours === 'string'}
-			<span class="day">{service.hours}</span>
-		{:else}
-			{#each hourEntries as [day, hours] (day)}
-				<span class="day">{day}: {hours}</span>
-			{/each}
-		{/if}
-	</div>
-	<a href="{base}/service/{service.id}" class="card-link">{t('view-details')}</a>
 </article>
 
 <style>
 	.card {
 		display: flex;
 		flex-direction: column;
-		background: var(--color-surface);
-		border-radius: var(--radius-lg);
-		padding: var(--space-3);
-		box-shadow: var(--shadow-sm);
+		background: transparent;
+		border-radius: 0;
+		padding: var(--space-3) var(--space-1);
+		box-shadow: none;
 		text-decoration: none;
 		color: inherit;
 		max-width: 100%;
 		box-sizing: border-box;
-		border: 1px solid var(--color-border);
+		border: 0;
+		border-bottom: 1px solid var(--color-border);
+	}
+	.row-link {
+		display: flex;
+		gap: var(--space-3);
+		text-decoration: none;
+		color: inherit;
+		min-height: 48px;
+		align-items: flex-start;
+	}
+	.status-dot {
+		width: 10px;
+		height: 10px;
+		border-radius: var(--radius-full);
+		margin-top: 6px;
+		flex: none;
+		background: var(--color-text-muted);
+	}
+	.status-dot.open {
+		background: var(--color-success);
+	}
+	.status-dot.closed {
+		background: var(--color-danger);
+	}
+	.row-body {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+	.row-top {
+		display: flex;
+		gap: var(--space-2);
+		align-items: center;
+	}
+	.open-text,
+	.closed-text {
+		font-size: var(--text-xs);
+		font-weight: 700;
+	}
+	.open-text {
+		color: var(--color-success);
+	}
+	.closed-text {
+		color: var(--color-danger);
+	}
+	.row-name {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: var(--text-lg);
+		letter-spacing: -0.01em;
+		line-height: var(--leading-tight);
 	}
 	@media (prefers-reduced-motion: no-preference) {
 		.card {

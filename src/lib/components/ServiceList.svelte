@@ -25,10 +25,17 @@
 
 <style>
 	.service-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-		gap: var(--space-3);
-		padding: var(--space-3);
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+		padding: 0;
+	}
+	@media (min-width: 700px) {
+		.service-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: var(--space-3);
+		}
 	}
 	.empty-state {
 		grid-column: 1 / -1;

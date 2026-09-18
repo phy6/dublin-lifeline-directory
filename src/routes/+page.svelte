@@ -66,6 +66,7 @@
 </svelte:head>
 
 <main id="main-content">
+	<p class="kicker">Baile Átha Cliath</p>
 	<h1>{t('app-title')}</h1>
 	<p>{t('app-intro')}</p>
 
@@ -102,15 +103,24 @@
 
 <style>
 	main {
-		max-width: 800px;
+		max-width: 640px;
 		margin: 0 auto;
 		padding: var(--space-3);
 		box-sizing: border-box;
 	}
-	h1 {
+	.kicker {
+		font-size: var(--text-sm);
+		font-weight: 700;
 		color: var(--color-accent);
-		margin-bottom: var(--space-2);
-		font-size: var(--text-2xl);
+		margin: 0 0 2px;
+	}
+	h1 {
+		color: var(--color-text-primary);
+		margin: 0 0 var(--space-2);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		font-size: var(--text-3xl);
 		line-height: var(--leading-tight);
 		text-wrap: balance;
 	}
