@@ -127,12 +127,14 @@
 	}
 	.sheet {
 		background: var(--color-surface);
-		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-xl);
 		padding: var(--space-3);
 		max-width: 420px;
 		width: 100%;
 		max-height: 85dvh;
 		overflow-y: auto;
+		box-shadow: var(--shadow-lg);
 	}
 	.grabber {
 		display: none;
@@ -145,7 +147,12 @@
 	}
 	.sheet-header h3 {
 		margin: 0;
-		font-size: var(--text-lg);
+		font-size: var(--text-xl);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		color: var(--color-text-primary);
+		line-height: var(--leading-tight);
 	}
 	.close {
 		min-width: 44px;
@@ -198,6 +205,8 @@
 	.row-label {
 		font-size: var(--text-sm);
 		font-weight: 600;
+		color: var(--color-text-secondary);
+		font-family: var(--font-sans);
 	}
 	.lang-row select {
 		padding: var(--space-1) var(--space-2);

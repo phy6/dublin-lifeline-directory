@@ -59,14 +59,19 @@
 		z-index: 2100;
 		background: var(--color-surface);
 		border: 1px solid var(--color-border);
-		border-radius: var(--radius-lg);
+		border-top: 3px solid var(--color-accent);
+		border-radius: var(--radius-xl);
 		box-shadow: var(--shadow-lg);
 		padding: var(--space-3);
+		max-width: 640px;
+		margin: 0 auto;
 	}
 	.install-banner p {
 		margin: 0 0 var(--space-2);
 		font-size: var(--text-sm);
-		color: var(--color-text-primary);
+		line-height: var(--leading-normal);
+		color: var(--color-text-secondary);
+		font-family: var(--font-sans);
 	}
 	.actions {
 		display: flex;

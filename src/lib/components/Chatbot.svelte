@@ -231,12 +231,24 @@
 		color: var(--color-text-on-accent);
 		border: 0;
 		border-radius: var(--radius-full);
-		padding: 12px 16px;
+		padding: 12px 20px;
+		font-family: var(--font-sans);
 		font-weight: 700;
+		font-size: var(--text-sm);
 		cursor: pointer;
 		min-height: 48px;
 		min-width: 48px;
 		box-shadow: var(--shadow-md);
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+	.chatbot-fab:hover {
+		background: var(--color-accent-hover);
+	}
+	.chatbot-fab:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
 	}
 	.modal-overlay {
 		position: fixed;
@@ -257,17 +269,35 @@
 	}
 	.modal-box {
 		background: var(--color-surface);
-		border-radius: var(--radius-lg);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-xl);
 		padding: var(--space-3);
 		max-width: 420px;
 		width: 100%;
 		max-height: 90vh;
 		overflow-y: auto;
 		position: relative;
+		box-shadow: var(--shadow-lg);
+	}
+	.modal-box h3 {
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		color: var(--color-text-primary);
+		font-size: var(--text-xl);
+		line-height: var(--leading-tight);
+		margin: 0 0 var(--space-2);
+		padding-right: var(--space-5);
 	}
 	.crisis {
 		font-size: var(--text-sm);
 		font-weight: 700;
+		background: var(--color-danger-container);
+		color: var(--color-danger-on-container);
+		border: 1px solid var(--color-danger);
+		border-radius: var(--radius-md);
+		padding: var(--space-2) var(--space-3);
+		margin: 0 0 var(--space-2);
 	}
 	.chatbot-log {
 		max-height: 280px;
@@ -281,10 +311,13 @@
 		border-radius: var(--radius-lg);
 		padding: 9px 12px;
 		font-size: var(--text-sm);
+		line-height: var(--leading-normal);
 		max-width: 88%;
+		color: var(--color-text-primary);
 	}
 	.bubble.bot {
-		background: var(--color-accent-container);
+		background: var(--color-surface-hover);
+		border: 1px solid var(--color-border);
 		align-self: flex-start;
 	}
 	.bubble.user {
@@ -298,17 +331,21 @@
 		gap: 6px;
 	}
 	.option-btn {
-		border: 2px solid var(--color-accent);
-		background: transparent;
+		border: 1px solid var(--color-accent);
+		background: var(--color-surface);
 		color: var(--color-accent);
-		border-radius: var(--radius-md);
-		padding: 9px 12px;
+		border-radius: var(--radius-full);
+		padding: 9px 16px;
 		text-align: left;
 		font-weight: 700;
 		cursor: pointer;
 		text-decoration: none;
 		font-size: var(--text-sm);
+		font-family: var(--font-sans);
 		min-height: 44px;
+	}
+	.option-btn:hover {
+		background: var(--color-surface-hover);
 	}
 	.inline-cards {
 		display: flex;
@@ -340,6 +377,21 @@
 		align-items: center;
 		justify-content: center;
 		gap: var(--space-1);
+		border-radius: var(--radius-full);
+		border: 1px solid var(--color-border);
+		background: var(--color-surface);
+		color: var(--color-text-secondary);
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		cursor: pointer;
+		padding: 8px 16px;
+	}
+	.restart:focus-visible,
+	.close:focus-visible,
+	.option-btn:focus-visible {
+		outline: 3px solid var(--color-focus-ring);
+		outline-offset: 2px;
 	}
 	.fab-icon,
 	.btn-icon {

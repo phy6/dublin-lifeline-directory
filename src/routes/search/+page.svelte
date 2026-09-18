@@ -82,6 +82,7 @@
 </script>
 
 <main id="main-content">
+	<p class="kicker">Baile Átha Cliath</p>
 	<h1>{t('search-title')}</h1>
 	<FilterBar
 		{categories}
@@ -112,16 +113,32 @@
 
 <style>
 	main {
-		max-width: 800px;
+		max-width: 640px;
 		margin: 0 auto;
 		padding: var(--space-3);
 		box-sizing: border-box;
+		background: var(--color-surface);
+	}
+	.kicker {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-accent);
+		margin: 0 0 2px;
 	}
 	h1 {
-		color: var(--color-accent);
-		font-size: var(--text-2xl);
+		color: var(--color-text-primary);
+		margin: 0 0 var(--space-2);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		font-size: var(--text-3xl);
 		line-height: var(--leading-tight);
 		text-wrap: balance;
+	}
+	p {
+		font-size: var(--text-base);
+		color: var(--color-text-secondary);
+		line-height: var(--leading-relaxed);
 	}
 	.stats {
 		color: var(--color-text-muted);

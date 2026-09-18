@@ -26,12 +26,14 @@
 
 <style>
 	.offline-banner {
-		background: var(--color-warning-container);
-		color: var(--color-warning-on-container);
-		border-bottom: 2px solid var(--color-warning);
+		background: var(--color-accent-container);
+		color: var(--color-accent-on-container);
+		border-bottom: 2px solid var(--color-accent);
 		padding: var(--space-2) var(--space-3);
 		text-align: center;
 		font-size: var(--text-sm);
 		font-weight: 600;
+		font-family: var(--font-sans);
+		line-height: var(--leading-normal);
 	}
 </style>
