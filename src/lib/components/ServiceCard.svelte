@@ -6,13 +6,10 @@
 
 	let { service }: { service: ServiceLocation } = $props();
 	const openStatus = $derived(getOpenNowStatus(service.hours));
-	const hourEntries = $derived(
-		service.hours && typeof service.hours === 'object' ? Object.entries(service.hours) : []
-	);
 </script>
 
 <article class="card">
-	<a href="{base}/service/{service.id}" class="row-link" aria-label="{service.name}">
+	<a href="{base}/service/{service.id}" class="row-link" aria-label={service.name}>
 		<span class="status-dot {openStatus}" aria-hidden="true"></span>
 		<span class="row-body">
 			<span class="row-top">

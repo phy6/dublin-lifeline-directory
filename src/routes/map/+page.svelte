@@ -55,12 +55,13 @@
 </script>
 
 <main id="main-content">
+	<p class="kicker">Baile Átha Cliath</p>
 	<h1>{t('map-title')}</h1>
 	<p>{t('map-intro')}</p>
 	<p class="map-instructions">
 		{t('map-help')}
 	</p>
-	<div bind:this={mapEl} id="map" style="width: 100%;"></div>
+	<div bind:this={mapEl} id="map"></div>
 	<details class="map-list">
 		<summary>{t('map-list-fallback')}</summary>
 		<ul>
@@ -79,17 +80,31 @@
 		height: 50vh;
 		min-height: 300px;
 		max-height: 600px;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background: var(--color-surface-variant);
 	}
 	main {
-		max-width: 100%;
+		max-width: 640px;
 		margin: 0 auto;
 		padding: var(--space-3);
+		box-sizing: border-box;
+	}
+	.kicker {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-accent);
+		margin: 0 0 2px;
 	}
 	h1 {
-		color: var(--color-accent);
-		font-size: var(--text-2xl);
+		color: var(--color-text-primary);
+		margin: 0 0 var(--space-2);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		font-size: var(--text-3xl);
 		line-height: var(--leading-tight);
-		margin-bottom: var(--space-2);
 		text-wrap: balance;
 	}
 	p {
@@ -106,20 +121,46 @@
 	}
 	.map-list {
 		margin-top: var(--space-3);
+		border-top: 1px solid var(--color-border);
+		padding-top: var(--space-3);
 	}
 	.map-list summary {
 		cursor: pointer;
 		min-height: 44px;
 		display: inline-flex;
 		align-items: center;
-		font-weight: 600;
+		font-weight: 700;
+		color: var(--color-accent);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		padding: var(--space-2) var(--space-3);
 	}
 	.map-list ul {
 		list-style: none;
 		margin: var(--space-2) 0 0;
 		padding: 0;
 		display: grid;
-		gap: var(--space-2);
+		gap: 0;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+	}
+	.map-list li {
+		padding: var(--space-2) var(--space-3);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.map-list li:last-child {
+		border-bottom: none;
+	}
+	.map-list a {
+		color: var(--color-accent);
+		font-weight: 600;
+		text-decoration: none;
+	}
+	.map-list a:hover {
+		text-decoration: underline;
 	}
 	@media (max-width: 600px) {
 		#map {

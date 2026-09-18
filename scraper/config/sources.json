@@ -26,10 +26,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -95,10 +92,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -163,10 +157,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -220,10 +211,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -276,10 +264,7 @@
 					".opening-times"
 				],
 				"email": [".contact-email", "a[href^=\"mailto\"]", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".about-text",
 					".mission",
@@ -334,10 +319,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -390,10 +372,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -446,10 +425,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -502,10 +478,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -558,10 +531,7 @@
 					".opening-times"
 				],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email", ".footer-email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -604,10 +574,7 @@
 				],
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -648,10 +615,7 @@
 				],
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",
@@ -692,10 +656,7 @@
 				],
 				"hours": [".opening-hours", ".hours", "[itemprop=\"openingHours\"]", ".schedule"],
 				"email": ["a[href^=\"mailto\"]", ".contact-email", ".email"],
-				"website": [
-					"link[rel=\"canonical\"]",
-					"meta[property=\"og:url\"]"
-				],
+				"website": ["link[rel=\"canonical\"]", "meta[property=\"og:url\"]"],
 				"description": [
 					".services-description",
 					".about-text",

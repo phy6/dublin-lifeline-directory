@@ -111,16 +111,22 @@
 
 <style>
 	main {
-		max-width: 700px;
+		max-width: 640px;
 		margin: 0 auto;
-		padding: var(--space-4);
+		padding: var(--space-3);
+		box-sizing: border-box;
 	}
 	.back-link {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
 		margin-bottom: var(--space-3);
 		color: var(--color-accent);
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		padding: var(--space-2) var(--space-3);
 		text-decoration: none;
-		font-weight: 500;
+		font-weight: 700;
 		font-size: var(--text-sm);
 	}
 	.back-link:hover {
@@ -134,18 +140,21 @@
 	.category {
 		background: var(--color-accent-container);
 		color: var(--color-accent-on-container);
-		padding: var(--space-1) var(--space-2);
-		border-radius: var(--radius-sm);
+		padding: var(--space-1) var(--space-3);
+		border-radius: var(--radius-full);
 		display: inline-block;
 		font-size: var(--text-sm);
-		font-weight: 600;
+		font-weight: 700;
 		margin-bottom: var(--space-2);
 	}
 	h1 {
 		color: var(--color-text-primary);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
 		font-size: var(--text-3xl);
 		line-height: var(--leading-tight);
-		margin-bottom: var(--space-2);
+		margin: 0 0 var(--space-2);
 		text-wrap: balance;
 	}
 	.description {
@@ -158,9 +167,11 @@
 		margin: var(--space-5) 0;
 	}
 	h2 {
-		color: var(--color-accent);
+		color: var(--color-text-primary);
+		font-family: var(--font-display);
 		font-size: var(--text-xl);
-		font-weight: 600;
+		font-weight: 800;
+		letter-spacing: -0.01em;
 		border-bottom: 1px solid var(--color-border);
 		padding-bottom: var(--space-2);
 		margin-bottom: var(--space-3);
@@ -193,11 +204,13 @@
 		gap: var(--space-1);
 	}
 	.tag {
-		background: var(--color-accent-container);
+		background: var(--color-surface-variant);
 		color: var(--color-accent-on-container);
-		padding: var(--space-1) var(--space-2);
-		border-radius: var(--radius-sm);
+		border: 1px solid var(--color-border);
+		padding: var(--space-1) var(--space-3);
+		border-radius: var(--radius-full);
 		font-size: var(--text-xs);
+		font-weight: 600;
 	}
 	footer {
 		margin-top: var(--space-6);
@@ -209,10 +222,11 @@
 		font-size: var(--text-xs);
 	}
 	.not-found {
-		max-width: 700px;
+		max-width: 640px;
 		margin: 0 auto;
-		padding: var(--space-6) var(--space-4);
+		padding: var(--space-6) var(--space-3);
 		text-align: center;
+		box-sizing: border-box;
 	}
 	.not-found h2 {
 		font-size: var(--text-2xl);
