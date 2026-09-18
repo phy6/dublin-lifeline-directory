@@ -15,8 +15,8 @@ export default defineConfig({
 				name: 'Dublin City Support',
 				short_name: 'Dublin Support',
 				description: 'Find nearby support services in Dublin City',
-				theme_color: '#1a73e8',
-				background_color: '#ffffff',
+				theme_color: '#0f4da1',
+				background_color: '#fbfdff',
 				display: 'standalone',
 				orientation: 'portrait',
 				// Match paths.base so install/scope work under the project subpath.

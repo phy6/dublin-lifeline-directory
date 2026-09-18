@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
     <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a73e8;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#0f4da1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0b3a7a;stop-opacity:1" />
     </linearGradient>
     <linearGradient id="crossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
@@ -19,26 +19,26 @@
     <path d="M256 80 L220 200 L292 200 Z" />
     <rect x="210" y="200" width="92" height="100" rx="2" />
     <!-- Tower top details -->
-    <rect x="215" y="210" width="15" height="20" rx="1" fill="#1a73e8" />
-    <rect x="240" y="210" width="32" height="20" rx="1" fill="#1a73e8" />
-    <rect x="282" y="210" width="15" height="20" rx="1" fill="#1a73e8" />
-    <rect x="215" y="245" width="15" height="20" rx="1" fill="#1a73e8" />
-    <rect x="240" y="245" width="32" height="20" rx="1" fill="#1a73e8" />
-    <rect x="282" y="245" width="15" height="20" rx="1" fill="#1a73e8" />
+    <rect x="215" y="210" width="15" height="20" rx="1" fill="#0f4da1" />
+    <rect x="240" y="210" width="32" height="20" rx="1" fill="#0f4da1" />
+    <rect x="282" y="210" width="15" height="20" rx="1" fill="#0f4da1" />
+    <rect x="215" y="245" width="15" height="20" rx="1" fill="#0f4da1" />
+    <rect x="240" y="245" width="32" height="20" rx="1" fill="#0f4da1" />
+    <rect x="282" y="245" width="15" height="20" rx="1" fill="#0f4da1" />
     
     <!-- Left tower -->
     <path d="M130 140 L110 260 L170 260 Z" />
     <rect x="105" y="260" width="70" height="80" rx="2" />
-    <rect x="110" y="270" width="12" height="16" rx="1" fill="#1a73e8" />
-    <rect x="130" y="270" width="26" height="16" rx="1" fill="#1a73e8" />
-    <rect x="162" y="270" width="12" height="16" rx="1" fill="#1a73e8" />
+    <rect x="110" y="270" width="12" height="16" rx="1" fill="#0f4da1" />
+    <rect x="130" y="270" width="26" height="16" rx="1" fill="#0f4da1" />
+    <rect x="162" y="270" width="12" height="16" rx="1" fill="#0f4da1" />
     
     <!-- Right tower -->
     <path d="M382 140 L402 260 L342 260 Z" />
     <rect x="337" y="260" width="70" height="80" rx="2" />
-    <rect x="342" y="270" width="12" height="16" rx="1" fill="#1a73e8" />
-    <rect x="362" y="270" width="26" height="16" rx="1" fill="#1a73e8" />
-    <rect x="394" y="270" width="12" height="16" rx="1" fill="#1a73e8" />
+    <rect x="342" y="270" width="12" height="16" rx="1" fill="#0f4da1" />
+    <rect x="362" y="270" width="26" height="16" rx="1" fill="#0f4da1" />
+    <rect x="394" y="270" width="12" height="16" rx="1" fill="#0f4da1" />
     
     <!-- Battlements on central tower -->
     <rect x="205" y="290" width="10" height="15" />
