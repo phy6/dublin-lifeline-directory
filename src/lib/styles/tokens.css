@@ -1,8 +1,8 @@
 :root {
-	--color-accent: #0b3d2e;
-	--color-accent-hover: #082e23;
-	--color-accent-container: #e3efe8;
-	--color-accent-on-container: #0b3d2e;
+	--color-accent: #0f4da1;
+	--color-accent-hover: #0b3a7a;
+	--color-accent-container: #e2ecfa;
+	--color-accent-on-container: #0b3a7a;
 	--color-success: #2e7d32;
 	--color-success-container: #e8f5e9;
 	--color-success-on-container: #1b5e20;
@@ -15,15 +15,15 @@
 	--color-info: #0288d1;
 	--color-info-container: #e1f5fe;
 	--color-info-on-container: #01579b;
-	--color-text-primary: #17201c;
-	--color-text-secondary: #3d4a44;
-	--color-text-muted: #68746d;
+	--color-text-primary: #16233a;
+	--color-text-secondary: #3c4c64;
+	--color-text-muted: #67778f;
 	--color-text-on-accent: #fff;
-	--color-border: #e2dccd;
-	--color-border-strong: #c9c2ae;
-	--color-surface: #fffdf7;
-	--color-surface-hover: #f6f1e6;
-	--color-surface-variant: #f6f1e6;
+	--color-border: #d7e0ee;
+	--color-border-strong: #b9c8e0;
+	--color-surface: #fbfdff;
+	--color-surface-hover: #eef4fc;
+	--color-surface-variant: #eef4fc;
 	--color-error: #c62828;
 	--color-focus-ring: #e8a013;
 	--color-highlight: #e8a013;
