@@ -239,6 +239,7 @@
 </script>
 
 <main id="main-content">
+	<p class="kicker">Baile Átha Cliath</p>
 	<h1>{t('planner-title')}</h1>
 	<p class="device-warning">{t('planner-device-warning')}</p>
 
@@ -386,13 +387,28 @@
 />
 
 <style>
+	main {
+		max-width: 640px;
+		margin: 0 auto;
+		padding: var(--space-3);
+		box-sizing: border-box;
+	}
 	h1 {
-		padding: 0 var(--space-3);
-		color: var(--color-accent);
-		margin-bottom: var(--space-2);
+		padding: 0;
+		color: var(--color-text-primary);
+		margin: 0 0 var(--space-2);
+		font-family: var(--font-display);
+		font-weight: 800;
+		letter-spacing: -0.02em;
 		font-size: var(--text-2xl);
 		line-height: var(--leading-tight);
 		text-wrap: balance;
+	}
+	.kicker {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-accent);
+		margin: 0 0 2px;
 	}
 	@media (max-width: 600px) {
 		h1 {
@@ -400,48 +416,94 @@
 		}
 	}
 	.device-warning {
-		margin: 0 var(--space-3) var(--space-3);
+		margin: 0 0 var(--space-3);
 		padding: var(--space-2) var(--space-3);
-		background: var(--color-warning-bg, #fff8e1);
+		background: var(--color-surface-variant);
 		border: 1px solid var(--color-border);
-		border-radius: var(--radius-sm);
-		font-size: var(--text-base);
+		border-radius: var(--radius-lg);
+		font-size: var(--text-sm);
 		line-height: var(--leading-relaxed);
 	}
 	.view-switch {
 		display: flex;
-		gap: var(--space-1);
-		padding: 0 var(--space-3) var(--space-2);
+		gap: 0;
+		padding: 0;
+		margin-bottom: var(--space-3);
+		background: var(--color-surface-variant);
+		border: 2px solid var(--color-border-strong);
+		border-radius: var(--radius-full);
+		overflow: hidden;
+	}
+	.view-switch button {
+		flex: 1;
+		border: 0;
+		background: transparent;
+		min-height: 48px;
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		color: var(--color-text-secondary);
+		cursor: pointer;
 	}
 	.view-switch button[aria-pressed='true'] {
-		font-weight: 700;
-		text-decoration: underline;
-		text-underline-offset: 3px;
+		background: var(--color-accent);
+		color: var(--color-text-on-accent);
+		text-decoration: none;
 	}
 	.week-controls {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
+		overflow-x: auto;
 		gap: var(--space-2);
-		padding: 0 var(--space-3) var(--space-3);
+		padding: 0 0 var(--space-3);
+		scrollbar-width: thin;
+	}
+	.week-controls button,
+	.week-controls label {
+		flex: none;
+		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius-full);
+		border: 2px solid var(--color-border-strong);
+		background: var(--color-surface);
+		font-size: var(--text-sm);
+		font-weight: 700;
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	.week-controls button {
+		font-family: var(--font-sans);
+		color: var(--color-text-primary);
 	}
 	.week-grid {
-		display: grid;
-		grid-template-columns: repeat(7, minmax(0, 1fr));
-		gap: var(--space-2);
-		padding: 0 var(--space-3) var(--space-4);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3);
+		padding: 0 0 var(--space-4);
 	}
 	.week-grid.single {
-		grid-template-columns: minmax(0, 32rem);
+		display: flex;
+		flex-direction: column;
 	}
-	@media (max-width: 900px) {
+	@media (min-width: 700px) {
+		main {
+			max-width: 1000px;
+		}
 		.week-grid:not(.single) {
+			display: grid;
 			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: var(--space-3);
+		}
+	}
+	@media (min-width: 1100px) {
+		.week-grid:not(.single) {
+			grid-template-columns: repeat(7, minmax(0, 1fr));
+			gap: var(--space-2);
 		}
 	}
 	@media (max-width: 600px) {
-		.week-grid:not(.single) {
-			grid-template-columns: 1fr;
-		}
 		.month-grid {
 			max-width: 24rem;
 		}
@@ -450,10 +512,11 @@
 		}
 	}
 	.day-col {
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-sm);
-		padding: var(--space-2);
-		background: var(--color-surface);
+		border: 0;
+		border-bottom: 1px solid var(--color-border);
+		border-radius: 0;
+		padding: var(--space-3) var(--space-1);
+		background: transparent;
 	}
 	.day-col.today {
 		border-width: 2px;

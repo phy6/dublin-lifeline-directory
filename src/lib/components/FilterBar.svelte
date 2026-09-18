@@ -79,12 +79,13 @@
 		display: flex;
 		flex-direction: column;
 		gap: var(--space-2);
-		padding: var(--space-2) 0;
-		background: transparent;
+		padding: var(--space-2);
+		background: var(--color-surface);
 		margin-bottom: var(--space-2);
 		position: sticky;
 		top: 0;
 		z-index: 900;
+		border-bottom: 1px solid var(--color-border);
 	}
 	input[type='search'] {
 		flex: 1;
@@ -107,12 +108,19 @@
 		display: flex;
 		flex-wrap: nowrap;
 		overflow-x: auto;
+		overflow-y: hidden;
 		gap: var(--space-2);
-		padding-bottom: var(--space-1);
-		scrollbar-width: none;
+		padding-bottom: var(--space-2);
+		scrollbar-width: thin;
+		overscroll-behavior-x: contain;
+		-webkit-overflow-scrolling: touch;
 	}
 	.filter-chips::-webkit-scrollbar {
-		display: none;
+		height: 8px;
+	}
+	.filter-chips::-webkit-scrollbar-thumb {
+		background: var(--color-border-strong);
+		border-radius: var(--radius-full);
 	}
 	.filter-chips button {
 		padding: var(--space-2) var(--space-3);
@@ -148,6 +156,12 @@
 	.filter-chips button:focus-visible {
 		outline: 3px solid var(--color-focus-ring);
 		outline-offset: 2px;
+	}
+	@media (min-width: 601px) {
+		.filter-chips {
+			flex-wrap: wrap;
+			overflow: visible;
+		}
 	}
 	@media (max-width: 600px) {
 		.filter-bar {
